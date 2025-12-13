@@ -1,0 +1,40 @@
+/* Estilos gerais */
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background-color: #f8f9fa;
+}
+
+.navbar {
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+.card {
+    border-radius: 10px;
+    box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+    margin-bottom: 20px;
+}
+
+.btn {
+    border-radius: 5px;
+}
+
+/* Cores específicas */
+.bg-primary {
+    background-color: #4a6cf7 !important;
+}
+
+.btn-primary {
+    background-color: #4a6cf7;
+    border-color: #4a6cf7;
+}
+
+.btn-success {
+    background-color: #28a745;
+    border-color: #28a745;
+}
+
+/* Dashboard */
+.dashboard-stats {
+    font-size: 2rem;
+    font-weight: bold;
+}
