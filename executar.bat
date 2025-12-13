@@ -6,7 +6,7 @@ echo ================================================
 
 REM Configurar ambiente
 set JAVA_HOME=C:\Users\valta\.jdk\jdk-21.0.8
-set "MAVEN_HOME=C:\Program Files\Maven\apache-maven-3.9.11"
+set "MAVEN_HOME=C:\Users\valta\.maven\maven-3.9.11"
 set PATH=%JAVA_HOME%\bin;%MAVEN_HOME%\bin;%PATH%
 
 REM Ir para a pasta do projeto
