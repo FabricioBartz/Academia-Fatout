@@ -1,6 +1,6 @@
 package com.academia.model;
 
-import javax.persistence.*;
+import jakarta.persistence.*;
 import java.time.Duration;
 
 @Entity
@@ -22,7 +22,7 @@ public class ExercicioPlano {
     private Integer series;
     private Integer repeticoes;
     
-    @Column(precision = 5, scale = 2)
+    @Column
     private Double carga;
     
     private Duration descanso;

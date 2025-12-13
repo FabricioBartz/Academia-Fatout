@@ -1,6 +1,6 @@
 package com.academia.model;
 
-import javax.persistence.*;
+import jakarta.persistence.*;
 import java.time.LocalDate;
 
 @Entity
@@ -14,41 +14,41 @@ public class AvaliacaoFisica {
     
     private LocalDate data;
     
-    @Column(precision = 5, scale = 2)
+    @Column
     private Double altura;
     
-    @Column(precision = 5, scale = 2)
+    @Column
     private Double peso;
     
-    @Column(name = "imc", precision = 4, scale = 2)
+    @Column(name = "imc")
     private Double imc;
     
     // Medidas corporais em cm
-    @Column(precision = 5, scale = 1)
+    @Column
     private Double peito;
     
-    @Column(precision = 5, scale = 1)
+    @Column
     private Double cintura;
     
-    @Column(precision = 5, scale = 1)
+    @Column
     private Double quadril;
     
-    @Column(precision = 5, scale = 1)
+    @Column
     private Double bicepsDireito;
     
-    @Column(precision = 5, scale = 1)
+    @Column
     private Double bicepsEsquerdo;
     
-    @Column(precision = 5, scale = 1)
+    @Column
     private Double coxaDireita;
     
-    @Column(precision = 5, scale = 1)
+    @Column
     private Double coxaEsquerda;
     
-    @Column(precision = 5, scale = 1)
+    @Column
     private Double panturrilhaDireita;
     
-    @Column(precision = 5, scale = 1)
+    @Column
     private Double panturrilhaEsquerda;
     
     @Column(length = 500)
