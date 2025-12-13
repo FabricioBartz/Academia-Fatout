@@ -30,12 +30,82 @@
             <div class="col-md-9">
                 <h1>Gerenciar Exercícios</h1>
                 <p>Adicionar e gerenciar exercícios da academia.</p>
-                <button class="btn btn-primary mb-3">Adicionar Novo Exercício</button>
+                
+                <!-- Botão para abrir modal -->
+                <button class="btn btn-primary mb-3" data-bs-toggle="modal" data-bs-target="#adicionarExercicioModal">Adicionar Novo Exercício</button>
+                
+                <!-- Modal para adicionar exercício -->
+                <div class="modal fade" id="adicionarExercicioModal" tabindex="-1">
+                    <div class="modal-dialog">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title">Adicionar Novo Exercício</h5>
+                                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                            </div>
+                            <form th:action="@{/instrutor/exercicios/adicionar}" method="post">
+                                <div class="modal-body">
+                                    <div class="mb-3">
+                                        <label for="nome" class="form-label">Nome do Exercício</label>
+                                        <input type="text" class="form-control" id="nome" name="nome" required>
+                                    </div>
+                                    <div class="mb-3">
+                                        <label for="equipamento" class="form-label">Equipamento</label>
+                                        <input type="text" class="form-control" id="equipamento" name="equipamento">
+                                    </div>
+                                    <div class="mb-3">
+                                        <label for="grupoMuscular" class="form-label">Grupo Muscular</label>
+                                        <input type="text" class="form-control" id="grupoMuscular" name="grupoMuscular" required>
+                                    </div>
+                                    <div class="mb-3">
+                                        <label for="instrucoes" class="form-label">Instruções</label>
+                                        <textarea class="form-control" id="instrucoes" name="instrucoes" rows="3"></textarea>
+                                    </div>
+                                    <div class="mb-3">
+                                        <label for="descricao" class="form-label">Descrição</label>
+                                        <textarea class="form-control" id="descricao" name="descricao" rows="2"></textarea>
+                                    </div>
+                                </div>
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                                    <button type="submit" class="btn btn-primary">Adicionar Exercício</button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+                
                 <div class="alert alert-info">
-                    Funcionalidade em desenvolvimento.
+                    Funcionalidade implementada. Use o botão acima para adicionar exercícios.
+                </div>
+                
+                <!-- Lista de Exercícios -->
+                <h3>Exercícios Cadastrados</h3>
+                <div class="table-responsive">
+                    <table class="table table-striped">
+                        <thead>
+                            <tr>
+                                <th>Nome</th>
+                                <th>Grupo Muscular</th>
+                                <th>Equipamento</th>
+                                <th>Ações</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr th:each="exercicio : ${exercicios}">
+                                <td th:text="${exercicio.nome}">Nome do Exercício</td>
+                                <td th:text="${exercicio.grupoMuscular}">Grupo Muscular</td>
+                                <td th:text="${exercicio.equipamento}">Equipamento</td>
+                                <td>
+                                    <button class="btn btn-sm btn-warning">Editar</button>
+                                    <button class="btn btn-sm btn-danger">Excluir</button>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
                 </div>
             </div>
         </div>
     </div>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>
