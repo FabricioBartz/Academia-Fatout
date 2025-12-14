@@ -6,7 +6,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Entity
-@Table(name = "Instrutor")
+@Table(name = "instrutor")
 @PrimaryKeyJoinColumn(name = "cpf")
 public class Instrutor extends Pessoa {
     

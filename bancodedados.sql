@@ -21,7 +21,7 @@ CREATE DATABASE IF NOT EXISTS academia_db
 USE academia_db;
 
 -- Tabela Pessoa (dados comuns)
-CREATE TABLE Pessoa (
+CREATE TABLE pessoa (
   cpf CHAR(11) NOT NULL,
   nome VARCHAR(255) NOT NULL,
   email VARCHAR(255) NOT NULL,
@@ -35,23 +35,23 @@ CREATE TABLE Pessoa (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 -- Tabela Aluno (herda de Pessoa)
-CREATE TABLE Aluno (
+CREATE TABLE aluno (
   cpf CHAR(11) NOT NULL,
   objetivo VARCHAR(255),
   PRIMARY KEY (cpf),
-  CONSTRAINT FK_Aluno_Pessoa FOREIGN KEY (cpf) REFERENCES Pessoa(cpf) ON DELETE CASCADE
+  CONSTRAINT FK_aluno_pessoa FOREIGN KEY (cpf) REFERENCES pessoa(cpf) ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 -- Tabela Instrutor (herda de Pessoa)
-CREATE TABLE Instrutor (
+CREATE TABLE instrutor (
   cpf CHAR(11) NOT NULL,
   dia_que_comecou_trabalhar DATE,
   PRIMARY KEY (cpf),
-  CONSTRAINT FK_Instrutor_Pessoa FOREIGN KEY (cpf) REFERENCES Pessoa(cpf) ON DELETE CASCADE
+  CONSTRAINT FK_instrutor_pessoa FOREIGN KEY (cpf) REFERENCES pessoa(cpf) ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 -- Tabela Exercicio
-CREATE TABLE Exercicio (
+CREATE TABLE exercicio (
   id_exercicio BIGINT NOT NULL AUTO_INCREMENT,
   nome VARCHAR(255) NOT NULL,
   equipamento VARCHAR(255),
@@ -62,7 +62,7 @@ CREATE TABLE Exercicio (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 -- Tabela Turma
-CREATE TABLE Turma (
+CREATE TABLE turma (
   id_turma BIGINT NOT NULL AUTO_INCREMENT,
   cpf_instrutor CHAR(11),
   titulo VARCHAR(255),
@@ -71,23 +71,23 @@ CREATE TABLE Turma (
   hora_aula TIME,
   vagas INT,
   PRIMARY KEY (id_turma),
-  INDEX IDX_Turma_Instrutor (cpf_instrutor),
-  CONSTRAINT FK_Turma_Instrutor FOREIGN KEY (cpf_instrutor) REFERENCES Instrutor(cpf) ON DELETE SET NULL
+  INDEX IDX_turma_instrutor (cpf_instrutor),
+  CONSTRAINT FK_turma_instrutor FOREIGN KEY (cpf_instrutor) REFERENCES instrutor(cpf) ON DELETE SET NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 -- Tabela AlunoTurma (join)
-CREATE TABLE AlunoTurma (
+CREATE TABLE aluno_turma (
   cpf_aluno CHAR(11) NOT NULL,
   id_turma BIGINT NOT NULL,
   PRIMARY KEY (cpf_aluno, id_turma),
-  INDEX IDX_AlunoTurma_Aluno (cpf_aluno),
-  INDEX IDX_AlunoTurma_Turma (id_turma),
-  CONSTRAINT FK_AlunoTurma_Aluno FOREIGN KEY (cpf_aluno) REFERENCES Aluno(cpf) ON DELETE CASCADE,
-  CONSTRAINT FK_AlunoTurma_Turma FOREIGN KEY (id_turma) REFERENCES Turma(id_turma) ON DELETE CASCADE
+  INDEX IDX_aluno_turma_aluno (cpf_aluno),
+  INDEX IDX_aluno_turma_turma (id_turma),
+  CONSTRAINT FK_aluno_turma_aluno FOREIGN KEY (cpf_aluno) REFERENCES aluno(cpf) ON DELETE CASCADE,
+  CONSTRAINT FK_aluno_turma_turma FOREIGN KEY (id_turma) REFERENCES turma(id_turma) ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 -- Tabela AvaliacaoFisica
-CREATE TABLE AvaliacaoFisica (
+CREATE TABLE avaliacao_fisica (
   id_avaliacao BIGINT NOT NULL AUTO_INCREMENT,
   cpf_aluno CHAR(11),
   cpf_instrutor CHAR(11),
@@ -106,14 +106,14 @@ CREATE TABLE AvaliacaoFisica (
   panturrilha_esquerda DECIMAL(10,2),
   observacoes VARCHAR(500),
   PRIMARY KEY (id_avaliacao),
-  INDEX IDX_Avaliacao_Aluno (cpf_aluno),
-  INDEX IDX_Avaliacao_Instrutor (cpf_instrutor),
-  CONSTRAINT FK_Avaliacao_Aluno FOREIGN KEY (cpf_aluno) REFERENCES Aluno(cpf) ON DELETE SET NULL,
-  CONSTRAINT FK_Avaliacao_Instrutor FOREIGN KEY (cpf_instrutor) REFERENCES Instrutor(cpf) ON DELETE SET NULL
+  INDEX IDX_avaliacao_aluno (cpf_aluno),
+  INDEX IDX_avaliacao_instrutor (cpf_instrutor),
+  CONSTRAINT FK_avaliacao_aluno FOREIGN KEY (cpf_aluno) REFERENCES aluno(cpf) ON DELETE SET NULL,
+  CONSTRAINT FK_avaliacao_instrutor FOREIGN KEY (cpf_instrutor) REFERENCES instrutor(cpf) ON DELETE SET NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 -- Tabela PlanoDeTreino
-CREATE TABLE PlanoDeTreino (
+CREATE TABLE plano_de_treino (
   id_plano BIGINT NOT NULL AUTO_INCREMENT,
   cpf_aluno CHAR(11),
   cpf_instrutor CHAR(11),
@@ -122,14 +122,14 @@ CREATE TABLE PlanoDeTreino (
   nome VARCHAR(255),
   observacoes VARCHAR(500),
   PRIMARY KEY (id_plano),
-  INDEX IDX_Plano_Aluno (cpf_aluno),
-  INDEX IDX_Plano_Instrutor (cpf_instrutor),
-  CONSTRAINT FK_Plano_Aluno FOREIGN KEY (cpf_aluno) REFERENCES Aluno(cpf) ON DELETE SET NULL,
-  CONSTRAINT FK_Plano_Instrutor FOREIGN KEY (cpf_instrutor) REFERENCES Instrutor(cpf) ON DELETE SET NULL
+  INDEX IDX_plano_aluno (cpf_aluno),
+  INDEX IDX_plano_instrutor (cpf_instrutor),
+  CONSTRAINT FK_plano_aluno FOREIGN KEY (cpf_aluno) REFERENCES aluno(cpf) ON DELETE SET NULL,
+  CONSTRAINT FK_plano_instrutor FOREIGN KEY (cpf_instrutor) REFERENCES instrutor(cpf) ON DELETE SET NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 -- Tabela ExercicioPlano
-CREATE TABLE ExercicioPlano (
+CREATE TABLE exercicio_plano (
   id BIGINT NOT NULL AUTO_INCREMENT,
   id_exercicio BIGINT,
   id_plano BIGINT,
@@ -139,47 +139,47 @@ CREATE TABLE ExercicioPlano (
   descanso TIME,
   observacoes VARCHAR(500),
   PRIMARY KEY (id),
-  INDEX IDX_ExercicioPlano_Exercicio (id_exercicio),
-  INDEX IDX_ExercicioPlano_Plano (id_plano),
-  CONSTRAINT FK_ExercicioPlano_Exercicio FOREIGN KEY (id_exercicio) REFERENCES Exercicio(id_exercicio) ON DELETE CASCADE,
-  CONSTRAINT FK_ExercicioPlano_Plano FOREIGN KEY (id_plano) REFERENCES PlanoDeTreino(id_plano) ON DELETE CASCADE
+  INDEX IDX_exercicio_plano_exercicio (id_exercicio),
+  INDEX IDX_exercicio_plano_plano (id_plano),
+  CONSTRAINT FK_exercicio_plano_exercicio FOREIGN KEY (id_exercicio) REFERENCES exercicio(id_exercicio) ON DELETE CASCADE,
+  CONSTRAINT FK_exercicio_plano_plano FOREIGN KEY (id_plano) REFERENCES plano_de_treino(id_plano) ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 -- Dados iniciais (adaptados)
 
 -- Pessoas (instrutores)
-INSERT INTO Pessoa (cpf, nome, email, telefone, senha, data_nascimento) VALUES
+INSERT INTO pessoa (cpf, nome, email, telefone, senha, data_nascimento) VALUES
 ('11111111111', 'Carlos Silva', 'carlos@academia.com', '11999999999', '123', '1980-01-01'),
 ('22222222222', 'Ana Costa', 'ana@academia.com', '11988888888', '123', '1985-05-20');
 
 -- Registra como Instrutor
-INSERT INTO Instrutor (cpf, dia_que_comecou_trabalhar) VALUES
+INSERT INTO instrutor (cpf, dia_que_comecou_trabalhar) VALUES
 ('11111111111', '2020-03-15'),
 ('22222222222', '2021-06-10');
 
 -- Pessoas (alunos)
-INSERT INTO Pessoa (cpf, nome, email, telefone, senha, data_nascimento) VALUES
+INSERT INTO pessoa (cpf, nome, email, telefone, senha, data_nascimento) VALUES
 ('12345678901', 'João Silva', 'joao@email.com', '11987654321', '123', '1995-03-14'),
 ('98765432100', 'Maria Santos', 'maria@email.com', '11976543210', '123', '1992-07-22'),
 ('55555555555', 'Pedro Oliveira', 'pedro@email.com', '11955555555', '123', '1990-11-30');
 
-INSERT INTO Aluno (cpf, objetivo) VALUES
+INSERT INTO aluno (cpf, objetivo) VALUES
 ('12345678901', 'Hipertrofia'),
 ('98765432100', 'Emagrecimento'),
 ('55555555555', 'Condicionamento Físico');
 
 -- Exercícios
-INSERT INTO Exercicio (id_exercicio, nome, equipamento, grupo_muscular, instrucoes, descricao) VALUES
+INSERT INTO exercicio (id_exercicio, nome, equipamento, grupo_muscular, instrucoes, descricao) VALUES
 (1, 'Supino Reto', 'Barra e Banco', 'Peito', 'Deite-se no banco, segure a barra com as mãos afastadas na largura dos ombros. Desça a barra até o peito e empurre para cima.', 'Exercício básico para desenvolvimento do peitoral'),
 (2, 'Agachamento Livre', 'Barra', 'Pernas', 'Posicione a barra nos ombros, desça flexionando os joelhos até formar 90 graus e retorne à posição inicial.', 'Exercício fundamental para desenvolvimento das pernas');
 
 -- Turmas
-INSERT INTO Turma (id_turma, titulo, descricao, data_da_aula, hora_aula, vagas, cpf_instrutor) VALUES
+INSERT INTO turma (id_turma, titulo, descricao, data_da_aula, hora_aula, vagas, cpf_instrutor) VALUES
 (1, 'Funcional Matinal', 'Treino funcional focado em condicionamento físico e mobilidade', '2024-12-20', '07:00:00', 15, '11111111111'),
 (2, 'Spinning', 'Aula de ciclismo indoor com música animada', '2024-12-21', '18:30:00', 20, '22222222222');
 
 -- Matrículas
-INSERT INTO AlunoTurma (cpf_aluno, id_turma) VALUES
+INSERT INTO aluno_turma (cpf_aluno, id_turma) VALUES
 ('12345678901', 1),
 ('12345678901', 2);
 
