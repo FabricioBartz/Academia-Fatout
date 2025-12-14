@@ -53,7 +53,7 @@
                         <div class="card text-white bg-primary">
                             <div class="card-body text-center">
                                 <h5 class="card-title">👥 Alunos</h5>
-                                <p class="dashboard-stats">24</p>
+                                <p class="dashboard-stats" th:text="${alunosCount}">24</p>
                                 <p class="card-text">Total cadastrado</p>
                             </div>
                         </div>
@@ -63,7 +63,7 @@
                         <div class="card text-white bg-success">
                             <div class="card-body text-center">
                                 <h5 class="card-title">🏋️ Turmas</h5>
-                                <p class="dashboard-stats">8</p>
+                                <p class="dashboard-stats" th:text="${turmasCount}">8</p>
                                 <p class="card-text">Turmas ativas</p>
                             </div>
                         </div>
@@ -73,7 +73,7 @@
                         <div class="card text-white bg-info">
                             <div class="card-body text-center">
                                 <h5 class="card-title">💪 Exercícios</h5>
-                                <p class="dashboard-stats">45</p>
+                                <p class="dashboard-stats" th:text="${exerciciosCount}">45</p>
                                 <p class="card-text">Na biblioteca</p>
                             </div>
                         </div>

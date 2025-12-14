@@ -54,6 +54,13 @@ public class InstrutorController {
         // Para demonstração, vamos usar o primeiro instrutor
         Instrutor instrutor = instrutorService.listarTodos().get(0);
         model.addAttribute("instrutor", instrutor);
+        // Contagens dinâmicas
+        long alunosCount = alunoService.contarAlunos();
+        model.addAttribute("alunosCount", alunosCount);
+        long turmasCount = turmaService.listarPorInstrutor(instrutor.getCpf()).size();
+        model.addAttribute("turmasCount", turmasCount);
+        long exerciciosCount = exercicioService.contarExercicios();
+        model.addAttribute("exerciciosCount", exerciciosCount);
         return "instrutor/dashboard-instrutor";
     }
     
