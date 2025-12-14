@@ -47,6 +47,13 @@ public class AlunoController {
             aluno = alunoService.listarTodos().isEmpty() ? null : alunoService.listarTodos().get(0);
         }
         model.addAttribute("aluno", aluno);
+        
+        // Carregar última avaliação
+        if (aluno != null) {
+            var ultimaAvaliacao = avaliacaoService.buscarUltimaAvaliacao(aluno.getCpf());
+            model.addAttribute("ultimaAvaliacao", ultimaAvaliacao.orElse(null));
+        }
+        
         return "aluno/dashboard-aluno";
     }
     

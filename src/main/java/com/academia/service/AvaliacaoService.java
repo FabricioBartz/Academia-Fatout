@@ -50,6 +50,11 @@ public class AvaliacaoService {
     public List<AvaliacaoFisica> listarPorAluno(String cpfAluno) {
         return avaliacaoRepository.findByAlunoCpf(cpfAluno);
     }
+
+    // Listar as 5 últimas avaliações de um aluno (ordenadas desc)
+    public List<AvaliacaoFisica> listarUltimas5PorAluno(String cpfAluno) {
+        return avaliacaoRepository.findTop5ByAlunoCpfOrderByDataDesc(cpfAluno);
+    }
     
     // Listar todas as avaliações de um instrutor
     public List<AvaliacaoFisica> listarPorInstrutor(String cpfInstrutor) {

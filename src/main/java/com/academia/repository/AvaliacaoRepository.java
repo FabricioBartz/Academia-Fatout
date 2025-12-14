@@ -14,6 +14,9 @@ public interface AvaliacaoRepository extends JpaRepository<AvaliacaoFisica, Long
     
     // Encontrar avaliações por aluno
     List<AvaliacaoFisica> findByAlunoCpf(String cpfAluno);
+
+    // Últimas 5 avaliações do aluno ordenadas por data desc
+    List<AvaliacaoFisica> findTop5ByAlunoCpfOrderByDataDesc(String cpfAluno);
     
     // Encontrar avaliações por instrutor
     List<AvaliacaoFisica> findByInstrutorCpf(String cpfInstrutor);

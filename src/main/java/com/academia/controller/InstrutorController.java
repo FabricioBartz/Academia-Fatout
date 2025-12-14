@@ -74,27 +74,41 @@ public class InstrutorController {
     }
     
     @GetMapping("/alunos")
-    public String alunos(Model model, HttpSession session) {
+    public String alunos(@RequestParam(name = "q", required = false) String q, Model model, HttpSession session) {
         Instrutor instrutor = (Instrutor) session.getAttribute("instrutor");
         if (instrutor == null) {
             instrutor = instrutorService.listarTodos().isEmpty() ? null : instrutorService.listarTodos().get(0);
         }
         model.addAttribute("instrutor", instrutor);
-        model.addAttribute("alunos", alunoService.listarTodos());
+        if (q != null && !q.trim().isEmpty()) {
+            model.addAttribute("alunos", alunoService.buscarPorNome(q.trim()));
+            model.addAttribute("q", q.trim());
+        } else {
+            model.addAttribute("alunos", alunoService.listarTodos());
+            model.addAttribute("q", "");
+        }
         return "instrutor/alunos-instrutor";
     }
     
     @GetMapping("/turmas")
-    public String turmas(Model model, HttpSession session) {
+    public String turmas(@RequestParam(name = "q", required = false) String q,
+                         Model model, HttpSession session) {
         Instrutor instrutor = (Instrutor) session.getAttribute("instrutor");
         if (instrutor == null) {
             instrutor = instrutorService.listarTodos().isEmpty() ? null : instrutorService.listarTodos().get(0);
         }
         model.addAttribute("instrutor", instrutor);
-        model.addAttribute("turmas", turmaService.listarPorInstrutor(instrutor == null ? "" : instrutor.getCpf()));
+        java.util.List<Turma> turmas;
+        if (q != null && !q.trim().isEmpty()) {
+            turmas = turmaService.buscarPorTitulo(q.trim());
+            model.addAttribute("q", q.trim());
+        } else {
+            turmas = turmaService.listarPorInstrutor(instrutor == null ? "" : instrutor.getCpf());
+            model.addAttribute("q", "");
+        }
+        model.addAttribute("turmas", turmas);
         return "instrutor/turmas-instrutor";
     }
-    
     @PostMapping("/turmas/criar")
     public String criarTurma(@RequestParam String titulo,
                             @RequestParam String descricao,
@@ -137,16 +151,24 @@ public class InstrutorController {
     }
     
     @GetMapping("/exercicios")
-    public String exercicios(Model model, HttpSession session) {
+    public String exercicios(@RequestParam(name = "q", required = false) String q,
+                             Model model, HttpSession session) {
         Instrutor instrutor = (Instrutor) session.getAttribute("instrutor");
         if (instrutor == null) {
             instrutor = instrutorService.listarTodos().isEmpty() ? null : instrutorService.listarTodos().get(0);
         }
         model.addAttribute("instrutor", instrutor);
-        model.addAttribute("exercicios", exercicioService.listarTodos());
+        java.util.List<Exercicio> exercicios;
+        if (q != null && !q.trim().isEmpty()) {
+            exercicios = exercicioService.buscarPorNome(q.trim());
+            model.addAttribute("q", q.trim());
+        } else {
+            exercicios = exercicioService.listarTodos();
+            model.addAttribute("q", "");
+        }
+        model.addAttribute("exercicios", exercicios);
         return "instrutor/exercicios-instrutor";
     }
-    
     @PostMapping("/exercicios/adicionar")
     public String adicionarExercicio(@RequestParam String nome,
                                     @RequestParam String equipamento,
@@ -273,6 +295,9 @@ public class InstrutorController {
         }
         
         model.addAttribute("aluno", aluno);
+        // Carregar últimas 5 avaliações (ordenadas por data desc)
+        var avaliacoes = avaliacaoService.listarUltimas5PorAluno(aluno.getCpf());
+        model.addAttribute("avaliacoes", avaliacoes);
         return "instrutor/perfil-aluno";
     }
     
