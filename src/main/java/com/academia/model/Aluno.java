@@ -5,14 +5,15 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Entity
-@Table(name = "aluno")
+@Table(name = "Aluno")
+@PrimaryKeyJoinColumn(name = "cpf")
 public class Aluno extends Pessoa {
     
     private String objetivo;
     
     @ManyToMany
     @JoinTable(
-        name = "aluno_turma",
+        name = "AlunoTurma",
         joinColumns = @JoinColumn(name = "cpf_aluno"),
         inverseJoinColumns = @JoinColumn(name = "id_turma")
     )

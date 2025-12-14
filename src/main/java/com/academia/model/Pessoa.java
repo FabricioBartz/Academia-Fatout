@@ -3,7 +3,9 @@ package com.academia.model;
 import jakarta.persistence.*;
 import java.time.LocalDate;
 
-@MappedSuperclass
+@Entity
+@Table(name = "Pessoa")
+@Inheritance(strategy = InheritanceType.JOINED)
 public abstract class Pessoa {
     @Id
     @Column(name = "cpf", length = 11)
