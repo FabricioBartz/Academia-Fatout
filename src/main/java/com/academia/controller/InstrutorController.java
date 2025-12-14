@@ -202,4 +202,42 @@ public class InstrutorController {
             return "instrutor/alunos-instrutor";
         }
     }
+    
+    @PostMapping("/alunos/editar")
+    public String editarAluno(@RequestParam String cpf,
+                             @RequestParam String nome,
+                             @RequestParam String email,
+                             @RequestParam(required = false) String telefone,
+                             @RequestParam(required = false) String dataNascimento,
+                             @RequestParam(required = false) String objetivo,
+                             Model model) {
+        try {
+            Aluno alunoAtualizado = new Aluno();
+            alunoAtualizado.setNome(nome);
+            alunoAtualizado.setEmail(email);
+            if (telefone != null && !telefone.trim().isEmpty()) {
+                alunoAtualizado.setTelefone(telefone);
+            }
+            if (dataNascimento != null && !dataNascimento.trim().isEmpty()) {
+                alunoAtualizado.setDataNascimento(LocalDate.parse(dataNascimento));
+            }
+            if (objetivo != null && !objetivo.trim().isEmpty()) {
+                alunoAtualizado.setObjetivo(objetivo);
+            }
+            alunoService.atualizarAluno(cpf, alunoAtualizado);
+            return "redirect:/instrutor/alunos";
+        } catch (Exception e) {
+            model.addAttribute("error", "Erro ao atualizar aluno: " + e.getMessage());
+            Instrutor instrutor = instrutorService.listarTodos().get(0);
+            model.addAttribute("instrutor", instrutor);
+            model.addAttribute("alunos", alunoService.listarTodos());
+            return "instrutor/alunos-instrutor";
+        }
+    }
+    
+    @PostMapping("/alunos/excluir/{cpf}")
+    public String excluirAluno(@PathVariable String cpf) {
+        alunoService.deletarAluno(cpf);
+        return "redirect:/instrutor/alunos";
+    }
 }

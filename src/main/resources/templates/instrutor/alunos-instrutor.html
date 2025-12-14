@@ -83,6 +83,47 @@
                     </div>
                 </div>
                 
+                <!-- Modal para editar aluno -->
+                <div class="modal fade" id="editarAlunoModal" tabindex="-1">
+                    <div class="modal-dialog">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title">Editar Aluno</h5>
+                                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                            </div>
+                            <form th:action="@{/instrutor/alunos/editar}" method="post">
+                                <input type="hidden" id="editCpf" name="cpf">
+                                <div class="modal-body">
+                                    <div class="mb-3">
+                                        <label for="editNome" class="form-label">Nome</label>
+                                        <input type="text" class="form-control" id="editNome" name="nome" required>
+                                    </div>
+                                    <div class="mb-3">
+                                        <label for="editEmail" class="form-label">Email</label>
+                                        <input type="email" class="form-control" id="editEmail" name="email" required>
+                                    </div>
+                                    <div class="mb-3">
+                                        <label for="editTelefone" class="form-label">Telefone</label>
+                                        <input type="text" class="form-control" id="editTelefone" name="telefone">
+                                    </div>
+                                    <div class="mb-3">
+                                        <label for="editDataNascimento" class="form-label">Data de Nascimento</label>
+                                        <input type="date" class="form-control" id="editDataNascimento" name="dataNascimento" required>
+                                    </div>
+                                    <div class="mb-3">
+                                        <label for="editObjetivo" class="form-label">Objetivo</label>
+                                        <input type="text" class="form-control" id="editObjetivo" name="objetivo">
+                                    </div>
+                                </div>
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                                    <button type="submit" class="btn btn-primary">Salvar Alterações</button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+                
                 <div class="alert alert-success">
                     Funcionalidade implementada. Use o botão acima para cadastrar alunos.
                 </div>
@@ -99,6 +140,7 @@
                                 <th>Telefone</th>
                                 <th>Data de Nascimento</th>
                                 <th>Objetivo</th>
+                                <th>Ações</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -109,6 +151,12 @@
                                 <td th:text="${aluno.telefone}">11987654321</td>
                                 <td th:text="${#temporals.format(aluno.dataNascimento, 'dd/MM/yyyy')}">14/03/1995</td>
                                 <td th:text="${aluno.objetivo}">Hipertrofia</td>
+                                <td>
+                                    <button class="btn btn-sm btn-warning" onclick="editarAluno(this)" th:data-cpf="${aluno.cpf}" th:data-nome="${aluno.nome}" th:data-email="${aluno.email}" th:data-telefone="${aluno.telefone}" th:data-data="${#temporals.format(aluno.dataNascimento, 'yyyy-MM-dd')}" th:data-objetivo="${aluno.objetivo}">Editar</button>
+                                    <form method="post" th:action="@{/instrutor/alunos/excluir/{cpf}(cpf=${aluno.cpf})}" style="display:inline;" onsubmit="return confirm('Tem certeza que deseja excluir este aluno?')">
+                                        <button type="submit" class="btn btn-sm btn-danger">Excluir</button>
+                                    </form>
+                                </td>
                             </tr>
                         </tbody>
                     </table>
@@ -120,6 +168,25 @@
     <script>
         function cadastrarAluno() {
             const modal = new bootstrap.Modal(document.getElementById('cadastrarAlunoModal'));
+            modal.show();
+        }
+        
+        function editarAluno(button) {
+            const cpf = button.getAttribute('data-cpf');
+            const nome = button.getAttribute('data-nome');
+            const email = button.getAttribute('data-email');
+            const telefone = button.getAttribute('data-telefone');
+            const dataNascimento = button.getAttribute('data-data');
+            const objetivo = button.getAttribute('data-objetivo');
+            
+            document.getElementById('editCpf').value = cpf;
+            document.getElementById('editNome').value = nome;
+            document.getElementById('editEmail').value = email;
+            document.getElementById('editTelefone').value = telefone;
+            document.getElementById('editDataNascimento').value = dataNascimento;
+            document.getElementById('editObjetivo').value = objetivo;
+            
+            const modal = new bootstrap.Modal(document.getElementById('editarAlunoModal'));
             modal.show();
         }
     </script>
