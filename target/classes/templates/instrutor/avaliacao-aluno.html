@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Avaliação Física</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body>
+    <nav class="navbar navbar-dark bg-dark">
+        <div class="container">
+            <a class="navbar-brand" href="#">🏋️ Academia FatOut - Instrutor</a>
+            <div>
+                <span class="text-white me-3" th:text="${instrutor.nome}">Carlos Silva</span>
+                <a href="/" class="btn btn-light btn-sm">Sair</a>
+            </div>
+        </div>
+    </nav>
+    
+    <div class="container mt-4">
+        <div class="row mb-4">
+            <div class="col-md-12">
+                <a th:href="@{/instrutor/alunos/perfil/{cpf}(cpf=${aluno.cpf})}" class="btn btn-secondary btn-sm">← Voltar</a>
+                <h1>Avaliação Física</h1>
+                <p class="text-muted" th:text="${aluno.nome}">Nome do Aluno</p>
+            </div>
+        </div>
+        
+        <div class="row">
+            <div class="col-md-8">
+                <form th:action="@{/instrutor/alunos/avaliacao/{cpf}(cpf=${aluno.cpf})}" method="post" class="card p-4">
+                    
+                    <h5 class="mb-4">Nova Avaliação Física</h5>
+                    
+                    <div th:if="${error}" class="alert alert-danger" th:text="${error}"></div>
+                    
+                    <!-- Dados Básicos -->
+                    <h6 class="mb-3 mt-4">Dados Básicos</h6>
+                    <div class="row mb-3">
+                        <div class="col-md-4">
+                            <label for="peso" class="form-label">Peso (kg)</label>
+                            <input type="number" step="0.01" class="form-control" id="peso" name="peso" placeholder="Ex: 75.5" required>
+                        </div>
+                        <div class="col-md-4">
+                            <label for="altura" class="form-label">Altura (m)</label>
+                            <input type="number" step="0.01" class="form-control" id="altura" name="altura" placeholder="Ex: 1.75" required>
+                        </div>
+                        <div class="col-md-4">
+                            <label for="imc" class="form-label">IMC</label>
+                            <input type="text" class="form-control" id="imc" placeholder="-" disabled>
+                        </div>
+                    </div>
+                    
+                    <!-- Medidas Corporais -->
+                    <h6 class="mb-3 mt-4">Medidas Corporais (cm)</h6>
+                    <div class="row mb-3">
+                        <div class="col-md-4">
+                            <label for="peito" class="form-label">Peito</label>
+                            <input type="number" step="0.01" class="form-control" id="peito" name="peito" placeholder="Ex: 100" required>
+                        </div>
+                        <div class="col-md-4">
+                            <label for="cintura" class="form-label">Cintura</label>
+                            <input type="number" step="0.01" class="form-control" id="cintura" name="cintura" placeholder="Ex: 85" required>
+                        </div>
+                        <div class="col-md-4">
+                            <label for="quadril" class="form-label">Quadril</label>
+                            <input type="number" step="0.01" class="form-control" id="quadril" name="quadril" placeholder="Ex: 95" required>
+                        </div>
+                    </div>
+                    
+                    <!-- Braços -->
+                    <h6 class="mb-3 mt-4">Braços (cm)</h6>
+                    <div class="row mb-3">
+                        <div class="col-md-6">
+                            <label for="bicepsEsquerdo" class="form-label">Bíceps Esquerdo</label>
+                            <input type="number" step="0.01" class="form-control" id="bicepsEsquerdo" name="bicepsEsquerdo" placeholder="Ex: 35" required>
+                        </div>
+                        <div class="col-md-6">
+                            <label for="bicepsDireito" class="form-label">Bíceps Direito</label>
+                            <input type="number" step="0.01" class="form-control" id="bicepsDireito" name="bicepsDireito" placeholder="Ex: 36" required>
+                        </div>
+                    </div>
+                    
+                    <!-- Coxas -->
+                    <h6 class="mb-3 mt-4">Coxas (cm)</h6>
+                    <div class="row mb-3">
+                        <div class="col-md-6">
+                            <label for="coxaEsquerda" class="form-label">Coxa Esquerda</label>
+                            <input type="number" step="0.01" class="form-control" id="coxaEsquerda" name="coxaEsquerda" placeholder="Ex: 58" required>
+                        </div>
+                        <div class="col-md-6">
+                            <label for="coxaDireita" class="form-label">Coxa Direita</label>
+                            <input type="number" step="0.01" class="form-control" id="coxaDireita" name="coxaDireita" placeholder="Ex: 58" required>
+                        </div>
+                    </div>
+                    
+                    <!-- Panturrilhas -->
+                    <h6 class="mb-3 mt-4">Panturrilhas (cm)</h6>
+                    <div class="row mb-3">
+                        <div class="col-md-6">
+                            <label for="panturrilhaEsquerda" class="form-label">Panturrilha Esquerda</label>
+                            <input type="number" step="0.01" class="form-control" id="panturrilhaEsquerda" name="panturrilhaEsquerda" placeholder="Ex: 38">
+                        </div>
+                        <div class="col-md-6">
+                            <label for="panturrilhaDireita" class="form-label">Panturrilha Direita</label>
+                            <input type="number" step="0.01" class="form-control" id="panturrilhaDireita" name="panturrilhaDireita" placeholder="Ex: 38">
+                        </div>
+                    </div>
+                    
+                    <!-- Observações -->
+                    <h6 class="mb-3 mt-4">Observações</h6>
+                    <div class="mb-3">
+                        <textarea class="form-control" id="observacoes" name="observacoes" rows="4" placeholder="Digite observações sobre a avaliação, objetivos do aluno, etc."></textarea>
+                    </div>
+                    
+                    <!-- Botões -->
+                    <div class="mt-4">
+                        <a th:href="@{/instrutor/alunos/perfil/{cpf}(cpf=${aluno.cpf})}" class="btn btn-secondary">Cancelar</a>
+                        <button type="submit" class="btn btn-danger">Salvar Avaliação</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+    
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        // Calcular IMC automaticamente
+        document.getElementById('peso').addEventListener('change', calcularImc);
+        document.getElementById('altura').addEventListener('change', calcularImc);
+        
+        function calcularImc() {
+            const peso = parseFloat(document.getElementById('peso').value);
+            const altura = parseFloat(document.getElementById('altura').value);
+            
+            if (peso > 0 && altura > 0) {
+                const imc = (peso / (altura * altura)).toFixed(2);
+                document.getElementById('imc').value = imc;
+            }
+        }
+    </script>
+</body>
+</html>

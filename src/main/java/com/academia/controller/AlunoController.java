@@ -2,6 +2,7 @@ package com.academia.controller;
 
 import com.academia.model.Aluno;
 import com.academia.service.AlunoService;
+import com.academia.service.AvaliacaoService;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -12,9 +13,11 @@ import jakarta.servlet.http.HttpSession;
 public class AlunoController {
     
     private final AlunoService alunoService;
+    private final AvaliacaoService avaliacaoService;
     
-    public AlunoController(AlunoService alunoService) {
+    public AlunoController(AlunoService alunoService, AvaliacaoService avaliacaoService) {
         this.alunoService = alunoService;
+        this.avaliacaoService = avaliacaoService;
     }
     
     @GetMapping("/login")
@@ -83,7 +86,11 @@ public class AlunoController {
         if (aluno == null) {
             aluno = alunoService.listarTodos().isEmpty() ? null : alunoService.listarTodos().get(0);
         }
+        if (aluno == null) {
+            return "redirect:/aluno/login";
+        }
         model.addAttribute("aluno", aluno);
+        model.addAttribute("avaliacoes", avaliacaoService.listarPorAluno(aluno.getCpf()));
         return "aluno/avaliacoes-aluno";
     }
 }

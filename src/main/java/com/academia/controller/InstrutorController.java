@@ -4,10 +4,12 @@ import com.academia.model.Aluno;
 import com.academia.model.Instrutor;
 import com.academia.model.Turma;
 import com.academia.model.Exercicio;
+import com.academia.model.AvaliacaoFisica;
 import com.academia.service.InstrutorService;
 import com.academia.service.TurmaService;
 import com.academia.service.ExercicioService;
 import com.academia.service.AlunoService;
+import com.academia.service.AvaliacaoService;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -23,12 +25,14 @@ public class InstrutorController {
     private final TurmaService turmaService;
     private final ExercicioService exercicioService;
     private final AlunoService alunoService;
+    private final AvaliacaoService avaliacaoService;
     
-    public InstrutorController(InstrutorService instrutorService, TurmaService turmaService, ExercicioService exercicioService, AlunoService alunoService) {
+    public InstrutorController(InstrutorService instrutorService, TurmaService turmaService, ExercicioService exercicioService, AlunoService alunoService, AvaliacaoService avaliacaoService) {
         this.instrutorService = instrutorService;
         this.turmaService = turmaService;
         this.exercicioService = exercicioService;
         this.alunoService = alunoService;
+        this.avaliacaoService = avaliacaoService;
     }
     
     @GetMapping("/login")
@@ -270,5 +274,133 @@ public class InstrutorController {
         
         model.addAttribute("aluno", aluno);
         return "instrutor/perfil-aluno";
+    }
+    
+    @GetMapping("/alunos/avaliacao/{cpf}")
+    public String formularioAvaliacao(@PathVariable String cpf, Model model, HttpSession session) {
+        Instrutor instrutor = (Instrutor) session.getAttribute("instrutor");
+        if (instrutor == null) {
+            instrutor = instrutorService.listarTodos().isEmpty() ? null : instrutorService.listarTodos().get(0);
+        }
+        model.addAttribute("instrutor", instrutor);
+        
+        Aluno aluno = alunoService.buscarPorCpf(cpf).orElse(null);
+        if (aluno == null) {
+            return "redirect:/instrutor/alunos";
+        }
+        
+        model.addAttribute("aluno", aluno);
+        return "instrutor/avaliacao-aluno";
+    }
+    
+    @PostMapping("/alunos/avaliacao/{cpf}")
+    public String salvarAvaliacao(@PathVariable String cpf,
+                                 @RequestParam Double peso,
+                                 @RequestParam Double altura,
+                                 @RequestParam Double peito,
+                                 @RequestParam Double cintura,
+                                 @RequestParam Double quadril,
+                                 @RequestParam Double bicepsEsquerdo,
+                                 @RequestParam Double bicepsDireito,
+                                 @RequestParam Double coxaEsquerda,
+                                 @RequestParam Double coxaDireita,
+                                 @RequestParam(required = false) Double panturrilhaEsquerda,
+                                 @RequestParam(required = false) Double panturrilhaDireita,
+                                 @RequestParam(required = false) String observacoes,
+                                 Model model,
+                                 HttpSession session) {
+        try {
+            Instrutor instrutor = (Instrutor) session.getAttribute("instrutor");
+            if (instrutor == null) {
+                instrutor = instrutorService.listarTodos().get(0);
+            }
+            
+            Aluno aluno = alunoService.buscarPorCpf(cpf).orElse(null);
+            if (aluno == null) {
+                return "redirect:/instrutor/alunos";
+            }
+            
+            AvaliacaoFisica avaliacao = new AvaliacaoFisica();
+            avaliacao.setAluno(aluno);
+            avaliacao.setInstrutor(instrutor);
+            avaliacao.setData(LocalDate.now());
+            avaliacao.setPeso(peso);
+            avaliacao.setAltura(altura);
+            avaliacao.setPeito(peito);
+            avaliacao.setCintura(cintura);
+            avaliacao.setQuadril(quadril);
+            avaliacao.setBicepsEsquerdo(bicepsEsquerdo);
+            avaliacao.setBicepsDireito(bicepsDireito);
+            avaliacao.setCoxaEsquerda(coxaEsquerda);
+            avaliacao.setCoxaDireita(coxaDireita);
+            if (panturrilhaEsquerda != null) {
+                avaliacao.setPanturrilhaEsquerda(panturrilhaEsquerda);
+            }
+            if (panturrilhaDireita != null) {
+                avaliacao.setPanturrilhaDireita(panturrilhaDireita);
+            }
+            avaliacao.setObservacoes(observacoes);
+            
+            avaliacaoService.criarAvaliacao(avaliacao);
+            
+            return "redirect:/instrutor/alunos/perfil/" + cpf;
+        } catch (Exception e) {
+            model.addAttribute("error", "Erro ao salvar avaliação: " + e.getMessage());
+            Instrutor instrutor = instrutorService.listarTodos().get(0);
+            model.addAttribute("instrutor", instrutor);
+            Aluno aluno = alunoService.buscarPorCpf(cpf).orElse(null);
+            model.addAttribute("aluno", aluno);
+            return "instrutor/avaliacao-aluno";
+        }
+    }
+    
+    @GetMapping("/alunos/editar/{cpf}")
+    public String formularioEditarAluno(@PathVariable String cpf, Model model, HttpSession session) {
+        Instrutor instrutor = (Instrutor) session.getAttribute("instrutor");
+        if (instrutor == null) {
+            instrutor = instrutorService.listarTodos().isEmpty() ? null : instrutorService.listarTodos().get(0);
+        }
+        model.addAttribute("instrutor", instrutor);
+        
+        Aluno aluno = alunoService.buscarPorCpf(cpf).orElse(null);
+        if (aluno == null) {
+            return "redirect:/instrutor/alunos";
+        }
+        
+        model.addAttribute("aluno", aluno);
+        return "instrutor/editar-aluno";
+    }
+    
+    @PostMapping("/alunos/editar/{cpf}")
+    public String salvarEdicaoAluno(@PathVariable String cpf,
+                                   @RequestParam String nome,
+                                   @RequestParam String email,
+                                   @RequestParam(required = false) String telefone,
+                                   @RequestParam(required = false) String dataNascimento,
+                                   @RequestParam(required = false) String objetivo,
+                                   Model model) {
+        try {
+            Aluno alunoAtualizado = new Aluno();
+            alunoAtualizado.setNome(nome);
+            alunoAtualizado.setEmail(email);
+            if (telefone != null && !telefone.trim().isEmpty()) {
+                alunoAtualizado.setTelefone(telefone);
+            }
+            if (dataNascimento != null && !dataNascimento.trim().isEmpty()) {
+                alunoAtualizado.setDataNascimento(LocalDate.parse(dataNascimento));
+            }
+            if (objetivo != null && !objetivo.trim().isEmpty()) {
+                alunoAtualizado.setObjetivo(objetivo);
+            }
+            alunoService.atualizarAluno(cpf, alunoAtualizado);
+            return "redirect:/instrutor/alunos/perfil/" + cpf;
+        } catch (Exception e) {
+            model.addAttribute("error", "Erro ao atualizar aluno: " + e.getMessage());
+            Instrutor instrutor = instrutorService.listarTodos().get(0);
+            model.addAttribute("instrutor", instrutor);
+            Aluno aluno = alunoService.buscarPorCpf(cpf).orElse(null);
+            model.addAttribute("aluno", aluno);
+            return "instrutor/editar-aluno";
+        }
     }
 }
