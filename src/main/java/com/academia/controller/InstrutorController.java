@@ -254,4 +254,21 @@ public class InstrutorController {
         alunoService.deletarAluno(cpf);
         return "redirect:/instrutor/alunos";
     }
+    
+    @GetMapping("/alunos/perfil/{cpf}")
+    public String perfilAluno(@PathVariable String cpf, Model model, HttpSession session) {
+        Instrutor instrutor = (Instrutor) session.getAttribute("instrutor");
+        if (instrutor == null) {
+            instrutor = instrutorService.listarTodos().isEmpty() ? null : instrutorService.listarTodos().get(0);
+        }
+        model.addAttribute("instrutor", instrutor);
+        
+        Aluno aluno = alunoService.buscarPorCpf(cpf).orElse(null);
+        if (aluno == null) {
+            return "redirect:/instrutor/alunos";
+        }
+        
+        model.addAttribute("aluno", aluno);
+        return "instrutor/perfil-aluno";
+    }
 }

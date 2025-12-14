@@ -188,7 +188,7 @@
                 <!-- Lista de Alunos -->
                 <h3>Alunos Cadastrados</h3>
                 <div class="table-responsive">
-                    <table class="table table-striped">
+                    <table class="table table-striped table-hover">
                         <thead>
                             <tr>
                                 <th>CPF</th>
@@ -200,7 +200,7 @@
                             </tr>
                         </thead>
                         <tbody>
-                            <tr th:each="aluno : ${alunos}">
+                            <tr th:each="aluno : ${alunos}" style="cursor: pointer;" onclick="abrirPerfilAluno(this)" th:data-cpf="${aluno.cpf}">
                                 <td th:text="${aluno.cpf}">12345678901</td>
                                 <td th:text="${aluno.nome}">João Silva</td>
                                 <td th:text="${aluno.email}">joao@email.com</td>
@@ -216,6 +216,13 @@
     </div>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
     <script>
+        function abrirPerfilAluno(row) {
+            const cpf = row.getAttribute('data-cpf');
+            if (cpf) {
+                window.location.href = '/instrutor/alunos/perfil/' + encodeURIComponent(cpf);
+            }
+        }
+        
         function cadastrarAluno() {
             const modal = new bootstrap.Modal(document.getElementById('cadastrarAlunoModal'));
             modal.show();
