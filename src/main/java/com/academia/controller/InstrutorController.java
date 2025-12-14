@@ -11,6 +11,7 @@ import com.academia.service.AlunoService;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import jakarta.servlet.http.HttpSession;
 import java.time.LocalDate;
 import java.time.LocalTime;
 
@@ -37,11 +38,13 @@ public class InstrutorController {
     
     @PostMapping("/login")
     public String login(@RequestParam String email,
-                       @RequestParam String senha,
-                       Model model) {
+                        @RequestParam String senha,
+                        Model model,
+                        HttpSession session) {
         try {
             Instrutor instrutor = instrutorService.login(email, senha);
-            model.addAttribute("instrutor", instrutor);
+            // guarda instrutor na sessão para uso nas próximas requisições
+            session.setAttribute("instrutor", instrutor);
             return "redirect:/instrutor/dashboard";
         } catch (RuntimeException e) {
             model.addAttribute("error", e.getMessage());
@@ -50,14 +53,16 @@ public class InstrutorController {
     }
     
     @GetMapping("/dashboard")
-    public String dashboard(Model model) {
-        // Para demonstração, vamos usar o primeiro instrutor
-        Instrutor instrutor = instrutorService.listarTodos().get(0);
+    public String dashboard(Model model, HttpSession session) {
+        Instrutor instrutor = (Instrutor) session.getAttribute("instrutor");
+        if (instrutor == null) {
+            instrutor = instrutorService.listarTodos().isEmpty() ? null : instrutorService.listarTodos().get(0);
+        }
         model.addAttribute("instrutor", instrutor);
         // Contagens dinâmicas
         long alunosCount = alunoService.contarAlunos();
         model.addAttribute("alunosCount", alunosCount);
-        long turmasCount = turmaService.listarPorInstrutor(instrutor.getCpf()).size();
+        long turmasCount = turmaService.listarPorInstrutor(instrutor == null ? "" : instrutor.getCpf()).size();
         model.addAttribute("turmasCount", turmasCount);
         long exerciciosCount = exercicioService.contarExercicios();
         model.addAttribute("exerciciosCount", exerciciosCount);
@@ -65,18 +70,24 @@ public class InstrutorController {
     }
     
     @GetMapping("/alunos")
-    public String alunos(Model model) {
-        Instrutor instrutor = instrutorService.listarTodos().get(0);
+    public String alunos(Model model, HttpSession session) {
+        Instrutor instrutor = (Instrutor) session.getAttribute("instrutor");
+        if (instrutor == null) {
+            instrutor = instrutorService.listarTodos().isEmpty() ? null : instrutorService.listarTodos().get(0);
+        }
         model.addAttribute("instrutor", instrutor);
         model.addAttribute("alunos", alunoService.listarTodos());
         return "instrutor/alunos-instrutor";
     }
     
     @GetMapping("/turmas")
-    public String turmas(Model model) {
-        Instrutor instrutor = instrutorService.listarTodos().get(0);
+    public String turmas(Model model, HttpSession session) {
+        Instrutor instrutor = (Instrutor) session.getAttribute("instrutor");
+        if (instrutor == null) {
+            instrutor = instrutorService.listarTodos().isEmpty() ? null : instrutorService.listarTodos().get(0);
+        }
         model.addAttribute("instrutor", instrutor);
-        model.addAttribute("turmas", turmaService.listarPorInstrutor(instrutor.getCpf()));
+        model.addAttribute("turmas", turmaService.listarPorInstrutor(instrutor == null ? "" : instrutor.getCpf()));
         return "instrutor/turmas-instrutor";
     }
     
@@ -122,8 +133,11 @@ public class InstrutorController {
     }
     
     @GetMapping("/exercicios")
-    public String exercicios(Model model) {
-        Instrutor instrutor = instrutorService.listarTodos().get(0);
+    public String exercicios(Model model, HttpSession session) {
+        Instrutor instrutor = (Instrutor) session.getAttribute("instrutor");
+        if (instrutor == null) {
+            instrutor = instrutorService.listarTodos().isEmpty() ? null : instrutorService.listarTodos().get(0);
+        }
         model.addAttribute("instrutor", instrutor);
         model.addAttribute("exercicios", exercicioService.listarTodos());
         return "instrutor/exercicios-instrutor";

@@ -237,22 +237,45 @@
                 alert('Selecione um aluno!');
                 return;
             }
-            
-            // Encontrar o aluno na tabela e preencher os dados
+
+            // Encontrar o aluno na tabela e preencher os dados a partir das células
             const linhas = document.querySelectorAll('table tbody tr');
             let alunoEncontrado = false;
-            
-            linhas.forEach(linha => {
-                if (linha.cells[0].textContent.trim() === cpf) {
+
+            for (const linha of linhas) {
+                const celCpf = linha.cells[0].textContent.trim();
+                if (celCpf === cpf) {
                     alunoEncontrado = true;
-                    const botaoEditar = linha.querySelector('.btn-warning');
-                    editarAluno(botaoEditar);
+                    const nome = linha.cells[1].textContent.trim();
+                    const email = linha.cells[2].textContent.trim();
+                    const telefone = linha.cells[3].textContent.trim();
+                    // data está no formato dd/MM/yyyy na tabela; converter para yyyy-MM-dd para o input date
+                    const dataText = linha.cells[4].textContent.trim();
+                    let dataIso = '';
+                    if (dataText) {
+                        const parts = dataText.split('/');
+                        if (parts.length === 3) {
+                            dataIso = parts[2] + '-' + parts[1].padStart(2,'0') + '-' + parts[0].padStart(2,'0');
+                        }
+                    }
+                    const objetivo = linha.cells[5].textContent.trim();
+
+                    document.getElementById('editCpf').value = cpf;
+                    document.getElementById('editNome').value = nome;
+                    document.getElementById('editEmail').value = email;
+                    document.getElementById('editTelefone').value = telefone;
+                    document.getElementById('editDataNascimento').value = dataIso;
+                    document.getElementById('editObjetivo').value = objetivo;
+
+                    const modal = new bootstrap.Modal(document.getElementById('editarAlunoModal'));
+                    modal.show();
+                    break;
                 }
-            });
-            
+            }
+
             if (alunoEncontrado) {
                 const selectModal = bootstrap.Modal.getInstance(document.getElementById('selecionarAlunoEditarModal'));
-                selectModal.hide();
+                if (selectModal) selectModal.hide();
             } else {
                 alert('Aluno não encontrado!');
             }
@@ -264,19 +287,18 @@
                 alert('Selecione um aluno!');
                 return;
             }
-            
-            if (confirm('Tem certeza que deseja excluir este aluno? Essa ação não pode ser desfeita!')) {
-                // Encontrar e submeter o formulário de exclusão
-                const linhas = document.querySelectorAll('table tbody tr');
-                linhas.forEach(linha => {
-                    if (linha.cells[0].textContent.trim() === cpf) {
-                        const formularioExcluir = linha.querySelector('form[method="post"]');
-                        if (formularioExcluir) {
-                            formularioExcluir.submit();
-                        }
-                    }
-                });
+
+            if (!confirm('Tem certeza que deseja excluir este aluno? Essa ação não pode ser desfeita!')) {
+                return;
             }
+
+            // Criar um form dinâmico e submeter para o endpoint de exclusão
+            const action = '/instrutor/alunos/excluir/' + encodeURIComponent(cpf);
+            const form = document.createElement('form');
+            form.method = 'post';
+            form.action = action;
+            document.body.appendChild(form);
+            form.submit();
         }
         
         function editarAluno(button) {
