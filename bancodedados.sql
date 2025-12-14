@@ -1,10 +1,23 @@
--- Script: mysql_schema_corrected.sql
--- Uso: executar em um servidor MySQL para criar o banco e as tabelas (corrigido)
+-- Arquivo: bancodedados.sql
+-- Uso: mysql -u root -padmin < bancodedados.sql
+-- Objetivo: cria o banco, as tabelas e insere dados iniciais; inclui rotina opcional
+--           para ajustar collation para utf8mb4_0900_ai_ci (MySQL 8)
 
+-- Garante que o cliente MySQL interprete corretamente caracteres acentuados
+SET NAMES utf8mb4;
+SET character_set_client = utf8mb4;
+SET character_set_connection = utf8mb4;
+
+-- Desabilita checagem de chaves estrangeiras durante import (opcional)
+SET FOREIGN_KEY_CHECKS = 0;
+
+-- -----------------------------------------------------
+-- Seção 1: criação do banco, tabelas e inserts (corrigido)
+-- -----------------------------------------------------
 DROP DATABASE IF EXISTS academia_db;
 CREATE DATABASE IF NOT EXISTS academia_db
   CHARACTER SET = utf8mb4
-  COLLATE = utf8mb4_unicode_ci;
+  COLLATE = utf8mb4_0900_ai_ci;
 USE academia_db;
 
 -- Tabela Pessoa (dados comuns)
@@ -165,4 +178,49 @@ INSERT INTO AlunoTurma (cpf_aluno, id_turma) VALUES
 ('12345678901', 1),
 ('12345678901', 2);
 
--- Observação: posso adicionar inserts para PlanoDeTreino, ExercicioPlano e AvaliacaoFisica se desejar.
+-- -----------------------------------------------------
+-- Seção 2: rotina opcional para forçar collation utf8mb4_0900_ai_ci
+-- (útil se a instalação MySQL usar collations diferentes)
+-- -----------------------------------------------------
+
+-- Ajusta collation do banco (reforça para 0900)
+ALTER DATABASE academia_db CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci;
+
+USE academia_db;
+
+-- Converte todas as tabelas do schema para a collation desejada
+DELIMITER $$
+CREATE PROCEDURE fix_collation()
+BEGIN
+  DECLARE done INT DEFAULT FALSE;
+  DECLARE tbl VARCHAR(255);
+  DECLARE cur CURSOR FOR
+    SELECT TABLE_NAME FROM INFORMATION_SCHEMA.TABLES
+    WHERE TABLE_SCHEMA = 'academia_db' AND TABLE_TYPE = 'BASE TABLE';
+  DECLARE CONTINUE HANDLER FOR NOT FOUND SET done = TRUE;
+
+  OPEN cur;
+  read_loop: LOOP
+    FETCH cur INTO tbl;
+    IF done THEN
+      LEAVE read_loop;
+    END IF;
+    SET @s = CONCAT('ALTER TABLE `', 'academia_db', '`.`', tbl, '` CONVERT TO CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci;');
+    PREPARE stmt FROM @s;
+    EXECUTE stmt;
+    DEALLOCATE PREPARE stmt;
+  END LOOP;
+  CLOSE cur;
+END$$
+DELIMITER ;
+
+CALL fix_collation();
+DROP PROCEDURE IF EXISTS fix_collation;
+
+-- Verificação rápida (opcional): mostra collation das tabelas
+SELECT TABLE_NAME, TABLE_COLLATION FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_SCHEMA='academia_db' ORDER BY TABLE_NAME;
+
+-- Reabilita checagem de chaves estrangeiras
+SET FOREIGN_KEY_CHECKS = 1;
+
+-- Fim de arquivo
