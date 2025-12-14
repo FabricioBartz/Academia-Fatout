@@ -35,17 +35,8 @@
                 
                 <div class="card mb-4">
                     <div class="card-body">
-                        <div class="row align-items-center mb-3">
-                            <div class="col-md-10">
-                                <h5 class="card-title mb-1" th:text="${aluno.nome}">Nome do Aluno</h5>
-                                <p class="text-muted mb-3" th:text="${aluno.email}">email@example.com</p>
-                            </div>
-                            <div class="col-md-2 text-end">
-                                <div class="avatar-placeholder" style="width: 60px; height: 60px; background-color: #007bff; border-radius: 50%; display: flex; align-items: center; justify-content: center; color: white; font-size: 24px; margin-left: auto;">
-                                    <span th:text="${aluno.nome.charAt(0)}">J</span>
-                                </div>
-                            </div>
-                        </div>
+                        <h5 class="card-title mb-1" th:text="${aluno.nome}">Nome do Aluno</h5>
+                        <p class="card-text text-muted mb-3" th:text="${aluno.email}">email@example.com</p>
                         
                         <hr>
                         
@@ -69,20 +60,10 @@
                         
                         <hr>
                         
-                        <div class="btn-group" role="group">
-                            <button type="button" class="btn btn-primary" onclick="abrirModalCriarPlano()">
-                                <i class="bi bi-plus"></i> Criar Plano de Treino
-                            </button>
-                            <button type="button" class="btn btn-success" onclick="abrirModalRealizarAvaliacao()">
-                                <i class="bi bi-clipboard-check"></i> Realizar Avaliação
-                            </button>
-                            <button type="button" class="btn btn-warning" onclick="editarAluno()">
-                                <i class="bi bi-pencil"></i> Editar Perfil
-                            </button>
-                            <button type="button" class="btn btn-danger" onclick="removerAluno()">
-                                <i class="bi bi-trash"></i> Remover Aluno
-                            </button>
-                        </div>
+                        <button type="button" class="btn btn-primary me-2" onclick="abrirModalCriarPlano()">Criar Plano de Treino</button>
+                        <button type="button" class="btn btn-success me-2" onclick="abrirModalRealizarAvaliacao()">Realizar Avaliação</button>
+                        <button type="button" class="btn btn-warning me-2" onclick="editarAluno()">Editar Perfil</button>
+                        <button type="button" class="btn btn-danger" onclick="removerAluno()">Remover Aluno</button>
                     </div>
                 </div>
                 
