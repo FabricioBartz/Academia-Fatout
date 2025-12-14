@@ -117,8 +117,8 @@
                         </div>
                         <div th:if="${avaliacoes != null and !avaliacoes.isEmpty()}">
                             <div class="list-group">
-                                <a th:each="avaliacao : ${avaliacoes}" 
-                                   th:href="@{/aluno/avaliacoes}" 
+                                          <a th:each="avaliacao : ${avaliacoes}" 
+                                              th:href="@{'/instrutor/alunos/avaliacoes/' + ${aluno.cpf} + '/' + ${avaliacao.id}}" 
                                    class="list-group-item list-group-item-action d-flex justify-content-between align-items-center">
                                     <div>
                                         <strong th:text="${#temporals.format(avaliacao.data, 'dd/MM/yyyy')}">10/12/2025</strong>

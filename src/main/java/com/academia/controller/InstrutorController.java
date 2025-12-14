@@ -317,6 +317,33 @@ public class InstrutorController {
         model.addAttribute("aluno", aluno);
         return "instrutor/avaliacao-aluno";
     }
+
+    @GetMapping("/alunos/avaliacoes/{cpf}/{id}")
+    public String visualizarAvaliacao(@PathVariable String cpf,
+                                      @PathVariable Long id,
+                                      Model model,
+                                      HttpSession session) {
+        Instrutor instrutor = (Instrutor) session.getAttribute("instrutor");
+        if (instrutor == null) {
+            instrutor = instrutorService.listarTodos().isEmpty() ? null : instrutorService.listarTodos().get(0);
+        }
+        model.addAttribute("instrutor", instrutor);
+
+        Aluno aluno = alunoService.buscarPorCpf(cpf).orElse(null);
+        if (aluno == null) {
+            return "redirect:/instrutor/alunos";
+        }
+
+        AvaliacaoFisica avaliacao = avaliacaoService.buscarPorId(id).orElse(null);
+        if (avaliacao == null || avaliacao.getAluno() == null || !cpf.equals(avaliacao.getAluno().getCpf())) {
+            // se não pertence ao aluno ou não existe, volta para perfil
+            return "redirect:/instrutor/alunos/perfil/" + cpf;
+        }
+
+        model.addAttribute("aluno", aluno);
+        model.addAttribute("avaliacao", avaliacao);
+        return "instrutor/avaliacao-detalhe";
+    }
     
     @PostMapping("/alunos/avaliacao/{cpf}")
     public String salvarAvaliacao(@PathVariable String cpf,
