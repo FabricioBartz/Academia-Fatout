@@ -38,3 +38,34 @@ body {
     font-size: 2rem;
     font-weight: bold;
 }
+
+/* Flash alerts: compact + region to avoid layout shift */
+.flash-slot {
+    /* Reserva espaço fixo e impede quebra/empurrar layout */
+    height: 28px;
+    min-height: 2px;
+    min-width: 240px;
+    max-width: 320px;
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    overflow: hidden;
+}
+.flash-alert {
+    display: inline-block;
+    padding: 0.15rem 0.4rem; /* ainda menor */
+    font-size: 0.8rem;
+    line-height: 1;
+    margin: 0;
+    border-radius: 0.25rem;
+    max-width: 100%;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    transition: opacity .3s ease;
+}
+
+@media (max-width: 576px) {
+    .flash-slot { min-width: 180px; max-width: 220px; height: 26px; min-height: 26px; }
+    .flash-alert { font-size: 0.75rem; padding: 0.1rem 0.35rem; }
+}

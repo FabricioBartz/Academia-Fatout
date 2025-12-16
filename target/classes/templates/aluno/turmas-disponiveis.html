@@ -67,7 +67,7 @@
                                     <span class="badge bg-danger ms-2" th:if="${t.vagasDisponiveis == 0}">Lotada</span>
                                 </td>
                                 <td>
-                                    <form th:action="@{/aluno/minhas_turmas/matricular/{id}(id=${t.id})}" method="post" onsubmit="return confirm('Confirmar matrícula nesta turma?')">
+                                    <form th:action="@{/aluno/turmas/matricular/{id}(id=${t.id})}" method="post" onsubmit="return confirm('Confirmar matrícula nesta turma?')">
                                         <button type="submit" class="btn btn-success btn-sm" th:disabled="${t.vagasDisponiveis == 0}">Matricular</button>
                                     </form>
                                 </td>
@@ -77,6 +77,20 @@
                 </div>
             </div>
         </div>
-    </div>
+        </div>
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
+        <script>
+            document.addEventListener('DOMContentLoaded', function(){
+                const alerts = document.querySelectorAll('.flash-alert');
+                alerts.forEach(function(el){
+                    setTimeout(function(){
+                        try {
+                            const instance = bootstrap.Alert.getOrCreateInstance(el);
+                            instance.close();
+                        } catch(e) { el.remove(); }
+                    }, 2000);
+                });
+            });
+        </script>
 </body>
 </html>
