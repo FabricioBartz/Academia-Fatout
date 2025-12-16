@@ -88,6 +88,11 @@ public class AlunoController {
         
         return "aluno/dashboard-aluno";
     }
+    // Alias amigável para Painel Principal
+    @GetMapping("/painel_principal")
+    public String painelPrincipalAluno(Model model, HttpSession session) {
+        return dashboard(model, session);
+    }
     
     @GetMapping("/perfil")
     public String perfil(Model model, HttpSession session) {
@@ -231,5 +236,26 @@ public class AlunoController {
         model.addAttribute("aluno", aluno);
         model.addAttribute("avaliacoes", avaliacaoService.listarPorAluno(aluno.getCpf()));
         return "aluno/avaliacoes-aluno";
+    }
+
+    // Aliases amigáveis para URLs do aluno
+    @GetMapping("/meus_treinos")
+    public String meusTreinos(Model model, HttpSession session) {
+        return treino(model, session);
+    }
+
+    @GetMapping("/minhas_turmas")
+    public String minhasTurmas(Model model, HttpSession session) {
+        return turmas(model, session);
+    }
+
+    @GetMapping("/minhas_avaliacoes")
+    public String minhasAvaliacoes(Model model, HttpSession session) {
+        return avaliacoes(model, session);
+    }
+
+    @GetMapping("/meu_perfil")
+    public String meuPerfil(Model model, HttpSession session) {
+        return perfil(model, session);
     }
 }

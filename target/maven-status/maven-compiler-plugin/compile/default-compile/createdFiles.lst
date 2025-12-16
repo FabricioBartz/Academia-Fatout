@@ -11,9 +11,7 @@ com\academia\model\Pessoa.class
 com\academia\model\Aluno.class
 com\academia\service\ExercicioService.class
 com\academia\service\InstrutorService.class
-com\academia\controller\AlunoController.class
 com\academia\repository\PlanoTreinoRepository.class
-com\academia\controller\InstrutorController.class
 com\academia\model\Exercicio.class
 com\academia\controller\AlunoController$1.class
 com\academia\repository\AlunoRepository.class

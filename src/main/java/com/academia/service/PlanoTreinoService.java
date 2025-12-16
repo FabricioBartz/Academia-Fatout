@@ -73,6 +73,10 @@ public class PlanoTreinoService {
                 planoTreino.setNome(planoTreinoAtualizado.getNome());
                 planoTreino.setTempo(planoTreinoAtualizado.getTempo());
                 planoTreino.setObservacoes(planoTreinoAtualizado.getObservacoes());
+                // Atualiza dias da semana se fornecido
+                if (planoTreinoAtualizado.getDiasSemana() != null) {
+                    planoTreino.setDiasSemana(planoTreinoAtualizado.getDiasSemana());
+                }
                 return planoTreinoRepository.save(planoTreino);
             })
             .orElseThrow(() -> new RuntimeException("Plano de treino não encontrado!"));
@@ -85,6 +89,11 @@ public class PlanoTreinoService {
         } else {
             throw new RuntimeException("Plano de treino não encontrado!");
         }
+    }
+
+    // Alias: excluir plano de treino (compatibilidade com controlador)
+    public void excluirPlanoTreino(Long id) {
+        deletarPlanoTreino(id);
     }
     
     // Adicionar exercício ao plano

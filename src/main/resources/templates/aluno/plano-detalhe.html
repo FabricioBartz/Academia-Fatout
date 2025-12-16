@@ -17,16 +17,24 @@
 </nav>
 
 <div class="container mt-4">
-    <div class="row">
-        <div class="col-md-3">
-            <div class="list-group">
-                <a th:href="@{/aluno/dashboard}" class="list-group-item list-group-item-action">Painel Principal</a>
-                <a th:href="@{/aluno/treino}" class="list-group-item list-group-item-action active">Meus Treinos</a>
-                <a th:href="@{/aluno/avaliacoes}" class="list-group-item list-group-item-action">Avaliações</a>
-                <a th:href="@{/aluno/turmas}" class="list-group-item list-group-item-action">Turmas</a>
-                <a th:href="@{/aluno/perfil}" class="list-group-item list-group-item-action">Meu Perfil</a>
+<div class="row">
+            <div class="col-md-3">
+                <div class="card">
+                    <div class="card-body">
+                        <h5 class="card-title">Menu</h5>
+                        <div class="list-group list-group-flush">
+
+                            <a th:href="@{/aluno/painel_principal}" class="list-group-item list-group-item-action">Painel Principal</a>
+                            <a th:href="@{/aluno/meu_perfil}" class="list-group-item list-group-item-action">👤 Meu Perfil</a>
+                            <a th:href="@{/aluno/meus_treinos}" class="list-group-item list-group-item-action active">💪 Meus Treinos</a>
+                             <a th:href="@{/aluno/minhas_avaliacoes}" class="list-group-item list-group-item-action">📊 Avaliações</a>
+                            <a th:href="@{/aluno/minhas_turmas}" class="list-group-item list-group-item-action">👥 Minhas Turmas</a>
+                             
+                            </a>
+                        </div>
+                    </div>
+                </div>
             </div>
-        </div>
 
         <div class="col-md-9">
             <div class="d-flex align-items-center mb-4">
