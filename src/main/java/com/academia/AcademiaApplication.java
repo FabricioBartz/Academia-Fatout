@@ -11,6 +11,6 @@ public class AcademiaApplication {
         var env = ctx.getEnvironment();
         String port = env.getProperty("local.server.port", env.getProperty("server.port", "8080"));
         System.out.println("✅ Academia FatOut está rodando em: http://localhost:" + port);
-        System.out.println("✅ H2 Console: http://localhost:" + port + "/h2-console");
+        // Banco configurado via application.properties (MySQL)
     }
 }
