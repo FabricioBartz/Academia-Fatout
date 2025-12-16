@@ -50,31 +50,34 @@
                 <!-- Cards de estatísticas -->
                 <div class="row">
                     <div class="col-md-4">
-                        <div class="card text-white bg-primary">
+                        <div class="card text-white bg-primary position-relative">
                             <div class="card-body text-center">
                                 <h5 class="card-title">👥 Alunos</h5>
                                 <p class="dashboard-stats" th:text="${alunosCount}">24</p>
-                                <p class="card-text">Total cadastrado</p>
+                                <p class="card-text">Total cadastrados</p>
+                                <a th:href="@{/instrutor/alunos}" class="stretched-link" aria-label="Ir para Meus Alunos"></a>
                             </div>
                         </div>
                     </div>
                     
                     <div class="col-md-4">
-                        <div class="card text-white bg-success">
+                        <div class="card text-white bg-success position-relative">
                             <div class="card-body text-center">
-                                <h5 class="card-title">🏋️ Turmas</h5>
+                                <h5 class="card-title">🏋️ Minhas Turmas</h5>
                                 <p class="dashboard-stats" th:text="${turmasCount}">8</p>
                                 <p class="card-text">Turmas ativas</p>
+                                <a th:href="@{/instrutor/turmas}" class="stretched-link" aria-label="Ir para Minhas Turmas"></a>
                             </div>
                         </div>
                     </div>
                     
                     <div class="col-md-4">
-                        <div class="card text-white bg-info">
+                        <div class="card text-white bg-info position-relative">
                             <div class="card-body text-center">
                                 <h5 class="card-title">💪 Exercícios</h5>
                                 <p class="dashboard-stats" th:text="${exerciciosCount}">45</p>
                                 <p class="card-text">Na biblioteca</p>
+                                <a th:href="@{/instrutor/exercicios}" class="stretched-link" aria-label="Ir para Exercícios"></a>
                             </div>
                         </div>
                     </div>
