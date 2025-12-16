@@ -55,8 +55,25 @@
                         <div class="card">
                             <div class="card-body">
                                 <h5 class="card-title">💪 Treino de Hoje</h5>
-                                <p class="card-text text-muted">Funcionalidade em desenvolvimento</p>
-                                <a th:href="@{/aluno/treino}" class="btn btn-success">Ver Treino</a>
+                                <div th:if="${planoHoje == null}">
+                                    <p class="text-muted">Sem plano ativo no momento.</p>
+                                    <a th:href="@{/aluno/treino}" class="btn btn-success">Ver Treino</a>
+                                </div>
+                                <div th:if="${planoHoje != null}">
+                                    <p class="text-muted mb-1">
+                                        <span th:text="${planoHoje.nome}">Treino A</span>
+                                        <span class="ms-2" th:text="${planoHoje.diasSemana}">SEG,QUA,SEX</span>
+                                    </p>
+                                    <div th:if="${planoHojeAtivoHoje}">
+                                        <ul class="mb-2">
+                                            <li th:each="ep : ${planoHoje.exercicios}" th:text="${ep.exercicio.nome} + ' - ' + ${ep.series} + 'x' + ${ep.repeticoes}">Supino 3x12</li>
+                                        </ul>
+                                    </div>
+                                    <div th:if="${!planoHojeAtivoHoje}">
+                                        <p class="text-muted">Hoje não é dia deste plano. Aproveite para recuperar!</p>
+                                    </div>
+                                    <a th:href="@{'/aluno/treino/' + ${planoHoje.id}}" class="btn btn-success">Abrir Plano</a>
+                                </div>
                             </div>
                         </div>
                     </div>

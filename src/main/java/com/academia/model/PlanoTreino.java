@@ -24,6 +24,10 @@ public class PlanoTreino {
     
     @Column(length = 500)
     private String observacoes;
+
+    // Dias da semana em que o plano deve ser executado, separados por vírgula (SEG,TER,QUA,QUI,SEX,SAB,DOM)
+    @Column(name = "dias_semana", length = 50)
+    private String diasSemana;
     
     @ManyToOne
     @JoinColumn(name = "cpf_aluno")
@@ -63,6 +67,9 @@ public class PlanoTreino {
     
     public String getObservacoes() { return observacoes; }
     public void setObservacoes(String observacoes) { this.observacoes = observacoes; }
+
+    public String getDiasSemana() { return diasSemana; }
+    public void setDiasSemana(String diasSemana) { this.diasSemana = diasSemana; }
     
     public Aluno getAluno() { return aluno; }
     public void setAluno(Aluno aluno) { this.aluno = aluno; }

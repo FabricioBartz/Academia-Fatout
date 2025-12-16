@@ -4,12 +4,15 @@ import com.academia.model.Aluno;
 import com.academia.model.Instrutor;
 import com.academia.model.Turma;
 import com.academia.model.Exercicio;
+import com.academia.model.PlanoTreino;
+import com.academia.model.ExercicioPlano;
 import com.academia.model.AvaliacaoFisica;
 import com.academia.service.InstrutorService;
 import com.academia.service.TurmaService;
 import com.academia.service.ExercicioService;
 import com.academia.service.AlunoService;
 import com.academia.service.AvaliacaoService;
+import com.academia.service.PlanoTreinoService;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -26,13 +29,15 @@ public class InstrutorController {
     private final ExercicioService exercicioService;
     private final AlunoService alunoService;
     private final AvaliacaoService avaliacaoService;
+    private final PlanoTreinoService planoTreinoService;
     
-    public InstrutorController(InstrutorService instrutorService, TurmaService turmaService, ExercicioService exercicioService, AlunoService alunoService, AvaliacaoService avaliacaoService) {
+    public InstrutorController(InstrutorService instrutorService, TurmaService turmaService, ExercicioService exercicioService, AlunoService alunoService, AvaliacaoService avaliacaoService, PlanoTreinoService planoTreinoService) {
         this.instrutorService = instrutorService;
         this.turmaService = turmaService;
         this.exercicioService = exercicioService;
         this.alunoService = alunoService;
         this.avaliacaoService = avaliacaoService;
+        this.planoTreinoService = planoTreinoService;
     }
     
     @GetMapping("/login")
@@ -295,6 +300,9 @@ public class InstrutorController {
         }
         
         model.addAttribute("aluno", aluno);
+        // Histórico de planos de treino
+        var planos = planoTreinoService.listarHistorico(aluno.getCpf());
+        model.addAttribute("planos", planos);
         // Carregar últimas 5 avaliações (ordenadas por data desc)
         var avaliacoes = avaliacaoService.listarUltimas5PorAluno(aluno.getCpf());
         model.addAttribute("avaliacoes", avaliacoes);
@@ -316,6 +324,145 @@ public class InstrutorController {
         
         model.addAttribute("aluno", aluno);
         return "instrutor/avaliacao-aluno";
+    }
+
+    // Formulário para criar plano de treino
+    @GetMapping("/alunos/plano/{cpf}")
+    public String formularioPlano(@PathVariable String cpf, Model model, HttpSession session) {
+        Instrutor instrutor = (Instrutor) session.getAttribute("instrutor");
+        if (instrutor == null) {
+            instrutor = instrutorService.listarTodos().isEmpty() ? null : instrutorService.listarTodos().get(0);
+        }
+        model.addAttribute("instrutor", instrutor);
+
+        Aluno aluno = alunoService.buscarPorCpf(cpf).orElse(null);
+        if (aluno == null) {
+            return "redirect:/instrutor/alunos";
+        }
+        model.addAttribute("aluno", aluno);
+        model.addAttribute("exercicios", exercicioService.listarTodos());
+        model.addAttribute("planosInstrutor", planoTreinoService.listarPorInstrutor(instrutor.getCpf()));
+        return "instrutor/criar-plano";
+    }
+
+    // Salvar plano de treino
+    @PostMapping("/alunos/plano/{cpf}")
+    public String salvarPlano(@PathVariable String cpf,
+                              @RequestParam String nome,
+                              @RequestParam(required = false) String observacoes,
+                              @RequestParam(name = "diasSemana", required = false) java.util.List<String> diasSemana,
+                              @RequestParam(name = "copiarPlanoId", required = false) Long copiarPlanoId,
+                              @RequestParam(name = "exercicioId") java.util.List<Long> exercicioIds,
+                              @RequestParam(name = "series") java.util.List<Integer> seriesList,
+                              @RequestParam(name = "repeticoes") java.util.List<Integer> repeticoesList,
+                              @RequestParam(name = "carga", required = false) java.util.List<Double> cargaList,
+                              Model model,
+                              HttpSession session) {
+        try {
+            Instrutor instrutor = (Instrutor) session.getAttribute("instrutor");
+            if (instrutor == null) {
+                instrutor = instrutorService.listarTodos().get(0);
+            }
+
+            Aluno aluno = alunoService.buscarPorCpf(cpf).orElse(null);
+            if (aluno == null) {
+                return "redirect:/instrutor/alunos";
+            }
+
+            PlanoTreino plano = new PlanoTreino();
+            plano.setAluno(aluno);
+            plano.setInstrutor(instrutor);
+            plano.setNome(nome);
+            plano.setObservacoes(observacoes);
+            if (diasSemana != null && !diasSemana.isEmpty()) {
+                plano.setDiasSemana(String.join(",", diasSemana));
+            }
+            if (copiarPlanoId != null) {
+                var origemOpt = planoTreinoService.buscarPorId(copiarPlanoId);
+                if (origemOpt.isPresent()) {
+                    var origem = origemOpt.get();
+                    if (plano.getDiasSemana() == null || plano.getDiasSemana().isEmpty()) {
+                        plano.setDiasSemana(origem.getDiasSemana());
+                    }
+                    java.util.List<ExercicioPlano> itens = new java.util.ArrayList<>();
+                    for (ExercicioPlano epOrig : origem.getExercicios()) {
+                        ExercicioPlano ep = new ExercicioPlano();
+                        ep.setPlanoTreino(plano);
+                        ep.setExercicio(epOrig.getExercicio());
+                        ep.setSeries(epOrig.getSeries());
+                        ep.setRepeticoes(epOrig.getRepeticoes());
+                        ep.setCarga(epOrig.getCarga());
+                        itens.add(ep);
+                    }
+                    plano.setExercicios(itens);
+                }
+            } else {
+                // Validar ao menos um exercício
+                if (exercicioIds == null || exercicioIds.isEmpty()) {
+                    model.addAttribute("error", "Adicione pelo menos um exercício ou selecione um plano para copiar.");
+                    model.addAttribute("instrutor", instrutor);
+                    model.addAttribute("aluno", aluno);
+                    model.addAttribute("exercicios", exercicioService.listarTodos());
+                    model.addAttribute("planosInstrutor", planoTreinoService.listarPorInstrutor(instrutor.getCpf()));
+                    return "instrutor/criar-plano";
+                }
+
+                // Monta exercícios
+                java.util.List<ExercicioPlano> itens = new java.util.ArrayList<>();
+                for (int i = 0; i < exercicioIds.size(); i++) {
+                    var exercicio = exercicioService.buscarPorId(exercicioIds.get(i)).orElse(null);
+                    if (exercicio == null) continue;
+                    Integer series = i < seriesList.size() ? seriesList.get(i) : null;
+                    Integer repeticoes = i < repeticoesList.size() ? repeticoesList.get(i) : null;
+                    Double carga = (cargaList != null && i < cargaList.size()) ? cargaList.get(i) : null;
+                    ExercicioPlano ep = new ExercicioPlano();
+                    ep.setPlanoTreino(plano);
+                    ep.setExercicio(exercicio);
+                    ep.setSeries(series);
+                    ep.setRepeticoes(repeticoes);
+                    ep.setCarga(carga);
+                    itens.add(ep);
+                }
+                plano.setExercicios(itens);
+            }
+
+            planoTreinoService.criarPlanoTreino(plano);
+
+            return "redirect:/instrutor/alunos/perfil/" + cpf;
+        } catch (Exception e) {
+            model.addAttribute("error", "Erro ao salvar plano: " + e.getMessage());
+            Instrutor instrutor = instrutorService.listarTodos().get(0);
+            model.addAttribute("instrutor", instrutor);
+            Aluno aluno = alunoService.buscarPorCpf(cpf).orElse(null);
+            model.addAttribute("aluno", aluno);
+            model.addAttribute("exercicios", exercicioService.listarTodos());
+            model.addAttribute("planosInstrutor", planoTreinoService.listarPorInstrutor(instrutor.getCpf()));
+            return "instrutor/criar-plano";
+        }
+    }
+
+    // Detalhe do plano de treino do aluno (instrutor)
+    @GetMapping("/alunos/planos/{cpf}/{id}")
+    public String detalhePlanoInstrutor(@PathVariable String cpf,
+                                        @PathVariable Long id,
+                                        Model model,
+                                        HttpSession session) {
+        Instrutor instrutor = (Instrutor) session.getAttribute("instrutor");
+        if (instrutor == null) {
+            instrutor = instrutorService.listarTodos().isEmpty() ? null : instrutorService.listarTodos().get(0);
+        }
+        model.addAttribute("instrutor", instrutor);
+
+        var aluno = alunoService.buscarPorCpf(cpf).orElse(null);
+        if (aluno == null) return "redirect:/instrutor/alunos";
+        model.addAttribute("aluno", aluno);
+
+        var plano = planoTreinoService.buscarPorId(id).orElse(null);
+        if (plano == null || plano.getAluno() == null || !cpf.equals(plano.getAluno().getCpf())) {
+            return "redirect:/instrutor/alunos/perfil/" + cpf;
+        }
+        model.addAttribute("plano", plano);
+        return "instrutor/plano-detalhe";
     }
 
     @GetMapping("/alunos/avaliacoes/{cpf}/{id}")

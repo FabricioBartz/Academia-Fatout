@@ -75,34 +75,10 @@
                         
                         <hr>
                         
-                        <button type="button" class="btn btn-primary me-2" onclick="abrirModalCriarPlano()">Criar Plano de Treino</button>
+                        <a th:href="@{/instrutor/alunos/plano/{cpf}(cpf=${aluno.cpf})}" class="btn btn-primary me-2">Criar Plano de Treino</a>
                         <button type="button" class="btn btn-success me-2" onclick="abrirAvaliacao()">Realizar Avaliação</button>
                         <button type="button" class="btn btn-warning me-2" onclick="editarAluno()">Editar Perfil</button>
                         <button type="button" class="btn btn-danger" onclick="removerAluno()">Remover Aluno</button>
-                    </div>
-                </div>
-                
-                <!-- Modal para criar plano de treino -->
-                <div class="modal fade" id="criarPlanoModal" tabindex="-1">
-                    <div class="modal-dialog">
-                        <div class="modal-content">
-                            <div class="modal-header">
-                                <h5 class="modal-title">Criar Plano de Treino</h5>
-                                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
-                            </div>
-                            <form th:action="@{/instrutor/alunos/criarPlano}" method="post">
-                                <input type="hidden" name="cpfAluno" th:value="${aluno.cpf}">
-                                <div class="modal-body">
-                                    <div class="alert alert-info">
-                                        Funcionalidade de criação de plano de treino será implementada em breve.
-                                    </div>
-                                </div>
-                                <div class="modal-footer">
-                                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
-                                    <button type="submit" class="btn btn-primary">Criar</button>
-                                </div>
-                            </form>
-                        </div>
                     </div>
                 </div>
                 
@@ -112,7 +88,22 @@
                         <h5 class="mb-0">Histórico de Treinos</h5>
                     </div>
                     <div class="card-body">
-                        <p class="text-muted">Sem treinos cadastrados no momento.</p>
+                        <div th:if="${planos == null or planos.isEmpty()}" class="alert alert-info">Sem treinos cadastrados no momento.</div>
+                        <div th:if="${planos != null and !planos.isEmpty()}">
+                            <div class="list-group">
+                                <a th:each="plano : ${planos}"
+                                   th:href="@{'/instrutor/alunos/planos/' + ${aluno.cpf} + '/' + ${plano.id}}"
+                                   class="list-group-item list-group-item-action d-flex justify-content-between align-items-center">
+                                    <div>
+                                        <strong th:text="${plano.nome}">Treino A</strong>
+                                        <span class="text-muted ms-2" th:text="${#temporals.format(plano.dataCriacao, 'dd/MM/yyyy')}">10/12/2025</span>
+                                        <span class="text-muted ms-2">-</span>
+                                        <span class="text-muted ms-2" th:text="'Exercícios: ' + ${plano.exercicios.size()}">Exercícios: 5</span>
+                                    </div>
+                                    <span class="text-muted" th:text="${plano.diasSemana}">SEG,QUA,SEX</span>
+                                </a>
+                            </div>
+                        </div>
                     </div>
                 </div>
                 
@@ -155,10 +146,7 @@
             nome: "[[${aluno.nome}]]"
         };
         
-        function abrirModalCriarPlano() {
-            const modal = new bootstrap.Modal(document.getElementById('criarPlanoModal'));
-            modal.show();
-        }
+        
         
         function abrirAvaliacao() {
             if (!alunoData.cpf || alunoData.cpf === "" || alunoData.cpf.includes("$")) {

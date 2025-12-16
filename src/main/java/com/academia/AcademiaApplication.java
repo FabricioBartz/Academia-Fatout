@@ -2,12 +2,15 @@ package com.academia;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.context.ConfigurableApplicationContext;
 
 @SpringBootApplication
 public class AcademiaApplication {
     public static void main(String[] args) {
-        SpringApplication.run(AcademiaApplication.class, args);
-        System.out.println("✅ Academia FatOut está rodando em: http://localhost:8080");
-        System.out.println("✅ H2 Console: http://localhost:8080/h2-console");
+        ConfigurableApplicationContext ctx = SpringApplication.run(AcademiaApplication.class, args);
+        var env = ctx.getEnvironment();
+        String port = env.getProperty("local.server.port", env.getProperty("server.port", "8080"));
+        System.out.println("✅ Academia FatOut está rodando em: http://localhost:" + port);
+        System.out.println("✅ H2 Console: http://localhost:" + port + "/h2-console");
     }
 }

@@ -3,6 +3,11 @@ package com.academia.controller;
 import com.academia.model.Aluno;
 import com.academia.service.AlunoService;
 import com.academia.service.AvaliacaoService;
+import com.academia.model.PlanoTreino;
+import com.academia.service.PlanoTreinoService;
+import java.time.LocalDate;
+import java.time.DayOfWeek;
+import java.util.Arrays;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -14,10 +19,12 @@ public class AlunoController {
     
     private final AlunoService alunoService;
     private final AvaliacaoService avaliacaoService;
+    private final PlanoTreinoService planoTreinoService;
     
-    public AlunoController(AlunoService alunoService, AvaliacaoService avaliacaoService) {
+    public AlunoController(AlunoService alunoService, AvaliacaoService avaliacaoService, PlanoTreinoService planoTreinoService) {
         this.alunoService = alunoService;
         this.avaliacaoService = avaliacaoService;
+        this.planoTreinoService = planoTreinoService;
     }
     
     @GetMapping("/login")
@@ -52,6 +59,12 @@ public class AlunoController {
         if (aluno != null) {
             var ultimaAvaliacao = avaliacaoService.buscarUltimaAvaliacao(aluno.getCpf());
             model.addAttribute("ultimaAvaliacao", ultimaAvaliacao.orElse(null));
+            var planoAtivo = planoTreinoService.buscarPlanoAtivo(aluno.getCpf());
+                model.addAttribute("planoHoje", planoAtivo.orElse(null));
+                String diaHoje = codigoDia(LocalDate.now().getDayOfWeek());
+                boolean ativoHoje = planoAtivo.map(p -> p.getDiasSemana() != null && Arrays.asList(p.getDiasSemana().split(",")).contains(diaHoje)).orElse(false);
+                model.addAttribute("diaHoje", diaHoje);
+                model.addAttribute("planoHojeAtivoHoje", ativoHoje);
         }
         
         return "aluno/dashboard-aluno";
@@ -74,7 +87,40 @@ public class AlunoController {
             aluno = alunoService.listarTodos().isEmpty() ? null : alunoService.listarTodos().get(0);
         }
         model.addAttribute("aluno", aluno);
+        if (aluno != null) {
+            var planoAtivo = planoTreinoService.buscarPlanoAtivo(aluno.getCpf());
+            model.addAttribute("plano", planoAtivo.orElse(null));
+            model.addAttribute("planos", planoTreinoService.listarPorAluno(aluno.getCpf()));
+        }
         return "aluno/treino-aluno";
+    }
+
+    // Detalhe do plano para aluno
+    @GetMapping("/treino/{id}")
+    public String detalhePlanoAluno(@PathVariable Long id, Model model, HttpSession session) {
+        Aluno aluno = (Aluno) session.getAttribute("aluno");
+        if (aluno == null) {
+            aluno = alunoService.listarTodos().isEmpty() ? null : alunoService.listarTodos().get(0);
+        }
+        model.addAttribute("aluno", aluno);
+        var plano = planoTreinoService.buscarPorId(id).orElse(null);
+        if (plano == null || plano.getAluno() == null || (aluno != null && !aluno.getCpf().equals(plano.getAluno().getCpf()))) {
+            return "redirect:/aluno/treino";
+        }
+        model.addAttribute("plano", plano);
+        return "aluno/plano-detalhe";
+    }
+    
+    private String codigoDia(DayOfWeek dow) {
+        return switch (dow) {
+            case MONDAY -> "SEG";
+            case TUESDAY -> "TER";
+            case WEDNESDAY -> "QUA";
+            case THURSDAY -> "QUI";
+            case FRIDAY -> "SEX";
+            case SATURDAY -> "SAB";
+            case SUNDAY -> "DOM";
+        };
     }
     
     @GetMapping("/turmas")
