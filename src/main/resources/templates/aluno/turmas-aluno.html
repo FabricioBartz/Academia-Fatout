@@ -17,6 +17,14 @@
     </nav>
     
     <div class="container mt-4">
+        <div th:if="${msgSucesso}" class="alert alert-success alert-dismissible fade show" role="alert">
+            <span th:text="${msgSucesso}"></span>
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+        <div th:if="${msgErro}" class="alert alert-danger alert-dismissible fade show" role="alert">
+            <span th:text="${msgErro}"></span>
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
         <div class="row">
             <div class="col-md-3">
                 <div class="list-group">
@@ -31,8 +39,43 @@
             <div class="col-md-9">
                 <h1>Minhas Turmas</h1>
                 <p>Turmas em que você está matriculado.</p>
-                <div class="alert alert-info">
-                    Turmas em desenvolvimento.
+
+                <div th:if="${turmasMatriculadas == null || #lists.isEmpty(turmasMatriculadas)}" class="alert alert-warning">
+                    Você ainda não está matriculado em nenhuma turma.
+                </div>
+
+                <div th:if="${turmasMatriculadas != null && !#lists.isEmpty(turmasMatriculadas)}" class="mb-4">
+                    <div class="table-responsive">
+                        <table class="table table-striped">
+                            <thead>
+                                <tr>
+                                    <th>Nome</th>
+                                    <th>Instrutor</th>
+                                    <th>Data</th>
+                                    <th>Hora</th>
+                                    <th>Ação</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr th:each="t : ${turmasMatriculadas}">
+                                    <td th:text="${t.titulo}">Nome</td>
+                                    <td th:text="${t.instrutor != null ? t.instrutor.nome : '—'}">Instrutor</td>
+                                    <td th:text="${#temporals.format(t.dataDaAula,'dd/MM/yyyy')}">01/01/2025</td>
+                                    <td th:text="${#temporals.format(t.horaAula,'HH:mm')}">10:00</td>
+                                    <td>
+                                        <form th:action="@{/aluno/turmas/desmatricular/{id}(id=${t.id})}" method="post" onsubmit="return confirm('Deseja desmatricular-se desta turma?')">
+                                            <button type="submit" class="btn btn-outline-danger btn-sm">Desmatricular</button>
+                                        </form>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <div class="d-flex justify-content-end align-items-center">
+                    
+                    <a th:href="@{/aluno/turmas/disponiveis}" class="btn btn-outline-success btn-sm">Ver Turmas Disponíveis</a>
                 </div>
             </div>
         </div>

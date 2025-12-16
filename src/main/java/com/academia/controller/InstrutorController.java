@@ -16,6 +16,7 @@ import com.academia.service.PlanoTreinoService;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import jakarta.servlet.http.HttpSession;
 import java.time.LocalDate;
 import java.time.LocalTime;
@@ -153,6 +154,43 @@ public class InstrutorController {
     public String excluirTurma(@PathVariable Long id) {
         turmaService.deletarTurma(id);
         return "redirect:/instrutor/turmas";
+    }
+
+    // Detalhe de uma turma com alunos matriculados
+    @GetMapping("/turmas/{id}")
+    public String detalheTurma(@PathVariable Long id, Model model, HttpSession session) {
+        Instrutor instrutor = (Instrutor) session.getAttribute("instrutor");
+        if (instrutor == null) {
+            instrutor = instrutorService.listarTodos().isEmpty() ? null : instrutorService.listarTodos().get(0);
+        }
+        model.addAttribute("instrutor", instrutor);
+        var turma = turmaService.buscarPorId(id).orElse(null);
+        if (turma == null || turma.getInstrutor() == null || (instrutor != null && !instrutor.getCpf().equals(turma.getInstrutor().getCpf()))) {
+            return "redirect:/instrutor/turmas";
+        }
+        model.addAttribute("turma", turma);
+        model.addAttribute("alunos", turma.getAlunos());
+        return "instrutor/turma-detalhe";
+    }
+
+    // Remover aluno de uma turma (instrutor)
+    @PostMapping("/turmas/{id}/remover-aluno/{cpfAluno}")
+    public String removerAlunoDaTurma(@PathVariable Long id, @PathVariable String cpfAluno, RedirectAttributes ra, HttpSession session) {
+        Instrutor instrutor = (Instrutor) session.getAttribute("instrutor");
+        if (instrutor == null) {
+            instrutor = instrutorService.listarTodos().isEmpty() ? null : instrutorService.listarTodos().get(0);
+        }
+        var turma = turmaService.buscarPorId(id).orElse(null);
+        if (turma == null || turma.getInstrutor() == null || (instrutor != null && !instrutor.getCpf().equals(turma.getInstrutor().getCpf()))) {
+            return "redirect:/instrutor/turmas";
+        }
+        try {
+            turmaService.desmatricularAluno(id, cpfAluno);
+            ra.addFlashAttribute("msgSucesso", "Aluno removido da turma.");
+        } catch (RuntimeException ex) {
+            ra.addFlashAttribute("msgErro", ex.getMessage());
+        }
+        return "redirect:/instrutor/turmas/" + id;
     }
     
     @GetMapping("/exercicios")

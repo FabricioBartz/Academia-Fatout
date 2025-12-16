@@ -5,6 +5,7 @@ import com.academia.service.AlunoService;
 import com.academia.service.AvaliacaoService;
 import com.academia.model.PlanoTreino;
 import com.academia.service.PlanoTreinoService;
+import com.academia.service.TurmaService;
 import java.time.LocalDate;
 import java.time.DayOfWeek;
 import java.util.Arrays;
@@ -12,6 +13,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import jakarta.servlet.http.HttpSession;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 @Controller
 @RequestMapping("/aluno")
@@ -20,11 +22,13 @@ public class AlunoController {
     private final AlunoService alunoService;
     private final AvaliacaoService avaliacaoService;
     private final PlanoTreinoService planoTreinoService;
+    private final TurmaService turmaService;
     
-    public AlunoController(AlunoService alunoService, AvaliacaoService avaliacaoService, PlanoTreinoService planoTreinoService) {
+    public AlunoController(AlunoService alunoService, AvaliacaoService avaliacaoService, PlanoTreinoService planoTreinoService, TurmaService turmaService) {
         this.alunoService = alunoService;
         this.avaliacaoService = avaliacaoService;
         this.planoTreinoService = planoTreinoService;
+        this.turmaService = turmaService;
     }
     
     @GetMapping("/login")
@@ -145,7 +149,74 @@ public class AlunoController {
             aluno = alunoService.listarTodos().isEmpty() ? null : alunoService.listarTodos().get(0);
         }
         model.addAttribute("aluno", aluno);
+        if (aluno != null) {
+            // Turmas matriculadas
+            var turmasMatriculadas = turmaService.listarTurmasDoAluno(aluno.getCpf());
+            model.addAttribute("turmasMatriculadas", turmasMatriculadas);
+        }
         return "aluno/turmas-aluno";
+    }
+
+    // Lista de turmas disponíveis do mesmo instrutor do plano ativo
+    @GetMapping("/turmas/disponiveis")
+    public String turmasDisponiveis(Model model, HttpSession session) {
+        Aluno aluno = (Aluno) session.getAttribute("aluno");
+        if (aluno == null) {
+            aluno = alunoService.listarTodos().isEmpty() ? null : alunoService.listarTodos().get(0);
+        }
+        model.addAttribute("aluno", aluno);
+        java.util.List<com.academia.model.Turma> turmas = java.util.List.of();
+        if (aluno != null) {
+            var planoAtivo = planoTreinoService.buscarPlanoAtivo(aluno.getCpf());
+            if (planoAtivo.isPresent() && planoAtivo.get().getInstrutor() != null) {
+                String cpfInstrutor = planoAtivo.get().getInstrutor().getCpf();
+                turmas = turmaService.listarPorInstrutor(cpfInstrutor).stream()
+                    .filter(t -> t.getVagasDisponiveis() > 0)
+                    .toList();
+            }
+        }
+        model.addAttribute("turmasDisponiveis", turmas);
+        return "aluno/turmas-disponiveis";
+    }
+
+    // Matricular aluno em turma
+    @PostMapping("/turmas/matricular/{id}")
+    public String matricularEmTurma(@PathVariable Long id, HttpSession session, RedirectAttributes ra) {
+        Aluno aluno = (Aluno) session.getAttribute("aluno");
+        if (aluno == null) {
+            aluno = alunoService.listarTodos().isEmpty() ? null : alunoService.listarTodos().get(0);
+        }
+        try {
+            if (aluno != null) {
+                turmaService.matricularAluno(id, aluno.getCpf());
+                ra.addFlashAttribute("msgSucesso", "Matrícula realizada com sucesso!");
+            } else {
+                ra.addFlashAttribute("msgErro", "Aluno não encontrado na sessão.");
+            }
+        } catch (RuntimeException ex) {
+            ra.addFlashAttribute("msgErro", ex.getMessage());
+        }
+        return "redirect:/aluno/turmas";
+    }
+
+    // Desmatricular aluno de turma
+    @PostMapping("/turmas/desmatricular/{id}")
+    public String desmatricularDaTurma(@PathVariable Long id, HttpSession session, RedirectAttributes ra) {
+        Aluno aluno = (Aluno) session.getAttribute("aluno");
+        if (aluno == null) {
+            aluno = alunoService.listarTodos().isEmpty() ? null : alunoService.listarTodos().get(0);
+        }
+        try {
+            if (aluno != null) {
+                turmaService.desmatricularAluno(id, aluno.getCpf());
+                ra.addFlashAttribute("msgSucesso", "Desmatrícula realizada com sucesso!");
+            } else {
+                ra.addFlashAttribute("msgErro", "Aluno não encontrado na sessão.");
+            }
+        } catch (RuntimeException ex) {
+            ra.addFlashAttribute("msgErro", ex.getMessage());
+        }
+        return "redirect:/aluno/turmas";
     }
     
     @GetMapping("/avaliacoes")
