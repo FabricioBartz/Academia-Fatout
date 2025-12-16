@@ -37,7 +37,7 @@ public class PlanoTreino {
     @JoinColumn(name = "cpf_instrutor")
     private Instrutor instrutor;
     
-    @OneToMany(mappedBy = "planoTreino", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "planoTreino", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<ExercicioPlano> exercicios = new ArrayList<>();
     
     // Construtor

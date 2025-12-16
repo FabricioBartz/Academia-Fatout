@@ -135,16 +135,22 @@ public class InstrutorController {
                             @RequestParam String descricao,
                             @RequestParam String dataDaAula,
                             @RequestParam String horaAula,
-                            @RequestParam Integer vagas) {
-        Instrutor instrutor = instrutorService.listarTodos().get(0);
-        Turma turma = new Turma();
-        turma.setTitulo(titulo);
-        turma.setDescricao(descricao);
-        turma.setDataDaAula(LocalDate.parse(dataDaAula));
-        turma.setHoraAula(LocalTime.parse(horaAula));
-        turma.setVagas(vagas);
-        turma.setInstrutor(instrutor);
-        turmaService.criarTurma(turma);
+                            @RequestParam Integer vagas,
+                            RedirectAttributes ra) {
+        try {
+            Instrutor instrutor = instrutorService.listarTodos().get(0);
+            Turma turma = new Turma();
+            turma.setTitulo(titulo);
+            turma.setDescricao(descricao);
+            turma.setDataDaAula(LocalDate.parse(dataDaAula));
+            turma.setHoraAula(LocalTime.parse(horaAula));
+            turma.setVagas(vagas);
+            turma.setInstrutor(instrutor);
+            turmaService.criarTurma(turma);
+            ra.addFlashAttribute("msgSucesso", "Turma criada com sucesso.");
+        } catch (RuntimeException ex) {
+            ra.addFlashAttribute("msgErro", ex.getMessage());
+        }
         return "redirect:/instrutor/turmas";
     }
     
@@ -154,20 +160,31 @@ public class InstrutorController {
                              @RequestParam String descricao,
                              @RequestParam String dataDaAula,
                              @RequestParam String horaAula,
-                             @RequestParam Integer vagas) {
-        Turma turma = new Turma();
-        turma.setTitulo(titulo);
-        turma.setDescricao(descricao);
-        turma.setDataDaAula(LocalDate.parse(dataDaAula));
-        turma.setHoraAula(LocalTime.parse(horaAula));
-        turma.setVagas(vagas);
-        turmaService.atualizarTurma(id, turma);
+                             @RequestParam Integer vagas,
+                             RedirectAttributes ra) {
+        try {
+            Turma turma = new Turma();
+            turma.setTitulo(titulo);
+            turma.setDescricao(descricao);
+            turma.setDataDaAula(LocalDate.parse(dataDaAula));
+            turma.setHoraAula(LocalTime.parse(horaAula));
+            turma.setVagas(vagas);
+            turmaService.atualizarTurma(id, turma);
+            ra.addFlashAttribute("msgSucesso", "Turma atualizada com sucesso.");
+        } catch (RuntimeException ex) {
+            ra.addFlashAttribute("msgErro", ex.getMessage());
+        }
         return "redirect:/instrutor/turmas";
     }
     
     @PostMapping("/turmas/excluir/{id}")
-    public String excluirTurma(@PathVariable Long id) {
-        turmaService.deletarTurma(id);
+    public String excluirTurma(@PathVariable Long id, RedirectAttributes ra) {
+        try {
+            turmaService.deletarTurma(id);
+            ra.addFlashAttribute("msgSucesso", "Turma excluída com sucesso.");
+        } catch (RuntimeException ex) {
+            ra.addFlashAttribute("msgErro", ex.getMessage());
+        }
         return "redirect:/instrutor/turmas";
     }
 
@@ -232,14 +249,20 @@ public class InstrutorController {
                                     @RequestParam String equipamento,
                                     @RequestParam String grupoMuscular,
                                     @RequestParam String instrucoes,
-                                    @RequestParam String descricao) {
-        Exercicio exercicio = new Exercicio();
-        exercicio.setNome(nome);
-        exercicio.setEquipamento(equipamento);
-        exercicio.setGrupoMuscular(grupoMuscular);
-        exercicio.setInstrucoes(instrucoes);
-        exercicio.setDescricao(descricao);
-        exercicioService.cadastrarExercicio(exercicio);
+                                    @RequestParam String descricao,
+                                    RedirectAttributes ra) {
+        try {
+            Exercicio exercicio = new Exercicio();
+            exercicio.setNome(nome);
+            exercicio.setEquipamento(equipamento);
+            exercicio.setGrupoMuscular(grupoMuscular);
+            exercicio.setInstrucoes(instrucoes);
+            exercicio.setDescricao(descricao);
+            exercicioService.cadastrarExercicio(exercicio);
+            ra.addFlashAttribute("msgSucesso", "Exercício adicionado com sucesso.");
+        } catch (RuntimeException ex) {
+            ra.addFlashAttribute("msgErro", ex.getMessage());
+        }
         return "redirect:/instrutor/exercicios";
     }
     
@@ -249,20 +272,31 @@ public class InstrutorController {
                                  @RequestParam String equipamento,
                                  @RequestParam String grupoMuscular,
                                  @RequestParam String instrucoes,
-                                 @RequestParam String descricao) {
-        Exercicio exercicio = new Exercicio();
-        exercicio.setNome(nome);
-        exercicio.setEquipamento(equipamento);
-        exercicio.setGrupoMuscular(grupoMuscular);
-        exercicio.setInstrucoes(instrucoes);
-        exercicio.setDescricao(descricao);
-        exercicioService.atualizarExercicio(id, exercicio);
+                                 @RequestParam String descricao,
+                                 RedirectAttributes ra) {
+        try {
+            Exercicio exercicio = new Exercicio();
+            exercicio.setNome(nome);
+            exercicio.setEquipamento(equipamento);
+            exercicio.setGrupoMuscular(grupoMuscular);
+            exercicio.setInstrucoes(instrucoes);
+            exercicio.setDescricao(descricao);
+            exercicioService.atualizarExercicio(id, exercicio);
+            ra.addFlashAttribute("msgSucesso", "Exercício atualizado com sucesso.");
+        } catch (RuntimeException ex) {
+            ra.addFlashAttribute("msgErro", ex.getMessage());
+        }
         return "redirect:/instrutor/exercicios";
     }
     
     @PostMapping("/exercicios/excluir/{id}")
-    public String excluirExercicio(@PathVariable Long id) {
-        exercicioService.deletarExercicio(id);
+    public String excluirExercicio(@PathVariable Long id, RedirectAttributes ra) {
+        try {
+            exercicioService.deletarExercicio(id);
+            ra.addFlashAttribute("msgSucesso", "Exercício excluído com sucesso.");
+        } catch (RuntimeException ex) {
+            ra.addFlashAttribute("msgErro", ex.getMessage());
+        }
         return "redirect:/instrutor/exercicios";
     }
     
@@ -274,7 +308,8 @@ public class InstrutorController {
                                 @RequestParam String senha,
                                 @RequestParam(required = false) String dataNascimento,
                                 @RequestParam(required = false) String objetivo,
-                                Model model) {
+                                Model model,
+                                RedirectAttributes ra) {
         try {
             Aluno aluno = new Aluno();
             aluno.setCpf(cpf);
@@ -291,6 +326,7 @@ public class InstrutorController {
                 aluno.setObjetivo(objetivo);
             }
             alunoService.cadastrarAluno(aluno);
+            ra.addFlashAttribute("msgSucesso", "Aluno cadastrado com sucesso.");
             return "redirect:/instrutor/alunos";
         } catch (Exception e) {
             model.addAttribute("error", "Erro ao cadastrar aluno: " + e.getMessage());
@@ -308,7 +344,8 @@ public class InstrutorController {
                              @RequestParam(required = false) String telefone,
                              @RequestParam(required = false) String dataNascimento,
                              @RequestParam(required = false) String objetivo,
-                             Model model) {
+                             Model model,
+                             RedirectAttributes ra) {
         try {
             Aluno alunoAtualizado = new Aluno();
             alunoAtualizado.setNome(nome);
@@ -323,6 +360,7 @@ public class InstrutorController {
                 alunoAtualizado.setObjetivo(objetivo);
             }
             alunoService.atualizarAluno(cpf, alunoAtualizado);
+            ra.addFlashAttribute("msgSucesso", "Aluno atualizado com sucesso.");
             return "redirect:/instrutor/alunos";
         } catch (Exception e) {
             model.addAttribute("error", "Erro ao atualizar aluno: " + e.getMessage());
@@ -334,8 +372,13 @@ public class InstrutorController {
     }
     
     @PostMapping("/alunos/excluir/{cpf}")
-    public String excluirAluno(@PathVariable String cpf) {
-        alunoService.deletarAluno(cpf);
+    public String excluirAluno(@PathVariable String cpf, RedirectAttributes ra) {
+        try {
+            alunoService.deletarAluno(cpf);
+            ra.addFlashAttribute("msgSucesso", "Aluno excluído com sucesso.");
+        } catch (RuntimeException ex) {
+            ra.addFlashAttribute("msgErro", ex.getMessage());
+        }
         return "redirect:/instrutor/alunos";
     }
     
@@ -441,7 +484,8 @@ public class InstrutorController {
                               @RequestParam(name = "repeticoes") java.util.List<Integer> repeticoesList,
                               @RequestParam(name = "carga", required = false) java.util.List<Double> cargaList,
                               Model model,
-                              HttpSession session) {
+                              HttpSession session,
+                              RedirectAttributes ra) {
         try {
             Instrutor instrutor = (Instrutor) session.getAttribute("instrutor");
             if (instrutor == null) {
@@ -511,7 +555,7 @@ public class InstrutorController {
             }
 
             planoTreinoService.criarPlanoTreino(plano);
-
+            ra.addFlashAttribute("msgSucesso", "Plano criado com sucesso.");
             return "redirect:/instrutor/alunos/perfil/" + cpf;
         } catch (Exception e) {
             model.addAttribute("error", "Erro ao salvar plano: " + e.getMessage());
@@ -605,7 +649,8 @@ public class InstrutorController {
                                              @RequestParam(name = "repeticoes") java.util.List<Integer> repeticoesList,
                                              @RequestParam(name = "carga", required = false) java.util.List<Double> cargaList,
                                              Model model,
-                                             HttpSession session) {
+                                             HttpSession session,
+                                             RedirectAttributes ra) {
         try {
             var planoOpt = planoTreinoService.buscarPorId(id);
             if (planoOpt.isEmpty()) {
@@ -625,8 +670,10 @@ public class InstrutorController {
                 model.addAttribute("error", "Adicione pelo menos um exercício.");
                 return editarPlanoInstrutor(cpf, id, model, session);
             }
-            // Recriar lista de exercícios
-            java.util.List<ExercicioPlano> itens = new java.util.ArrayList<>();
+            // Recriar lista de exercícios sem substituir a coleção gerenciada
+            if (plano.getExercicios() != null) {
+                plano.getExercicios().clear();
+            }
             for (int i = 0; i < exercicioIds.size(); i++) {
                 var exercicio = exercicioService.buscarPorId(exercicioIds.get(i)).orElse(null);
                 if (exercicio == null) continue;
@@ -639,11 +686,13 @@ public class InstrutorController {
                 ep.setSeries(series);
                 ep.setRepeticoes(repeticoes);
                 ep.setCarga(carga);
-                itens.add(ep);
+                plano.getExercicios().add(ep);
             }
-            plano.setExercicios(itens);
-            planoTreinoService.criarPlanoTreino(plano); // save
-            return "redirect:/instrutor/alunos/planos/" + cpf + "/" + id + "/editar";
+            // Persistir: save com ID existente fará update
+            planoTreinoService.criarPlanoTreino(plano);
+            ra.addFlashAttribute("msgSucesso", "Plano atualizado com sucesso.");
+            // Voltar para a lista de planos do aluno (página anterior)
+            return "redirect:/instrutor/alunos/planos/" + cpf;
         } catch (Exception e) {
             model.addAttribute("error", "Erro ao salvar edição do plano: " + e.getMessage());
             return editarPlanoInstrutor(cpf, id, model, session);
@@ -653,12 +702,14 @@ public class InstrutorController {
     @PostMapping("/alunos/planos/{cpf}/{id}/excluir")
     public String excluirPlanoInstrutor(@PathVariable String cpf,
                                         @PathVariable Long id,
-                                        HttpSession session) {
+                                        HttpSession session,
+                                        RedirectAttributes ra) {
         var planoOpt = planoTreinoService.buscarPorId(id);
         if (planoOpt.isPresent()) {
             var plano = planoOpt.get();
             if (plano.getAluno() != null && cpf.equals(plano.getAluno().getCpf())) {
                 planoTreinoService.excluirPlanoTreino(id);
+                ra.addFlashAttribute("msgSucesso", "Plano excluído com sucesso.");
             }
         }
         return "redirect:/instrutor/alunos/planos/" + cpf;
@@ -706,7 +757,8 @@ public class InstrutorController {
                                  @RequestParam(required = false) Double panturrilhaDireita,
                                  @RequestParam(required = false) String observacoes,
                                  Model model,
-                                 HttpSession session) {
+                                 HttpSession session,
+                                 RedirectAttributes ra) {
         try {
             Instrutor instrutor = (Instrutor) session.getAttribute("instrutor");
             if (instrutor == null) {
@@ -740,7 +792,7 @@ public class InstrutorController {
             avaliacao.setObservacoes(observacoes);
             
             avaliacaoService.criarAvaliacao(avaliacao);
-            
+            ra.addFlashAttribute("msgSucesso", "Avaliação salva com sucesso.");
             return "redirect:/instrutor/alunos/perfil/" + cpf;
         } catch (Exception e) {
             model.addAttribute("error", "Erro ao salvar avaliação: " + e.getMessage());
@@ -776,7 +828,8 @@ public class InstrutorController {
                                    @RequestParam(required = false) String telefone,
                                    @RequestParam(required = false) String dataNascimento,
                                    @RequestParam(required = false) String objetivo,
-                                   Model model) {
+                                   Model model,
+                                   RedirectAttributes ra) {
         try {
             Aluno alunoAtualizado = new Aluno();
             alunoAtualizado.setNome(nome);
@@ -791,6 +844,7 @@ public class InstrutorController {
                 alunoAtualizado.setObjetivo(objetivo);
             }
             alunoService.atualizarAluno(cpf, alunoAtualizado);
+            ra.addFlashAttribute("msgSucesso", "Aluno atualizado com sucesso.");
             return "redirect:/instrutor/alunos/perfil/" + cpf;
         } catch (Exception e) {
             model.addAttribute("error", "Erro ao atualizar aluno: " + e.getMessage());

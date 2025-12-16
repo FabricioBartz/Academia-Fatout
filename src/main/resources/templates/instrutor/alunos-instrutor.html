@@ -43,7 +43,13 @@
             </div>
             
             <div class="col-md-9">
-                <h1>Gerenciar Alunos</h1>
+                <div class="d-flex align-items-center justify-content-between mb-2" style="height: 45px;">
+                    <h1 class="mb-0">Gerenciar Alunos</h1>
+                    <div class="ms-3 flash-slot">
+                        <div th:if="${msgSucesso}" class="alert alert-success flash-alert mb-0" th:text="${msgSucesso}">Sucesso</div>
+                        <div th:if="${msgErro}" class="alert alert-danger flash-alert mb-0" th:text="${msgErro}">Erro</div>
+                    </div>
+                </div>
                 <p class="text-muted">Cadastrar e gerenciar alunos da academia.</p>
                 <div class="d-flex justify-content-between align-items-center mb-3">
                     <div class="d-flex gap-2">
@@ -238,6 +244,18 @@
     </div>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
     <script>
+        // Auto-dismiss para mensagens flash
+        document.addEventListener('DOMContentLoaded', function() {
+            const alerts = document.querySelectorAll('.flash-alert');
+            alerts.forEach(a => {
+                setTimeout(() => {
+                    a.classList.add('fade');
+                    a.style.opacity = '0';
+                    setTimeout(() => a.remove(), 300);
+                }, 2000);
+            });
+        });
+
         function abrirPerfilAluno(row) {
             const cpf = row.getAttribute('data-cpf');
             if (cpf) {

@@ -34,10 +34,16 @@
         </div>
 
         <div class="col-md-9">
-            <div class="d-flex align-items-center mb-4">
-                <a th:href="@{'/instrutor/alunos/perfil/' + ${aluno.cpf}}" class="btn btn-secondary btn-sm me-3">← Voltar</a>
-                <h1 class="mb-0">Planos de Treino</h1>
-                <span class="text-muted ms-3" th:text="${aluno.nome}">João Silva</span>
+            <div class="d-flex align-items-center justify-content-between mb-4" style="height: 45px;">
+                <div class="d-flex align-items-center">
+                    <a th:href="@{'/instrutor/alunos/perfil/' + ${aluno.cpf}}" class="btn btn-secondary btn-sm me-3">← Voltar</a>
+                    <h1 class="mb-0">Planos de Treino</h1>
+                    <span class="text-muted ms-3" th:text="${aluno.nome}">João Silva</span>
+                </div>
+                <div class="ms-3 flash-slot">
+                    <div th:if="${msgSucesso}" class="alert alert-success flash-alert mb-0" th:text="${msgSucesso}">Sucesso</div>
+                    <div th:if="${msgErro}" class="alert alert-danger flash-alert mb-0" th:text="${msgErro}">Erro</div>
+                </div>
             </div>
 
             <div class="card">
@@ -82,6 +88,16 @@
 </div>
 
 <script>
+document.addEventListener('DOMContentLoaded', function() {
+    const alerts = document.querySelectorAll('.flash-alert');
+    alerts.forEach(a => {
+        setTimeout(() => {
+            a.classList.add('fade');
+            a.style.opacity = '0';
+            setTimeout(() => a.remove(), 300);
+        }, 2000);
+    });
+});
 function confirmarExclusaoPlano(){
     return confirm('Tem certeza que deseja excluir este plano?');
 }
