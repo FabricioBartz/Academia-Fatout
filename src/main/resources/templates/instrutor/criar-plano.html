@@ -94,7 +94,7 @@
 
                     <div class="mb-3">
                         <label class="form-label">Copiar de um plano existente (opcional)</label>
-                        <select class="form-select" name="copiarPlanoId">
+                        <select class="form-select" name="copiarPlanoId" id="copiarPlanoId">
                             <option value="">Não copiar</option>
                             <option th:each="plano : ${planosInstrutor}" th:value="${plano.id}" th:text="${plano.nome} + ' - ' + ${plano.aluno.nome}"></option>
                         </select>
@@ -138,7 +138,7 @@
 
                     <div class="mb-3">
                         <label class="form-label">Observações (opcional)</label>
-                        <textarea class="form-control" name="observacoes" rows="3" placeholder="Ex: Descanso 60s entre séries"></textarea>
+                        <textarea class="form-control" name="observacoes" id="observacoes" rows="3" placeholder="Ex: Descanso 60s entre séries"></textarea>
                     </div>
 
                     <div>
@@ -166,6 +166,64 @@
             });
             lista.appendChild(clone);
         }
+
+        // Auto-preencher ao selecionar plano de cópia
+        document.getElementById('copiarPlanoId').addEventListener('change', async function() {
+            const id = this.value;
+            if (!id) return;
+            try {
+                const resp = await fetch(`/instrutor/alunos/plano/json/${id}`);
+                const data = await resp.json();
+                if (!data.ok) return;
+                // Preencher nome
+                const nomeInput = document.querySelector('input[name="nome"]');
+                if (data.nome) nomeInput.value = data.nome;
+                // Preencher observações
+                const obs = document.getElementById('observacoes');
+                obs.value = data.observacoes || '';
+                // Marcar dias da semana
+                Array.from(document.querySelectorAll('input[name="diasSemana"]')).forEach(chk => chk.checked = false);
+                if (data.diasSemana) {
+                    const dias = data.diasSemana.split(',').map(s => s.trim().toUpperCase());
+                    dias.forEach(d => {
+                        const el = document.querySelector(`input[name="diasSemana"][value="${d}"]`);
+                        if (el) el.checked = true;
+                    });
+                }
+                // Preencher exercícios
+                const lista = document.getElementById('exercicios-list');
+                // Remover todos blocos exceto primeiro
+                const items = Array.from(lista.getElementsByClassName('exercicio-item'));
+                items.slice(1).forEach(i => i.remove());
+                const first = items[0];
+                function fillItem(item, ex) {
+                    const sel = item.querySelector('select[name="exercicioId"]');
+                    const series = item.querySelector('input[name="series"]');
+                    const reps = item.querySelector('input[name="repeticoes"]');
+                    const carga = item.querySelector('input[name="carga"]');
+                    if (sel) sel.value = ex.exercicioId;
+                    if (series) series.value = ex.series;
+                    if (reps) reps.value = ex.repeticoes;
+                    if (carga) carga.value = ex.carga ?? '';
+                }
+                if (data.exercicios && data.exercicios.length > 0) {
+                    fillItem(first, data.exercicios[0]);
+                    for (let i = 1; i < data.exercicios.length; i++) {
+                        adicionarExercicio();
+                        const newItem = lista.getElementsByClassName('exercicio-item')[lista.getElementsByClassName('exercicio-item').length - 1];
+                        fillItem(newItem, data.exercicios[i]);
+                    }
+                } else {
+                    // Limpar primeiro item
+                    Array.from(first.querySelectorAll('select, input')).forEach(el => {
+                        if (el.tagName === 'SELECT') el.selectedIndex = 0;
+                        else el.value = '';
+                    });
+                }
+            } catch (e) {
+                console.error('Erro ao carregar plano para cópia', e);
+            }
+        });
     </script>
 </body>
 </html>

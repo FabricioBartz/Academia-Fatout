@@ -345,6 +345,37 @@ public class InstrutorController {
         return "instrutor/criar-plano";
     }
 
+    // JSON: detalhes de plano para auto-preenchimento ao copiar
+    @GetMapping("/alunos/plano/json/{id}")
+    @ResponseBody
+    public java.util.Map<String, Object> planoJson(@PathVariable Long id) {
+        var opt = planoTreinoService.buscarPorId(id);
+        var resp = new java.util.HashMap<String, Object>();
+        if (opt.isEmpty()) {
+            resp.put("ok", false);
+            resp.put("error", "Plano não encontrado");
+            return resp;
+        }
+        var p = opt.get();
+        resp.put("ok", true);
+        resp.put("nome", p.getNome());
+        resp.put("diasSemana", p.getDiasSemana());
+        resp.put("observacoes", p.getObservacoes());
+        var exs = new java.util.ArrayList<java.util.Map<String, Object>>();
+        if (p.getExercicios() != null) {
+            for (var ep : p.getExercicios()) {
+                var m = new java.util.HashMap<String, Object>();
+                m.put("exercicioId", ep.getExercicio().getId());
+                m.put("series", ep.getSeries());
+                m.put("repeticoes", ep.getRepeticoes());
+                m.put("carga", ep.getCarga());
+                exs.add(m);
+            }
+        }
+        resp.put("exercicios", exs);
+        return resp;
+    }
+
     // Salvar plano de treino
     @PostMapping("/alunos/plano/{cpf}")
     public String salvarPlano(@PathVariable String cpf,

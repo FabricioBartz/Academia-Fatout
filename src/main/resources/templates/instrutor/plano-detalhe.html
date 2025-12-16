@@ -56,7 +56,7 @@
                                     <strong th:text="${ep.exercicio.nome}">Supino</strong>
                                     <span class="text-muted ms-2" th:text="'Séries: ' + ${ep.series} + ' | Reps: ' + ${ep.repeticoes}">Séries/Reps</span>
                                 </div>
-                                <span class="text-muted" th:text="${ep.carga != null} ? ('Carga: ' + ep.carga + ' kg') : ''"></span>
+                                <span class="text-muted" th:if="${ep.carga != null}" th:text="'Carga: ' + ${ep.carga} + ' kg'"></span>
                             </div>
                             <div th:if="${ep.observacoes}" class="mt-2">
                                 <small class="text-muted" th:text="${ep.observacoes}"></small>

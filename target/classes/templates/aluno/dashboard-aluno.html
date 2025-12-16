@@ -21,7 +21,7 @@
             <div class="col-md-3">
                 <div class="list-group">
                     <a th:href="@{/aluno/dashboard}" class="list-group-item list-group-item-action active">Painel Principal</a>
-                    <a th:href="@{/aluno/treino}" class="list-group-item list-group-item-action">Meu Treino</a>
+                    <a th:href="@{/aluno/treino}" class="list-group-item list-group-item-action">Meus Treinos</a>
                     <a th:href="@{/aluno/avaliacoes}" class="list-group-item list-group-item-action">Avaliações</a>
                     <a th:href="@{/aluno/turmas}" class="list-group-item list-group-item-action">Turmas</a>
                     <a th:href="@{/aluno/perfil}" class="list-group-item list-group-item-action">Meu Perfil</a>
@@ -34,7 +34,7 @@
                 
                 <div class="row mt-4">
                     <div class="col-md-6">
-                        <div class="card">
+                        <div class="card h-100">
                             <div class="card-body">
                                 <h5 class="card-title">📊 Última Avaliação</h5>
                                 <div th:if="${ultimaAvaliacao != null}">
@@ -52,7 +52,7 @@
                     </div>
                     
                     <div class="col-md-6">
-                        <div class="card">
+                        <div class="card h-100">
                             <div class="card-body">
                                 <h5 class="card-title">💪 Treino de Hoje</h5>
                                 <div th:if="${planoHoje == null}">
@@ -61,8 +61,7 @@
                                 </div>
                                 <div th:if="${planoHoje != null}">
                                     <p class="text-muted mb-1">
-                                        <span th:text="${planoHoje.nome}">Treino A</span>
-                                        <span class="ms-2" th:text="${planoHoje.diasSemana}">SEG,QUA,SEX</span>
+                                        <span th:text="${diaHoje + ' - ' + #dates.format(#dates.createNow(), 'dd/MM/yyyy')}">SEG - 15/12/2025</span>
                                     </p>
                                     <div th:if="${planoHojeAtivoHoje}">
                                         <ul class="mb-2">
@@ -72,9 +71,11 @@
                                     <div th:if="${!planoHojeAtivoHoje}">
                                         <p class="text-muted">Hoje não é dia deste plano. Aproveite para recuperar!</p>
                                     </div>
-                                    <a th:href="@{'/aluno/treino/' + ${planoHoje.id}}" class="btn btn-success">Abrir Plano</a>
                                 </div>
                             </div>
+                            <div class="card-footer bg-white border-top-0">
+                                <a th:href="@{'/aluno/treino/' + ${planoHoje != null ? planoHoje.id : 0}}" class="btn btn-success btn-sm">Abrir Plano</a>
+                                </div>
                         </div>
                     </div>
                 </div>

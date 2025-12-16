@@ -32,37 +32,8 @@
                 <h1>Meus Treinos</h1>
                 <p class="text-muted">Visualize seus planos de treino personalizado.</p>
 
-                <div th:if="${plano == null}" class="alert alert-info">
+                <div th:if="${planos == null or planos.isEmpty()}" class="alert alert-info">
                     Nenhum plano de treino ativo. Consulte seu instrutor.
-                </div>
-
-                <div th:if="${plano != null}" class="card mb-4">
-                    <div class="card-header d-flex justify-content-between align-items-center">
-                        <div>
-                            <strong th:text="${plano.nome}">Treino A</strong>
-                            <span class="text-muted ms-2" th:text="${#temporals.format(plano.dataCriacao, 'dd/MM/yyyy')}">10/12/2025</span>
-                        </div>
-                        <div>
-                            <span class="badge bg-secondary me-2" th:text="${plano.diasSemana}">SEG,QUA,SEX</span>
-                            <a class="btn btn-outline-success btn-sm" th:href="@{'/aluno/treino/' + ${plano.id}}">Abrir Plano</a>
-                        </div>
-                    </div>
-                    <div class="card-body">
-                        <div class="list-group">
-                            <div th:each="ep : ${plano.exercicios}" class="list-group-item">
-                                <div class="d-flex justify-content-between align-items-center">
-                                    <div>
-                                        <strong th:text="${ep.exercicio.nome}">Supino Reto</strong>
-                                        <span class="text-muted ms-2" th:text="'Séries: ' + ${ep.series} + ' | Reps: ' + ${ep.repeticoes}">Séries: 3 | Reps: 12</span>
-                                    </div>
-                                    <span class="text-muted" th:text="${ep.carga != null} ? ('Carga: ' + ep.carga + ' kg') : ''"></span>
-                                </div>
-                            </div>
-                        </div>
-                        <div th:if="${plano.observacoes}" class="mt-3">
-                            <small class="text-muted" th:text="${plano.observacoes}">Descanso 60s entre séries.</small>
-                        </div>
-                    </div>
                 </div>
 
                 <div th:if="${planos != null and !planos.isEmpty()}">
@@ -85,7 +56,7 @@
                                             <strong th:text="${ep.exercicio.nome}">Supino Reto</strong>
                                             <span class="text-muted ms-2" th:text="'Séries: ' + ${ep.series} + ' | Reps: ' + ${ep.repeticoes}">Séries: 3 | Reps: 12</span>
                                         </div>
-                                        <span class="text-muted" th:text="${ep.carga != null} ? ('Carga: ' + ep.carga + ' kg') : ''"></span>
+                                        <span class="text-muted" th:if="${ep.carga != null}" th:text="'Carga: ' + ${ep.carga} + ' kg'"></span>
                                     </div>
                                 </div>
                             </div>

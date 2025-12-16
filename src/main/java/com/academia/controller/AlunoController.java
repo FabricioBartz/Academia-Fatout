@@ -60,11 +60,26 @@ public class AlunoController {
             var ultimaAvaliacao = avaliacaoService.buscarUltimaAvaliacao(aluno.getCpf());
             model.addAttribute("ultimaAvaliacao", ultimaAvaliacao.orElse(null));
             var planoAtivo = planoTreinoService.buscarPlanoAtivo(aluno.getCpf());
-                model.addAttribute("planoHoje", planoAtivo.orElse(null));
-                String diaHoje = codigoDia(LocalDate.now().getDayOfWeek());
-                boolean ativoHoje = planoAtivo.map(p -> p.getDiasSemana() != null && Arrays.asList(p.getDiasSemana().split(",")).contains(diaHoje)).orElse(false);
-                model.addAttribute("diaHoje", diaHoje);
-                model.addAttribute("planoHojeAtivoHoje", ativoHoje);
+            String diaHoje = codigoDia(LocalDate.now().getDayOfWeek());
+            var planosAluno = planoTreinoService.listarPorAluno(aluno.getCpf());
+            PlanoTreino planoDoDia = null;
+            for (PlanoTreino p : planosAluno) {
+                String dias = p.getDiasSemana();
+                if (dias != null && Arrays.stream(dias.toUpperCase().split(",")).map(String::trim).anyMatch(d -> d.equals(diaHoje))) {
+                    planoDoDia = p;
+                    break;
+                }
+            }
+            if (planoDoDia == null) {
+                planoDoDia = planoAtivo.orElse(null);
+            }
+            model.addAttribute("planoHoje", planoDoDia);
+            boolean ativoHoje = planoDoDia != null && planoDoDia.getDiasSemana() != null &&
+                Arrays.stream(planoDoDia.getDiasSemana().toUpperCase().split(",")).map(String::trim).anyMatch(d -> d.equals(diaHoje));
+            model.addAttribute("diaHoje", diaHoje);
+            model.addAttribute("dataHoje", LocalDate.now());
+            model.addAttribute("dataHojeStr", java.time.format.DateTimeFormatter.ofPattern("dd/MM/yyyy").format(LocalDate.now()));
+            model.addAttribute("planoHojeAtivoHoje", ativoHoje);
         }
         
         return "aluno/dashboard-aluno";
