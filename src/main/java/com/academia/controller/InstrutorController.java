@@ -742,6 +742,87 @@ public class InstrutorController {
         return "instrutor/avaliacao-detalhe";
     }
     
+    // Formulário de edição de avaliação
+    @GetMapping("/alunos/avaliacoes/{cpf}/{id}/editar")
+    public String editarAvaliacaoForm(@PathVariable String cpf,
+                                      @PathVariable Long id,
+                                      Model model,
+                                      HttpSession session) {
+        Instrutor instrutor = (Instrutor) session.getAttribute("instrutor");
+        if (instrutor == null) {
+            instrutor = instrutorService.listarTodos().isEmpty() ? null : instrutorService.listarTodos().get(0);
+        }
+        model.addAttribute("instrutor", instrutor);
+
+        Aluno aluno = alunoService.buscarPorCpf(cpf).orElse(null);
+        if (aluno == null) {
+            return "redirect:/instrutor/alunos";
+        }
+        model.addAttribute("aluno", aluno);
+
+        AvaliacaoFisica avaliacao = avaliacaoService.buscarPorId(id).orElse(null);
+        if (avaliacao == null || avaliacao.getAluno() == null || !cpf.equals(avaliacao.getAluno().getCpf())) {
+            return "redirect:/instrutor/alunos/perfil/" + cpf;
+        }
+        model.addAttribute("avaliacao", avaliacao);
+        return "instrutor/avaliacao-aluno";
+    }
+
+    // Salvar edição da avaliação
+    @PostMapping("/alunos/avaliacoes/{cpf}/{id}/editar")
+    public String salvarEdicaoAvaliacao(@PathVariable String cpf,
+                                        @PathVariable Long id,
+                                        @RequestParam Double peso,
+                                        @RequestParam Double altura,
+                                        @RequestParam Double peito,
+                                        @RequestParam Double cintura,
+                                        @RequestParam Double quadril,
+                                        @RequestParam Double bicepsEsquerdo,
+                                        @RequestParam Double bicepsDireito,
+                                        @RequestParam Double coxaEsquerda,
+                                        @RequestParam Double coxaDireita,
+                                        @RequestParam(required = false) Double panturrilhaEsquerda,
+                                        @RequestParam(required = false) Double panturrilhaDireita,
+                                        @RequestParam(required = false) String observacoes,
+                                        RedirectAttributes ra) {
+        try {
+            AvaliacaoFisica atualizada = new AvaliacaoFisica();
+            atualizada.setPeso(peso);
+            atualizada.setAltura(altura);
+            atualizada.setPeito(peito);
+            atualizada.setCintura(cintura);
+            atualizada.setQuadril(quadril);
+            atualizada.setBicepsEsquerdo(bicepsEsquerdo);
+            atualizada.setBicepsDireito(bicepsDireito);
+            atualizada.setCoxaEsquerda(coxaEsquerda);
+            atualizada.setCoxaDireita(coxaDireita);
+            if (panturrilhaEsquerda != null) atualizada.setPanturrilhaEsquerda(panturrilhaEsquerda);
+            if (panturrilhaDireita != null) atualizada.setPanturrilhaDireita(panturrilhaDireita);
+            atualizada.setObservacoes(observacoes);
+
+            avaliacaoService.atualizarAvaliacao(id, atualizada);
+            ra.addFlashAttribute("msgSucesso", "Avaliação atualizada com sucesso.");
+            return "redirect:/instrutor/alunos/avaliacoes/" + cpf + "/" + id;
+        } catch (RuntimeException ex) {
+            ra.addFlashAttribute("msgErro", ex.getMessage());
+            return "redirect:/instrutor/alunos/avaliacoes/" + cpf + "/" + id + "/editar";
+        }
+    }
+
+    // Excluir avaliação
+    @PostMapping("/alunos/avaliacoes/{cpf}/{id}/excluir")
+    public String excluirAvaliacao(@PathVariable String cpf,
+                                   @PathVariable Long id,
+                                   RedirectAttributes ra) {
+        try {
+            avaliacaoService.deletarAvaliacao(id);
+            ra.addFlashAttribute("msgSucesso", "Avaliação excluída com sucesso.");
+        } catch (RuntimeException ex) {
+            ra.addFlashAttribute("msgErro", ex.getMessage());
+        }
+        return "redirect:/instrutor/alunos/perfil/" + cpf;
+    }
+    
     @PostMapping("/alunos/avaliacao/{cpf}")
     public String salvarAvaliacao(@PathVariable String cpf,
                                  @RequestParam Double peso,

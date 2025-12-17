@@ -65,6 +65,14 @@ body {
     transition: opacity .3s ease;
 }
 
+/* Padronização global dos avisos: mesmo tamanho em todas as páginas */
+.alert.flash-alert, .flash-alert.alert {
+    padding: 0.15rem 0.4rem !important;
+    font-size: 0.8rem !important;
+    line-height: 1 !important;
+    border-radius: 0.25rem !important;
+}
+
 @media (max-width: 576px) {
     .flash-slot { min-width: 180px; max-width: 220px; height: 26px; min-height: 26px; }
     .flash-alert { font-size: 0.75rem; padding: 0.1rem 0.35rem; }

@@ -53,9 +53,10 @@
                         <div th:if="${msgErro}" class="alert alert-danger flash-alert mb-0" th:text="${msgErro}">Erro</div>
                     </div>
                 </div>
-                <!-- Form na mesma coluna para eliminar qualquer gap entre título e conteúdo -->
-                <form th:action="@{/instrutor/alunos/avaliacao/{cpf}(cpf=${aluno.cpf})}" method="post" class="card p-3 mt-0">
-                    <h5 class="mb-2 mt-0">Nova Avaliação Física</h5>
+                                <!-- Form na mesma coluna para eliminar qualquer gap entre título e conteúdo -->
+                                <form th:action="${avaliacao} != null ? @{/instrutor/alunos/avaliacoes/{cpf}/{id}/editar(cpf=${aluno.cpf},id=${avaliacao.id})} : @{/instrutor/alunos/avaliacao/{cpf}(cpf=${aluno.cpf})}"
+                                            method="post" class="card p-3 mt-0">
+                                        <h5 class="mb-2 mt-0" th:text="${avaliacao} != null ? 'Editar Avaliação Física' : 'Nova Avaliação Física'">Nova Avaliação Física</h5>
                     <div th:if="${error}" class="alert alert-danger mb-2" th:text="${error}"></div>
 
                     <!-- Dados Básicos -->
@@ -63,15 +64,15 @@
                     <div class="row mb-2">
                         <div class="col-md-4">
                             <label for="peso" class="form-label">Peso (kg)</label>
-                            <input type="number" step="0.01" class="form-control" id="peso" name="peso" placeholder="Ex: 75.5" required>
+                            <input type="number" step="0.01" class="form-control" id="peso" name="peso" placeholder="Ex: 75.5" th:value="${avaliacao != null} ? ${avaliacao.peso} : ''" required>
                         </div>
                         <div class="col-md-4">
                             <label for="altura" class="form-label">Altura (m)</label>
-                            <input type="number" step="0.01" class="form-control" id="altura" name="altura" placeholder="Ex: 1.75" required>
+                            <input type="number" step="0.01" class="form-control" id="altura" name="altura" placeholder="Ex: 1.75" th:value="${avaliacao != null} ? ${avaliacao.altura} : ''" required>
                         </div>
                         <div class="col-md-4">
                             <label for="imc" class="form-label">IMC</label>
-                            <input type="text" class="form-control" id="imc" placeholder="-" disabled>
+                            <input type="text" class="form-control" id="imc" placeholder="-" th:value="${avaliacao != null} ? ${#numbers.formatDecimal(avaliacao.imc, 1, 2)} : ''" disabled>
                         </div>
                     </div>
 
@@ -80,15 +81,15 @@
                     <div class="row mb-2">
                         <div class="col-md-4">
                             <label for="peito" class="form-label">Peito</label>
-                            <input type="number" step="0.01" class="form-control" id="peito" name="peito" placeholder="Ex: 100" required>
+                            <input type="number" step="0.01" class="form-control" id="peito" name="peito" placeholder="Ex: 100" th:value="${avaliacao != null} ? ${avaliacao.peito} : ''" required>
                         </div>
                         <div class="col-md-4">
                             <label for="cintura" class="form-label">Cintura</label>
-                            <input type="number" step="0.01" class="form-control" id="cintura" name="cintura" placeholder="Ex: 85" required>
+                            <input type="number" step="0.01" class="form-control" id="cintura" name="cintura" placeholder="Ex: 85" th:value="${avaliacao != null} ? ${avaliacao.cintura} : ''" required>
                         </div>
                         <div class="col-md-4">
                             <label for="quadril" class="form-label">Quadril</label>
-                            <input type="number" step="0.01" class="form-control" id="quadril" name="quadril" placeholder="Ex: 95" required>
+                            <input type="number" step="0.01" class="form-control" id="quadril" name="quadril" placeholder="Ex: 95" th:value="${avaliacao != null} ? ${avaliacao.quadril} : ''" required>
                         </div>
                     </div>
 
@@ -97,11 +98,11 @@
                     <div class="row mb-2">
                         <div class="col-md-6">
                             <label for="bicepsEsquerdo" class="form-label">Bíceps Esquerdo</label>
-                            <input type="number" step="0.01" class="form-control" id="bicepsEsquerdo" name="bicepsEsquerdo" placeholder="Ex: 35" required>
+                            <input type="number" step="0.01" class="form-control" id="bicepsEsquerdo" name="bicepsEsquerdo" placeholder="Ex: 35" th:value="${avaliacao != null} ? ${avaliacao.bicepsEsquerdo} : ''" required>
                         </div>
                         <div class="col-md-6">
                             <label for="bicepsDireito" class="form-label">Bíceps Direito</label>
-                            <input type="number" step="0.01" class="form-control" id="bicepsDireito" name="bicepsDireito" placeholder="Ex: 36" required>
+                            <input type="number" step="0.01" class="form-control" id="bicepsDireito" name="bicepsDireito" placeholder="Ex: 36" th:value="${avaliacao != null} ? ${avaliacao.bicepsDireito} : ''" required>
                         </div>
                     </div>
 
@@ -110,11 +111,11 @@
                     <div class="row mb-2">
                         <div class="col-md-6">
                             <label for="coxaEsquerda" class="form-label">Coxa Esquerda</label>
-                            <input type="number" step="0.01" class="form-control" id="coxaEsquerda" name="coxaEsquerda" placeholder="Ex: 58" required>
+                            <input type="number" step="0.01" class="form-control" id="coxaEsquerda" name="coxaEsquerda" placeholder="Ex: 58" th:value="${avaliacao != null} ? ${avaliacao.coxaEsquerda} : ''" required>
                         </div>
                         <div class="col-md-6">
                             <label for="coxaDireita" class="form-label">Coxa Direita</label>
-                            <input type="number" step="0.01" class="form-control" id="coxaDireita" name="coxaDireita" placeholder="Ex: 58" required>
+                            <input type="number" step="0.01" class="form-control" id="coxaDireita" name="coxaDireita" placeholder="Ex: 58" th:value="${avaliacao != null} ? ${avaliacao.coxaDireita} : ''" required>
                         </div>
                     </div>
 
@@ -123,24 +124,24 @@
                     <div class="row mb-2">
                         <div class="col-md-6">
                             <label for="panturrilhaEsquerda" class="form-label">Panturrilha Esquerda</label>
-                            <input type="number" step="0.01" class="form-control" id="panturrilhaEsquerda" name="panturrilhaEsquerda" placeholder="Ex: 38">
+                            <input type="number" step="0.01" class="form-control" id="panturrilhaEsquerda" name="panturrilhaEsquerda" placeholder="Ex: 38" th:value="${avaliacao != null} ? ${avaliacao.panturrilhaEsquerda} : ''">
                         </div>
                         <div class="col-md-6">
                             <label for="panturrilhaDireita" class="form-label">Panturrilha Direita</label>
-                            <input type="number" step="0.01" class="form-control" id="panturrilhaDireita" name="panturrilhaDireita" placeholder="Ex: 38">
+                            <input type="number" step="0.01" class="form-control" id="panturrilhaDireita" name="panturrilhaDireita" placeholder="Ex: 38" th:value="${avaliacao != null} ? ${avaliacao.panturrilhaDireita} : ''">
                         </div>
                     </div>
 
                     <!-- Observações -->
                     <h6 class="mb-2 mt-2">Observações</h6>
                     <div class="mb-2">
-                        <textarea class="form-control" id="observacoes" name="observacoes" rows="4" placeholder="Digite observações sobre a avaliação, objetivos do aluno, etc."></textarea>
+                        <textarea class="form-control" id="observacoes" name="observacoes" rows="4" placeholder="Digite observações sobre a avaliação, objetivos do aluno, etc." th:text="${avaliacao != null} ? ${avaliacao.observacoes} : ''"></textarea>
                     </div>
 
                     <!-- Botões -->
                     <div class="mt-2">
                         <a th:href="@{/instrutor/alunos/perfil/{cpf}(cpf=${aluno.cpf})}" class="btn btn-secondary">Cancelar</a>
-                        <button type="submit" class="btn btn-primary">Salvar Avaliação</button>
+                        <button type="submit" class="btn btn-primary" th:text="${avaliacao} != null ? 'Salvar Alterações' : 'Salvar Avaliação'">Salvar Avaliação</button>
                     </div>
                 </form>
             </div>

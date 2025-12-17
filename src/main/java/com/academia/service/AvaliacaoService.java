@@ -76,7 +76,10 @@ public class AvaliacaoService {
     public AvaliacaoFisica atualizarAvaliacao(Long id, AvaliacaoFisica avaliacaoAtualizada) {
         return avaliacaoRepository.findById(id)
             .map(avaliacao -> {
-                avaliacao.setData(avaliacaoAtualizada.getData());
+                // Preserva a data original quando não enviada no update
+                if (avaliacaoAtualizada.getData() != null) {
+                    avaliacao.setData(avaliacaoAtualizada.getData());
+                }
                 avaliacao.setPeso(avaliacaoAtualizada.getPeso());
                 avaliacao.setAltura(avaliacaoAtualizada.getAltura());
                 avaliacao.setPeito(avaliacaoAtualizada.getPeito());
