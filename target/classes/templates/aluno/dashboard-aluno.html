@@ -44,7 +44,7 @@
                 <div class="row mt-4">
                     <div class="col-md-6">
                         <div class="card h-100">
-                            <div class="card-body">
+                            <div class="card-body d-flex flex-column">
                                 <h5 class="card-title">📊 Última Avaliação</h5>
                                 <div th:if="${ultimaAvaliacao != null}">
                                     <p class="card-text" th:text="'Peso: ' + ${ultimaAvaliacao.peso} + ' kg'">Peso: 82.5 kg</p>
@@ -55,14 +55,14 @@
                                 <div th:if="${ultimaAvaliacao == null}" class="text-muted">
                                     <p>Nenhuma avaliação registrada ainda.</p>
                                 </div>
-                                <a th:href="@{/aluno/minhas_avaliacoes}" class="btn btn-success btn-sm mt-2">Ver Histórico</a>
+                                <a th:href="@{/aluno/minhas_avaliacoes}" class="btn btn-success btn-sm mt-auto align-self-end">Ver Histórico</a>
                             </div>
                         </div>
                     </div>
                     
                     <div class="col-md-6">
                         <div class="card h-100">
-                            <div class="card-body">
+                            <div class="card-body d-flex flex-column">
                                 <h5 class="card-title">💪 Treino de Hoje</h5>
                                 <div th:if="${planoHoje == null}">
                                     <p class="text-muted">Sem plano ativo no momento.</p>
@@ -82,8 +82,8 @@
                                     </div>
                                 </div>
                             </div>
-                            <div class="card-footer bg-white border-top-0">
-                                <a th:href="@{'/aluno/treino/' + ${planoHoje != null ? planoHoje.id : 0}}" class="btn btn-success btn-sm">Abrir Plano</a>
+                            <div class="card-footer bg-white border-top-0 d-flex justify-content-end">
+                                <a th:href="@{'/aluno/treino/' + ${planoHoje != null ? planoHoje.id : 0}}" class="btn btn-success btn-sm mt-auto align-self-end">Abrir Plano</a>
                                 </div>
                         </div>
                     </div>
