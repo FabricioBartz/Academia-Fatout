@@ -25,7 +25,7 @@ public interface TurmaRepository extends JpaRepository<Turma, Long> {
     List<Turma> findByDataDaAulaGreaterThanEqual(LocalDate data);
     
     // Encontrar turmas com vagas disponíveis
-    @Query("SELECT t FROM Turma t WHERE t.vagas > SIZE(t.alunos)")
+    @Query("SELECT t FROM Turma t WHERE t.vagas > SIZE(t.alunos) ORDER BY t.dataDaAula ASC, t.horaAula ASC")
     List<Turma> findTurmasComVagasDisponiveis();
     
     // Encontrar turmas onde aluno está matriculado

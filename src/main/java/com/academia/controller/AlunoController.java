@@ -162,7 +162,7 @@ public class AlunoController {
         return "aluno/turmas-aluno";
     }
 
-    // Lista de turmas disponíveis do mesmo instrutor do plano ativo
+    // Lista todas as turmas com vagas disponíveis (independente do instrutor)
     @GetMapping("/turmas/disponiveis")
     public String turmasDisponiveis(Model model, HttpSession session) {
         Aluno aluno = (Aluno) session.getAttribute("aluno");
@@ -170,16 +170,7 @@ public class AlunoController {
             aluno = alunoService.listarTodos().isEmpty() ? null : alunoService.listarTodos().get(0);
         }
         model.addAttribute("aluno", aluno);
-        java.util.List<com.academia.model.Turma> turmas = java.util.List.of();
-        if (aluno != null) {
-            var planoAtivo = planoTreinoService.buscarPlanoAtivo(aluno.getCpf());
-            if (planoAtivo.isPresent() && planoAtivo.get().getInstrutor() != null) {
-                String cpfInstrutor = planoAtivo.get().getInstrutor().getCpf();
-                turmas = turmaService.listarPorInstrutor(cpfInstrutor).stream()
-                    .filter(t -> t.getVagasDisponiveis() > 0)
-                    .toList();
-            }
-        }
+        var turmas = turmaService.listarComVagasDisponiveis();
         model.addAttribute("turmasDisponiveis", turmas);
         return "aluno/turmas-disponiveis";
     }
