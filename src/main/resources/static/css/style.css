@@ -33,6 +33,11 @@ body {
     border-color: #28a745;
 }
 
+/* Tamanho consistente para botões de matrícula/desmatrícula */
+.btn-matricula {
+    min-width: 130px;
+}
+
 /* Dashboard */
 .dashboard-stats {
     font-size: 2rem;

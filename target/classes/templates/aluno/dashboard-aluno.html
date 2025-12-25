@@ -12,7 +12,7 @@
             <a class="navbar-brand" href="#">🏋️ Academia FatOut</a>
             <div class="navbar-text text-white">
                 Aluno: <span th:text="${aluno.nome}">João Silva</span>
-                <a href="/" class="btn btn-dark btn-sm ms-3">Sair</a>
+                <a href="/" class="btn btn-outline-dark btn-sm ms-3">Sair</a>
             </div>
         </div>
     </nav>
@@ -55,7 +55,7 @@
                                 <div th:if="${ultimaAvaliacao == null}" class="text-muted">
                                     <p>Nenhuma avaliação registrada ainda.</p>
                                 </div>
-                                <a th:href="@{/aluno/minhas_avaliacoes}" class="btn btn-success btn-sm mt-auto align-self-end">Ver Histórico</a>
+                                <a th:href="@{/aluno/minhas_avaliacoes}" class="btn btn-outline-success btn-sm mt-auto align-self-end">Ver Histórico</a>
                             </div>
                         </div>
                     </div>
@@ -83,7 +83,7 @@
                                 </div>
                             </div>
                             <div class="card-footer bg-white border-top-0 d-flex justify-content-end">
-                                <a th:href="@{'/aluno/treino/' + ${planoHoje != null ? planoHoje.id : 0}}" class="btn btn-success btn-sm mt-auto align-self-end">Abrir Plano</a>
+                                <a th:href="@{'/aluno/treino/' + ${planoHoje != null ? planoHoje.id : 0}}" class="btn btn-outline-success btn-sm mt-auto align-self-end">Abrir Plano</a>
                                 </div>
                         </div>
                     </div>

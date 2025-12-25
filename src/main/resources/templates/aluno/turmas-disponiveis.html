@@ -12,7 +12,7 @@
             <a class="navbar-brand" href="#">🏋️ Academia FatOut</a>
             <div class="navbar-text text-white">
                 Aluno: <span th:text="${aluno.nome}">João Silva</span>
-                <a href="/" class="btn btn-dark btn-sm ms-3">Sair</a>
+                <a href="/" class="btn btn-outline-dark btn-sm ms-3">Sair</a>
             </div>
         </div>
     </nav>
@@ -38,8 +38,17 @@
             </div>
 
             <div class="col-md-9">
-                <h1>Turmas Disponíveis</h1>
-                <p>Turmas do seu instrutor com vagas disponíveis.</p>
+                <div class="d-flex align-items-center justify-content-between mb-3">
+                    <div class="d-flex align-items-center">
+                        <a th:href="@{/aluno/turmas}" class="btn btn-secondary btn-sm me-3">← Voltar</a>
+                        <h1 class="mb-0">Turmas Disponíveis</h1>
+                    </div>
+                    <form class="d-flex" th:action="@{/aluno/turmas/disponiveis}" method="get" style="max-width: 360px; width: 100%;">
+                        <input type="text" class="form-control form-control-sm me-2" name="q" placeholder="Pesquisar por nome" th:value="${q}">
+                        <button type="submit" class="btn btn-outline-primary btn-sm">🔍</button>
+                    </form>
+                </div>
+                <p>Turmas de todos os instrutores. Use a busca para filtrar.</p>
 
                 <div th:if="${turmasDisponiveis == null || #lists.isEmpty(turmasDisponiveis)}" class="alert alert-info">
                     Não há turmas disponíveis no momento.
@@ -63,14 +72,21 @@
                                 <td th:text="${t.instrutor != null ? t.instrutor.nome : '—'}">Instrutor</td>
                                 <td th:text="${#temporals.format(t.dataDaAula,'dd/MM/yyyy')}">01/01/2025</td>
                                 <td th:text="${#temporals.format(t.horaAula,'HH:mm')}">10:00</td>
-                                <td>
+                                <td >
                                     <span class="badge bg-secondary" th:text="${t.vagasDisponiveis} + ' vagas'">10 vagas</span>
                                     <span class="badge bg-danger ms-2" th:if="${t.vagasDisponiveis == 0}">Lotada</span>
                                 </td>
                                 <td>
-                                    <form th:action="@{/aluno/turmas/matricular/{id}(id=${t.id})}" method="post" onsubmit="return confirm('Confirmar matrícula nesta turma?')">
-                                        <button type="submit" class="btn btn-success btn-sm" th:disabled="${t.vagasDisponiveis == 0}">Matricular</button>
-                                    </form>
+                                    <div th:if="${turmasMatriculadasIds != null && turmasMatriculadasIds.contains(t.id)}">
+                                        <form th:action="@{/aluno/turmas/desmatricular/{id}(id=${t.id})}" method="post" onsubmit="return confirm('Confirmar desmatrícula desta turma?')">
+                                            <button type="submit" class="btn btn-outline-danger btn-sm btn-matricula">Desmatricular</button>
+                                        </form>
+                                    </div>
+                                    <div th:if="${turmasMatriculadasIds == null || !turmasMatriculadasIds.contains(t.id)}">
+                                        <form th:action="@{/aluno/turmas/matricular/{id}(id=${t.id})}" method="post" onsubmit="return confirm('Confirmar matrícula nesta turma?')">
+                                            <button type="submit" class="btn btn-outline-success btn-sm btn-matricula" th:disabled="${t.vagasDisponiveis == 0}">Matricular</button>
+                                        </form>
+                                    </div>
                                 </td>
                             </tr>
                         </tbody>

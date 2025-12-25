@@ -185,23 +185,33 @@ public class AlunoController {
 
     // Lista de turmas disponíveis do mesmo instrutor do plano ativo
     @GetMapping("/turmas/disponiveis")
-    public String turmasDisponiveis(Model model, HttpSession session) {
+    public String turmasDisponiveis(@RequestParam(name = "q", required = false) String q,
+                                    Model model, HttpSession session) {
         Aluno aluno = (Aluno) session.getAttribute("aluno");
         if (aluno == null) {
             aluno = alunoService.listarTodos().isEmpty() ? null : alunoService.listarTodos().get(0);
         }
         model.addAttribute("aluno", aluno);
         java.util.List<com.academia.model.Turma> turmas = java.util.List.of();
+        java.util.Set<Long> turmasMatriculadasIds = java.util.Set.of();
         if (aluno != null) {
-            var planoAtivo = planoTreinoService.buscarPlanoAtivo(aluno.getCpf());
-            if (planoAtivo.isPresent() && planoAtivo.get().getInstrutor() != null) {
-                String cpfInstrutor = planoAtivo.get().getInstrutor().getCpf();
-                turmas = turmaService.listarPorInstrutor(cpfInstrutor).stream()
-                    .filter(t -> t.getVagasDisponiveis() > 0)
-                    .toList();
-            }
+            turmas = turmaService.listarTodas().stream()
+                // Filtrar por título se houver busca
+                .filter(t -> q == null || q.trim().isEmpty() ||
+                        (t.getTitulo() != null && t.getTitulo().toLowerCase().contains(q.trim().toLowerCase())))
+                // Ordenar alfabeticamente por título
+                .sorted(java.util.Comparator.comparing(
+                        (com.academia.model.Turma t) -> t.getTitulo() == null ? "" : t.getTitulo(),
+                        String.CASE_INSENSITIVE_ORDER
+                ))
+                .toList();
+            turmasMatriculadasIds = turmaService.listarTurmasDoAluno(aluno.getCpf()).stream()
+                .map(com.academia.model.Turma::getId)
+                .collect(java.util.stream.Collectors.toSet());
         }
         model.addAttribute("turmasDisponiveis", turmas);
+        model.addAttribute("turmasMatriculadasIds", turmasMatriculadasIds);
+        model.addAttribute("q", q == null ? "" : q.trim());
         return "aluno/turmas-disponiveis";
     }
 
