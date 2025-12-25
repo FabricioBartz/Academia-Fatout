@@ -23,6 +23,10 @@ public abstract class Pessoa {
     @Column(name = "data_nascimento")
     private LocalDate dataNascimento;
     
+    // Data de cadastro no sistema
+    @Column(name = "data_cadastro")
+    private LocalDate dataCadastro;
+    
     private String endereco;
     private String usuario;
     
@@ -54,6 +58,9 @@ public abstract class Pessoa {
     
     public LocalDate getDataNascimento() { return dataNascimento; }
     public void setDataNascimento(LocalDate dataNascimento) { this.dataNascimento = dataNascimento; }
+    
+    public LocalDate getDataCadastro() { return dataCadastro; }
+    public void setDataCadastro(LocalDate dataCadastro) { this.dataCadastro = dataCadastro; }
     
     public String getEndereco() { return endereco; }
     public void setEndereco(String endereco) { this.endereco = endereco; }

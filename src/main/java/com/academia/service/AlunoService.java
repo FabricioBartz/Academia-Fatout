@@ -22,6 +22,10 @@ public class AlunoService {
         if (alunoRepository.existsByEmail(aluno.getEmail())) {
             throw new RuntimeException("Email já cadastrado!");
         }
+        // Definir data de cadastro no sistema, se não estiver preenchida
+        if (aluno.getDataCadastro() == null) {
+            aluno.setDataCadastro(java.time.LocalDate.now());
+        }
         return alunoRepository.save(aluno);
     }
     

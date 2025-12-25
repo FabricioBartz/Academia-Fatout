@@ -99,10 +99,10 @@ public class InstrutorController {
             alunos = alunoService.listarTodos();
             model.addAttribute("q", "");
         }
-        // Mapa de início (primeira atividade registrada: menor data entre primeiro plano e primeira avaliação)
+        // Mapa de início (data de cadastro no sistema; fallback: menor data entre primeiro plano e primeira avaliação)
         java.util.Map<String, java.time.LocalDate> inicioPorAluno = new java.util.HashMap<>();
         for (Aluno a : alunos) {
-            java.time.LocalDate inicio = null;
+            java.time.LocalDate inicio = a.getDataCadastro();
             // Primeiro plano
             var planos = planoTreinoService.listarPorAluno(a.getCpf());
             for (var p : planos) {
@@ -419,6 +419,23 @@ public class InstrutorController {
         }
         
         model.addAttribute("aluno", aluno);
+        // Calcular data de início (primeiro plano/avaliação) para exibir no perfil
+        java.time.LocalDate inicioAluno = null;
+        var planosAluno = planoTreinoService.listarPorAluno(aluno.getCpf());
+        for (var p : planosAluno) {
+            var d = p.getDataCriacao();
+            if (d != null) {
+                inicioAluno = (inicioAluno == null || d.isBefore(inicioAluno)) ? d : inicioAluno;
+            }
+        }
+        var avalsAluno = avaliacaoService.listarPorAluno(aluno.getCpf());
+        for (var a : avalsAluno) {
+            var d = a.getData();
+            if (d != null) {
+                inicioAluno = (inicioAluno == null || d.isBefore(inicioAluno)) ? d : inicioAluno;
+            }
+        }
+        model.addAttribute("inicioAluno", inicioAluno);
         // Histórico de planos de treino
         var planos = planoTreinoService.listarHistorico(aluno.getCpf());
         model.addAttribute("planos", planos);

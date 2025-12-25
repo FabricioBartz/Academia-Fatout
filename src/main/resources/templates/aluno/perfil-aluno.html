@@ -46,6 +46,9 @@
                         <p class="card-text"><strong>Telefone:</strong> <span th:text="${aluno.telefone}">telefone</span></p>
                         <p class="card-text"><strong>Data de Nascimento:</strong> <span th:text="${aluno.dataNascimento}">data</span></p>
                         <p class="card-text"><strong>Objetivo:</strong> <span th:text="${aluno.objetivo}">objetivo</span></p>
+                        <p class="card-text"><strong>Início na Academia:</strong>
+                            <span th:text="${inicioAluno != null ? #temporals.format(inicioAluno, 'dd/MM/yyyy') : '—'}">—</span>
+                        </p>
                     </div>
                 </div>
             </div>

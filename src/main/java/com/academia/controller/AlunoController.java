@@ -101,6 +101,27 @@ public class AlunoController {
             aluno = alunoService.listarTodos().isEmpty() ? null : alunoService.listarTodos().get(0);
         }
         model.addAttribute("aluno", aluno);
+        // Data de início = data de cadastro no sistema; fallback: primeira atividade
+        if (aluno != null) {
+            java.time.LocalDate inicioAluno = aluno.getDataCadastro();
+            var planos = planoTreinoService.listarPorAluno(aluno.getCpf());
+            for (var p : planos) {
+                var d = p.getDataCriacao();
+                if (d != null) {
+                    inicioAluno = (inicioAluno == null || d.isBefore(inicioAluno)) ? d : inicioAluno;
+                }
+            }
+            var avals = avaliacaoService.listarPorAluno(aluno.getCpf());
+            for (var a : avals) {
+                var d = a.getData();
+                if (d != null) {
+                    inicioAluno = (inicioAluno == null || d.isBefore(inicioAluno)) ? d : inicioAluno;
+                }
+            }
+            model.addAttribute("inicioAluno", inicioAluno);
+        } else {
+            model.addAttribute("inicioAluno", null);
+        }
         return "aluno/perfil-aluno";
     }
     

@@ -66,7 +66,7 @@ CREATE TABLE `aluno_turma` (
 
 LOCK TABLES `aluno_turma` WRITE;
 /*!40000 ALTER TABLE `aluno_turma` DISABLE KEYS */;
-INSERT INTO `aluno_turma` VALUES ('12345678901',1),('12345678901',2),('12345678901',5),('02673548900',7);
+INSERT INTO `aluno_turma` VALUES ('12345678901',1),('12345678901',2),('02673548900',7);
 /*!40000 ALTER TABLE `aluno_turma` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -100,7 +100,7 @@ CREATE TABLE `avaliacao_fisica` (
   KEY `IDX_avaliacao_instrutor` (`cpf_instrutor`),
   CONSTRAINT `FK_avaliacao_aluno` FOREIGN KEY (`cpf_aluno`) REFERENCES `aluno` (`cpf`) ON DELETE SET NULL,
   CONSTRAINT `FK_avaliacao_instrutor` FOREIGN KEY (`cpf_instrutor`) REFERENCES `instrutor` (`cpf`) ON DELETE SET NULL
-) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -109,7 +109,7 @@ CREATE TABLE `avaliacao_fisica` (
 
 LOCK TABLES `avaliacao_fisica` WRITE;
 /*!40000 ALTER TABLE `avaliacao_fisica` DISABLE KEYS */;
-INSERT INTO `avaliacao_fisica` VALUES (1,'12345678901','11111111111','2025-12-14',88,1.77,28.088991030674453,120,85,77,88,77,65,54,87,57,''),(2,'02673548900','11111111111','2025-12-16',75.5,1.75,24.653061224489797,100,85,95,36,35,58,57,40,39,'Texto de observação'),(4,'12345678901','11111111111','2025-12-17',95,1.75,31.020408163265305,100,85,95,40,40,60,60,40,40,'');
+INSERT INTO `avaliacao_fisica` VALUES (1,'12345678901','11111111111','2025-12-14',88,1.77,28.088991030674453,120,85,77,88,77,65,54,87,57,''),(2,'02673548900','11111111111','2025-12-16',75.5,1.75,24.653061224489797,100,85,95,36,35,58,57,40,39,'Texto de observação'),(4,'12345678901','11111111111','2025-12-17',95,1.75,31.020408163265305,100,85,95,40,40,60,60,40,40,''),(5,'55555555555','22222222222','2025-12-17',80,1.9,22.1606648199446,100,90,95,40,40,60,60,45,45,'');
 /*!40000 ALTER TABLE `avaliacao_fisica` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -162,7 +162,7 @@ CREATE TABLE `exercicio_plano` (
   KEY `IDX_exercicio_plano_plano` (`id_plano`),
   CONSTRAINT `FK_exercicio_plano_exercicio` FOREIGN KEY (`id_exercicio`) REFERENCES `exercicio` (`id_exercicio`) ON DELETE CASCADE,
   CONSTRAINT `FK_exercicio_plano_plano` FOREIGN KEY (`id_plano`) REFERENCES `plano_de_treino` (`id_plano`) ON DELETE CASCADE
-) ENGINE=InnoDB AUTO_INCREMENT=81 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=89 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -171,7 +171,7 @@ CREATE TABLE `exercicio_plano` (
 
 LOCK TABLES `exercicio_plano` WRITE;
 /*!40000 ALTER TABLE `exercicio_plano` DISABLE KEYS */;
-INSERT INTO `exercicio_plano` VALUES (65,2,4,5,12,NULL,NULL,NULL),(66,1,4,1,10,NULL,NULL,NULL),(67,1,4,1,10,NULL,NULL,NULL),(68,2,4,2,12,NULL,NULL,NULL),(77,2,6,5,12,NULL,NULL,NULL),(78,1,6,1,10,NULL,NULL,NULL),(79,1,6,1,10,NULL,NULL,NULL),(80,2,6,2,12,NULL,NULL,NULL);
+INSERT INTO `exercicio_plano` VALUES (77,2,6,5,12,NULL,NULL,NULL),(78,1,6,1,10,NULL,NULL,NULL),(79,1,6,1,10,NULL,NULL,NULL),(80,2,6,2,12,NULL,NULL,NULL),(85,2,4,5,12,NULL,NULL,NULL),(86,2,4,2,12,NULL,NULL,NULL),(87,2,7,5,12,NULL,NULL,NULL),(88,2,7,2,12,NULL,NULL,NULL);
 /*!40000 ALTER TABLE `exercicio_plano` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -185,6 +185,7 @@ DROP TABLE IF EXISTS `instrutor`;
 CREATE TABLE `instrutor` (
   `cpf` char(11) NOT NULL,
   `dia_que_comecou_trabalhar` date DEFAULT NULL,
+  `is_admin` tinyint(1) NOT NULL DEFAULT '0',
   PRIMARY KEY (`cpf`),
   CONSTRAINT `FK_instrutor_pessoa` FOREIGN KEY (`cpf`) REFERENCES `pessoa` (`cpf`) ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
@@ -196,7 +197,7 @@ CREATE TABLE `instrutor` (
 
 LOCK TABLES `instrutor` WRITE;
 /*!40000 ALTER TABLE `instrutor` DISABLE KEYS */;
-INSERT INTO `instrutor` VALUES ('11111111111','2020-03-15'),('22222222222','2021-06-10');
+INSERT INTO `instrutor` VALUES ('11111111111','2020-03-15',1),('22222222222','2021-06-10',0);
 /*!40000 ALTER TABLE `instrutor` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -253,7 +254,7 @@ CREATE TABLE `plano_de_treino` (
   KEY `IDX_plano_instrutor` (`cpf_instrutor`),
   CONSTRAINT `FK_plano_aluno` FOREIGN KEY (`cpf_aluno`) REFERENCES `aluno` (`cpf`) ON DELETE SET NULL,
   CONSTRAINT `FK_plano_instrutor` FOREIGN KEY (`cpf_instrutor`) REFERENCES `instrutor` (`cpf`) ON DELETE SET NULL
-) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=8 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -262,7 +263,7 @@ CREATE TABLE `plano_de_treino` (
 
 LOCK TABLES `plano_de_treino` WRITE;
 /*!40000 ALTER TABLE `plano_de_treino` DISABLE KEYS */;
-INSERT INTO `plano_de_treino` VALUES (4,'12345678901','11111111111','2025-12-16',NULL,'teste final 2','teste para ver se esta funcionando o campo observação','SEG,TER,QUA,QUI,SEX,SAB,DOM'),(6,'02673548900','11111111111','2025-12-16',NULL,'plano de treino teste','teste para ver se esta funcionando o campo observação','TER,QUA');
+INSERT INTO `plano_de_treino` VALUES (4,'12345678901','11111111111','2025-12-16',NULL,'treino do joao','teste para ver se esta funcionando o campo observação','QUA,SEX'),(6,'02673548900','11111111111','2025-12-16',NULL,'plano de treino teste','teste para ver se esta funcionando o campo observação','TER,QUA'),(7,'12345678901','11111111111','2025-12-17',NULL,'treino de teste','teste para ver se esta funcionando o campo observação','QUA,QUI,SEX');
 /*!40000 ALTER TABLE `plano_de_treino` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -306,4 +307,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2025-12-17  0:33:25
+-- Dump completed on 2025-12-25 13:16:24

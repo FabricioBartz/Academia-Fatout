@@ -80,6 +80,13 @@
                                 <p><strong>Objetivo:</strong> <span th:text="${aluno.objetivo}">Hipertrofia</span></p>
                             </div>
                         </div>
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <p><strong>Início na Academia:</strong>
+                                    <span th:text="${inicioAluno != null ? #temporals.format(inicioAluno, 'dd/MM/yyyy') : '—'}">—</span>
+                                </p>
+                            </div>
+                        </div>
                         
                         <hr>
                         
