@@ -37,6 +37,9 @@
                             <a th:href="@{/instrutor/exercicios}" class="list-group-item list-group-item-action active">
                                 💪 Exercícios
                             </a>
+                            <a th:if="${instrutor.admin}" th:href="@{/instrutor/instrutores}" class="list-group-item list-group-item-action">
+                                🧑‍🏫 Instrutores
+                            </a>
                         </div>
                     </div>
                 </div>

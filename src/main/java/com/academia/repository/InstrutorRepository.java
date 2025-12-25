@@ -5,6 +5,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
 import java.util.Optional;
+import java.util.List;
 
 @Repository
 public interface InstrutorRepository extends JpaRepository<Instrutor, String> {
@@ -17,4 +18,10 @@ public interface InstrutorRepository extends JpaRepository<Instrutor, String> {
     
     // Verificar se existe instrutor por email
     boolean existsByEmail(String email);
+
+    // Listar instrutores excluindo um CPF específico
+    List<Instrutor> findAllByCpfNot(String cpf);
+
+    // Buscar por nome contendo (case-insensitive) opcional
+    List<Instrutor> findByNomeContainingIgnoreCase(String nome);
 }

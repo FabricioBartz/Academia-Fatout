@@ -12,6 +12,9 @@ public class Instrutor extends Pessoa {
     
     @Column(name = "dia_que_comecou_trabalhar")
     private LocalDate diaQueComecouTrabalhar;
+
+    @Column(name = "is_admin")
+    private boolean isAdmin = false;
     
     @OneToMany(mappedBy = "instrutor", cascade = CascadeType.ALL)
     private List<Turma> turmas = new ArrayList<>();
@@ -37,6 +40,9 @@ public class Instrutor extends Pessoa {
     
     public List<PlanoTreino> getPlanosCriados() { return planosCriados; }
     public void setPlanosCriados(List<PlanoTreino> planosCriados) { this.planosCriados = planosCriados; }
+
+    public boolean isAdmin() { return isAdmin; }
+    public void setAdmin(boolean admin) { this.isAdmin = admin; }
     
     // Método para cadastrar aluno (simulação)
     public void cadastrarAluno(Aluno aluno) {

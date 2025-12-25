@@ -936,4 +936,153 @@ public class InstrutorController {
             return "instrutor/editar-aluno";
         }
     }
+
+    // =====================
+    // Gestão de Instrutores
+    // =====================
+
+    @GetMapping("/instrutores")
+    public String instrutores(@RequestParam(name = "q", required = false) String q,
+                              Model model,
+                              HttpSession session) {
+        Instrutor instrutor = (Instrutor) session.getAttribute("instrutor");
+        if (instrutor == null) {
+            instrutor = instrutorService.listarTodos().isEmpty() ? null : instrutorService.listarTodos().get(0);
+        }
+        // Somente administradores podem acessar
+        if (instrutor == null || !instrutor.isAdmin()) {
+            return "redirect:/instrutor/dashboard";
+        }
+        model.addAttribute("instrutor", instrutor);
+
+        java.util.List<Instrutor> instrutores = instrutorService.listarTodosMenos(instrutor.getCpf());
+        if (q != null && !q.trim().isEmpty()) {
+            String termo = q.trim().toLowerCase();
+            instrutores = instrutores.stream()
+                    .filter(i -> i.getNome() != null && i.getNome().toLowerCase().contains(termo))
+                    .toList();
+            model.addAttribute("q", q.trim());
+        } else {
+            model.addAttribute("q", "");
+        }
+        model.addAttribute("instrutores", instrutores);
+        return "instrutor/instrutores-instrutor";
+    }
+
+    @PostMapping("/instrutores/cadastrar")
+    public String cadastrarInstrutor(@RequestParam String cpf,
+                                     @RequestParam String nome,
+                                     @RequestParam String email,
+                                     @RequestParam(required = false) String telefone,
+                                     @RequestParam String senha,
+                                     @RequestParam(required = false, name = "dataInicio") String dataInicio,
+                                     @RequestParam(required = false, name = "admin") Boolean admin,
+                                     HttpSession session,
+                                     RedirectAttributes ra) {
+        Instrutor atual = (Instrutor) session.getAttribute("instrutor");
+        if (atual == null || !atual.isAdmin()) {
+            return "redirect:/instrutor/dashboard";
+        }
+        try {
+            Instrutor novo = new Instrutor();
+            novo.setCpf(cpf);
+            novo.setNome(nome);
+            novo.setEmail(email);
+            if (telefone != null && !telefone.trim().isEmpty()) {
+                novo.setTelefone(telefone);
+            }
+            novo.setSenha(senha);
+            if (dataInicio != null && !dataInicio.trim().isEmpty()) {
+                novo.setDiaQueComecouTrabalhar(java.time.LocalDate.parse(dataInicio));
+            }
+            novo.setAdmin(Boolean.TRUE.equals(admin));
+            instrutorService.cadastrarInstrutor(novo);
+            ra.addFlashAttribute("msgSucesso", "Instrutor cadastrado com sucesso.");
+        } catch (RuntimeException ex) {
+            ra.addFlashAttribute("msgErro", ex.getMessage());
+        }
+        return "redirect:/instrutor/instrutores";
+    }
+
+    @PostMapping("/instrutores/editar")
+    public String editarInstrutor(@RequestParam String cpf,
+                                  @RequestParam String nome,
+                                  @RequestParam String email,
+                                  @RequestParam(required = false) String telefone,
+                                  @RequestParam(required = false, name = "dataInicio") String dataInicio,
+                                  @RequestParam(required = false, name = "admin") Boolean admin,
+                                  HttpSession session,
+                                  RedirectAttributes ra) {
+        Instrutor atual = (Instrutor) session.getAttribute("instrutor");
+        if (atual == null || !atual.isAdmin()) {
+            return "redirect:/instrutor/dashboard";
+        }
+        // Não permitir editar a si mesmo via essa tela (para evitar remoção acidental futura)
+        if (atual.getCpf().equals(cpf)) {
+            ra.addFlashAttribute("msgErro", "Você não pode editar a si mesmo nesta tela.");
+            return "redirect:/instrutor/instrutores";
+        }
+        try {
+            Instrutor atualizado = new Instrutor();
+            atualizado.setNome(nome);
+            atualizado.setEmail(email);
+            if (telefone != null && !telefone.trim().isEmpty()) {
+                atualizado.setTelefone(telefone);
+            }
+            if (dataInicio != null && !dataInicio.trim().isEmpty()) {
+                atualizado.setDiaQueComecouTrabalhar(java.time.LocalDate.parse(dataInicio));
+            }
+            atualizado.setAdmin(Boolean.TRUE.equals(admin));
+            instrutorService.atualizarInstrutor(cpf, atualizado);
+            ra.addFlashAttribute("msgSucesso", "Instrutor atualizado com sucesso.");
+        } catch (RuntimeException ex) {
+            ra.addFlashAttribute("msgErro", ex.getMessage());
+        }
+        return "redirect:/instrutor/instrutores";
+    }
+
+    @PostMapping("/instrutores/excluir/{cpf}")
+    public String excluirInstrutor(@PathVariable String cpf,
+                                   HttpSession session,
+                                   RedirectAttributes ra) {
+        Instrutor atual = (Instrutor) session.getAttribute("instrutor");
+        if (atual == null || !atual.isAdmin()) {
+            return "redirect:/instrutor/dashboard";
+        }
+        if (atual.getCpf().equals(cpf)) {
+            ra.addFlashAttribute("msgErro", "Você não pode excluir a si mesmo.");
+            return "redirect:/instrutor/instrutores";
+        }
+        try {
+            instrutorService.deletarInstrutor(cpf);
+            ra.addFlashAttribute("msgSucesso", "Instrutor excluído com sucesso.");
+        } catch (RuntimeException ex) {
+            ra.addFlashAttribute("msgErro", ex.getMessage());
+        }
+        return "redirect:/instrutor/instrutores";
+    }
+
+    // Perfil de um instrutor (somente admin acessa)
+    @GetMapping("/instrutores/perfil/{cpf}")
+    public String perfilInstrutor(@PathVariable String cpf,
+                                  Model model,
+                                  HttpSession session) {
+        Instrutor atual = (Instrutor) session.getAttribute("instrutor");
+        if (atual == null) {
+            atual = instrutorService.listarTodos().isEmpty() ? null : instrutorService.listarTodos().get(0);
+        }
+        if (atual == null || !atual.isAdmin()) {
+            return "redirect:/instrutor/dashboard";
+        }
+        model.addAttribute("instrutor", atual);
+
+        Instrutor alvo = instrutorService.buscarPorCpf(cpf).orElse(null);
+        if (alvo == null) {
+            return "redirect:/instrutor/instrutores";
+        }
+        model.addAttribute("instrutorPerfil", alvo);
+        model.addAttribute("turmas", turmaService.listarPorInstrutor(alvo.getCpf()));
+        model.addAttribute("planosInstrutor", planoTreinoService.listarPorInstrutor(alvo.getCpf()));
+        return "instrutor/perfil-instrutor";
+    }
 }

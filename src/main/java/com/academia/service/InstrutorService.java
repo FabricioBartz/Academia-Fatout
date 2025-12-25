@@ -39,6 +39,14 @@ public class InstrutorService {
     public List<Instrutor> listarTodos() {
         return instrutorRepository.findAll();
     }
+
+    // Listar todos os instrutores, exceto o CPF informado
+    public List<Instrutor> listarTodosMenos(String cpf) {
+        if (cpf == null || cpf.isEmpty()) {
+            return listarTodos();
+        }
+        return instrutorRepository.findAllByCpfNot(cpf);
+    }
     
     // Atualizar instrutor
     public Instrutor atualizarInstrutor(String cpf, Instrutor instrutorAtualizado) {
@@ -48,6 +56,7 @@ public class InstrutorService {
                 instrutor.setEmail(instrutorAtualizado.getEmail());
                 instrutor.setTelefone(instrutorAtualizado.getTelefone());
                 instrutor.setDiaQueComecouTrabalhar(instrutorAtualizado.getDiaQueComecouTrabalhar());
+                instrutor.setAdmin(instrutorAtualizado.isAdmin());
                 return instrutorRepository.save(instrutor);
             })
             .orElseThrow(() -> new RuntimeException("Instrutor não encontrado!"));
