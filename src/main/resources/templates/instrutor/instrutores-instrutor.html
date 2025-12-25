@@ -44,8 +44,7 @@
                 <div class="d-flex justify-content-between align-items-center mb-3">
                     <div class="d-flex gap-2">
                         <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#cadastrarInstrutorModal">Cadastrar Novo Instrutor</button>
-                        <button class="btn btn-warning" onclick="abrirSelecionarParaEditarInstrutor()">Editar Instrutor</button>
-                        <button class="btn btn-danger" onclick="abrirSelecionarParaExcluirInstrutor()">Excluir Instrutor</button>
+                        
                     </div>
                     <form class="d-flex" th:action="@{/instrutor/instrutores}" method="get" style="max-width: 320px;">
                         <input class="form-control me-2" type="search" placeholder="Pesquisar por nome" aria-label="Buscar" name="q" th:value="${q}">

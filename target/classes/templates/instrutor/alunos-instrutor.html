@@ -57,8 +57,7 @@
                 <div class="d-flex justify-content-between align-items-center mb-3">
                     <div class="d-flex gap-2">
                         <button class="btn btn-primary" onclick="cadastrarAluno()">Cadastrar Novo Aluno</button>
-                        <button class="btn btn-warning" onclick="abrirSelecionarParaEditar()">Editar Aluno</button>
-                        <button class="btn btn-danger" onclick="abrirSelecionarParaExcluir()">Excluir Aluno</button>
+                        
                     </div>
                     <form th:action="@{/instrutor/alunos}" method="get" class="d-flex" role="search" style="max-width: 320px;">
                         <input class="form-control me-2" type="search" placeholder="Pesquisar por nome" aria-label="Pesquisar" name="q" th:value="${q}">
@@ -226,8 +225,8 @@
                                 <th>Nome</th>
                                 <th>Email</th>
                                 <th>Telefone</th>
-                                <th>Data de Nascimento</th>
-                                <th>Objetivo</th>
+                                <th>Início</th>
+                                <th>Ações</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -236,8 +235,19 @@
                                 <td th:text="${aluno.nome}">João Silva</td>
                                 <td th:text="${aluno.email}">joao@email.com</td>
                                 <td th:text="${aluno.telefone}">11987654321</td>
-                                <td th:text="${#temporals.format(aluno.dataNascimento, 'dd/MM/yyyy')}">14/03/1995</td>
-                                <td th:text="${aluno.objetivo}">Hipertrofia</td>
+                                <td th:text="${inicioPorAluno[aluno.cpf] != null ? #temporals.format(inicioPorAluno[aluno.cpf], 'dd/MM/yyyy') : '—'}">—</td>
+                                <td>
+                                    <button class="btn btn-sm btn-warning" onclick="editarAluno(this)"
+                                        th:data-cpf="${aluno.cpf}"
+                                        th:data-nome="${aluno.nome}"
+                                        th:data-email="${aluno.email}"
+                                        th:data-telefone="${aluno.telefone}"
+                                        th:data-data="${#temporals.format(aluno.dataNascimento, 'yyyy-MM-dd')}"
+                                        th:data-objetivo="${aluno.objetivo}">Editar</button>
+                                    <form method="post" th:action="@{/instrutor/alunos/excluir/{cpf}(cpf=${aluno.cpf})}" style="display:inline;" onsubmit="return confirm('Tem certeza que deseja excluir este aluno?')">
+                                        <button type="submit" class="btn btn-sm btn-danger">Excluir</button>
+                                    </form>
+                                </td>
                             </tr>
                         </tbody>
                     </table>
@@ -287,42 +297,32 @@
                 alert('Selecione um aluno!');
                 return;
             }
-
-            // Encontrar o aluno na tabela e preencher os dados a partir das células
             const linhas = document.querySelectorAll('table tbody tr');
             let alunoEncontrado = false;
-
             for (const linha of linhas) {
                 const celCpf = linha.cells[0].textContent.trim();
                 if (celCpf === cpf) {
                     alunoEncontrado = true;
-                    const nome = linha.cells[1].textContent.trim();
-                    const email = linha.cells[2].textContent.trim();
-                    const telefone = linha.cells[3].textContent.trim();
-                    // data está no formato dd/MM/yyyy na tabela; converter para yyyy-MM-dd para o input date
-                    const dataText = linha.cells[4].textContent.trim();
-                    let dataIso = '';
-                    if (dataText) {
-                        const parts = dataText.split('/');
-                        if (parts.length === 3) {
-                            dataIso = parts[2] + '-' + parts[1].padStart(2,'0') + '-' + parts[0].padStart(2,'0');
-                        }
+                    // Buscar botão Editar dentro da linha para obter os dados completos
+                    const btn = linha.querySelector('button.btn-warning');
+                    if (btn) {
+                        const nome = btn.getAttribute('data-nome') || linha.cells[1].textContent.trim();
+                        const email = btn.getAttribute('data-email') || linha.cells[2].textContent.trim();
+                        const telefone = btn.getAttribute('data-telefone') || linha.cells[3].textContent.trim();
+                        const dataIso = btn.getAttribute('data-data') || '';
+                        const objetivo = btn.getAttribute('data-objetivo') || '';
+                        document.getElementById('editCpf').value = cpf;
+                        document.getElementById('editNome').value = nome;
+                        document.getElementById('editEmail').value = email;
+                        document.getElementById('editTelefone').value = telefone;
+                        document.getElementById('editDataNascimento').value = dataIso;
+                        document.getElementById('editObjetivo').value = objetivo;
+                        const modal = new bootstrap.Modal(document.getElementById('editarAlunoModal'));
+                        modal.show();
                     }
-                    const objetivo = linha.cells[5].textContent.trim();
-
-                    document.getElementById('editCpf').value = cpf;
-                    document.getElementById('editNome').value = nome;
-                    document.getElementById('editEmail').value = email;
-                    document.getElementById('editTelefone').value = telefone;
-                    document.getElementById('editDataNascimento').value = dataIso;
-                    document.getElementById('editObjetivo').value = objetivo;
-
-                    const modal = new bootstrap.Modal(document.getElementById('editarAlunoModal'));
-                    modal.show();
                     break;
                 }
             }
-
             if (alunoEncontrado) {
                 const selectModal = bootstrap.Modal.getInstance(document.getElementById('selecionarAlunoEditarModal'));
                 if (selectModal) selectModal.hide();

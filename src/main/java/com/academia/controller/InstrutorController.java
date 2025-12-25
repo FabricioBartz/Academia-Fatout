@@ -91,13 +91,36 @@ public class InstrutorController {
             instrutor = instrutorService.listarTodos().isEmpty() ? null : instrutorService.listarTodos().get(0);
         }
         model.addAttribute("instrutor", instrutor);
+        java.util.List<Aluno> alunos;
         if (q != null && !q.trim().isEmpty()) {
-            model.addAttribute("alunos", alunoService.buscarPorNome(q.trim()));
+            alunos = alunoService.buscarPorNome(q.trim());
             model.addAttribute("q", q.trim());
         } else {
-            model.addAttribute("alunos", alunoService.listarTodos());
+            alunos = alunoService.listarTodos();
             model.addAttribute("q", "");
         }
+        // Mapa de início (primeira atividade registrada: menor data entre primeiro plano e primeira avaliação)
+        java.util.Map<String, java.time.LocalDate> inicioPorAluno = new java.util.HashMap<>();
+        for (Aluno a : alunos) {
+            java.time.LocalDate inicio = null;
+            // Primeiro plano
+            var planos = planoTreinoService.listarPorAluno(a.getCpf());
+            for (var p : planos) {
+                if (p.getDataCriacao() != null) {
+                    inicio = (inicio == null || p.getDataCriacao().isBefore(inicio)) ? p.getDataCriacao() : inicio;
+                }
+            }
+            // Primeira avaliação
+            var avals = avaliacaoService.listarPorAluno(a.getCpf());
+            for (var av : avals) {
+                if (av.getData() != null) {
+                    inicio = (inicio == null || av.getData().isBefore(inicio)) ? av.getData() : inicio;
+                }
+            }
+            inicioPorAluno.put(a.getCpf(), inicio);
+        }
+        model.addAttribute("alunos", alunos);
+        model.addAttribute("inicioPorAluno", inicioPorAluno);
         return "instrutor/alunos-instrutor";
     }
     // Alias para URL amigável
