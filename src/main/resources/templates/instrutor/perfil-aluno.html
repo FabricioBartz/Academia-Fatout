@@ -65,10 +65,10 @@
                         
                         <div class="row">
                             <div class="col-md-6 mb-3">
-                                <p><strong>CPF:</strong> <span th:text="${aluno.cpf}">12345678901</span></p>
+                                <p><strong>CPF:</strong> <span th:text="${aluno.cpf.replaceAll('(\d{3})(\d{3})(\d{3})(\d{2})', '$1.$2.$3-$4')}">123.456.789-01</span></p>
                             </div>
                             <div class="col-md-6 mb-3">
-                                <p><strong>Telefone:</strong> <span th:text="${aluno.telefone}">11987654321</span></p>
+                                <p><strong>Telefone:</strong> <span th:text="${aluno.telefone != null && aluno.telefone.length() == 11 ? aluno.telefone.replaceAll('(\d{2})(\d{5})(\d{4})', '($1) $2-$3') : aluno.telefone}">(11) 98765-4321</span></p>
                             </div>
                         </div>
                         
