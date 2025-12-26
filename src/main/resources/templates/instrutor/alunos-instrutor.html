@@ -93,7 +93,7 @@
                                     </div>
                                     <div class="mb-3">
                                         <label for="telefone" class="form-label">Telefone</label>
-                                        <input type="text" class="form-control" id="telefone" name="telefone">
+                                        <input type="text" class="form-control" id="telefone" name="telefone" placeholder="(00) 00000-0000">
                                     </div>
                                     <div class="mb-3">
                                         <label for="senha" class="form-label">Senha</label>
@@ -231,10 +231,10 @@
                         </thead>
                         <tbody>
                             <tr th:each="aluno : ${alunos}" style="cursor: pointer;" onclick="abrirPerfilAluno(this)" th:data-cpf="${aluno.cpf}">
-                                <td th:text="${aluno.cpf}">12345678901</td>
+                                <td th:text="${aluno.cpf.replaceAll('(\d{3})(\d{3})(\d{3})(\d{2})', '$1.$2.$3-$4')}">123.456.789-01</td>
                                 <td th:text="${aluno.nome}">João Silva</td>
                                 <td th:text="${aluno.email}">joao@email.com</td>
-                                <td th:text="${aluno.telefone}">11987654321</td>
+                                <td th:text="${aluno.telefone != null && aluno.telefone.length() == 11 ? aluno.telefone.replaceAll('(\d{2})(\d{5})(\d{4})', '($1) $2-$3') : aluno.telefone}">(11) 98765-4321</td>
                                 <td th:text="${inicioPorAluno[aluno.cpf] != null ? #temporals.format(inicioPorAluno[aluno.cpf], 'dd/MM/yyyy') : '—'}">—</td>
                                 <td>
                                     <button class="btn btn-sm btn-warning" onclick="editarAluno(this)"
@@ -255,8 +255,18 @@
             </div>
         </div>
     </div>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.mask/1.14.16/jquery.mask.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
     <script>
+
+        $(document).ready(function(){
+            // Máscara para CPF
+             $('#cpf').mask('000.000.000-00');
+            
+            // Máscara para os dois campos de Telefone
+            $('#telefone, #editTelefone').mask('(00) 00000-0000');
+        });
         // Auto-dismiss para mensagens flash
         document.addEventListener('DOMContentLoaded', function() {
             const alerts = document.querySelectorAll('.flash-alert');
@@ -271,9 +281,11 @@
 
         function abrirPerfilAluno(row) {
             const cpf = row.getAttribute('data-cpf');
-            if (cpf) {
-                window.location.href = '/instrutor/alunos/perfil/' + encodeURIComponent(cpf);
-            }
+                if (cpf) {
+                 // Remove pontos e traços antes de redirecionar
+                     const cpfLimpo = cpf.replace(/\D/g, ''); 
+                     window.location.href = '/instrutor/alunos/perfil/' + encodeURIComponent(cpfLimpo);
+                }
         }
         
         function cadastrarAluno() {

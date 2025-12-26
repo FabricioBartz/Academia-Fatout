@@ -335,11 +335,11 @@ public class InstrutorController {
                                 RedirectAttributes ra) {
         try {
             Aluno aluno = new Aluno();
-            aluno.setCpf(cpf);
+            aluno.setCpf(cpf.replaceAll("[^0-9]", ""));
             aluno.setNome(nome);
             aluno.setEmail(email);
             if (telefone != null && !telefone.trim().isEmpty()) {
-                aluno.setTelefone(telefone);
+                aluno.setTelefone(telefone.replaceAll("[^0-9]", ""));
             }
             aluno.setSenha(senha);
             if (dataNascimento != null && !dataNascimento.trim().isEmpty()) {
@@ -956,7 +956,7 @@ public class InstrutorController {
             alunoAtualizado.setNome(nome);
             alunoAtualizado.setEmail(email);
             if (telefone != null && !telefone.trim().isEmpty()) {
-                alunoAtualizado.setTelefone(telefone);
+                alunoAtualizado.setTelefone(telefone.replaceAll("[^0-9]", ""));
             }
             if (dataNascimento != null && !dataNascimento.trim().isEmpty()) {
                 alunoAtualizado.setDataNascimento(LocalDate.parse(dataNascimento));
