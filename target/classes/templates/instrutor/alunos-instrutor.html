@@ -77,11 +77,12 @@
                                 <h5 class="modal-title">Cadastrar Novo Aluno</h5>
                                 <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
                             </div>
-                            <form th:action="@{/instrutor/alunos/cadastrar}" method="post">
+                            <form id="formCadastrarAluno" th:action="@{/instrutor/alunos/cadastrar}" method="post" novalidate>
                                 <div class="modal-body">
                                     <div class="mb-3">
                                         <label for="cpf" class="form-label">CPF</label>
-                                        <input type="text" class="form-control" id="cpf" name="cpf" required>
+                                        <input type="text" class="form-control" id="cpf" name="cpf" required aria-describedby="cpfHelp">
+                                        <div class="invalid-feedback">Informe um CPF válido com 11 dígitos.</div>
                                     </div>
                                     <div class="mb-3">
                                         <label for="nome" class="form-label">Nome</label>
@@ -93,7 +94,8 @@
                                     </div>
                                     <div class="mb-3">
                                         <label for="telefone" class="form-label">Telefone</label>
-                                        <input type="text" class="form-control" id="telefone" name="telefone" placeholder="(00) 00000-0000">
+                                        <input type="text" class="form-control" id="telefone" name="telefone" placeholder="(00) 00000-0000" aria-describedby="telHelp">
+                                        <div class="invalid-feedback">Informe 11 dígitos se optar por preencher.</div>
                                     </div>
                                     <div class="mb-3">
                                         <label for="senha" class="form-label">Senha</label>
@@ -110,7 +112,7 @@
                                 </div>
                                 <div class="modal-footer">
                                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
-                                    <button type="submit" class="btn btn-primary">Cadastrar Aluno</button>
+                                    <button type="submit" id="btnCadastrarAluno" class="btn btn-primary" disabled>Cadastrar Aluno</button>
                                 </div>
                             </form>
                         </div>
@@ -125,24 +127,28 @@
                                 <h5 class="modal-title">Editar Aluno</h5>
                                 <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
                             </div>
-                            <form th:action="@{/instrutor/alunos/editar}" method="post">
+                            <form id="formEditarAluno" th:action="@{/instrutor/alunos/editar}" method="post" novalidate>
                                 <input type="hidden" id="editCpf" name="cpf">
                                 <div class="modal-body">
                                     <div class="mb-3">
                                         <label for="editNome" class="form-label">Nome</label>
                                         <input type="text" class="form-control" id="editNome" name="nome" required>
+                                        <div class="invalid-feedback">Informe o nome do aluno.</div>
                                     </div>
                                     <div class="mb-3">
                                         <label for="editEmail" class="form-label">Email</label>
                                         <input type="email" class="form-control" id="editEmail" name="email" required>
+                                        <div class="invalid-feedback">Informe um email válido.</div>
                                     </div>
                                     <div class="mb-3">
                                         <label for="editTelefone" class="form-label">Telefone</label>
                                         <input type="text" class="form-control" id="editTelefone" name="telefone">
+                                        <div class="invalid-feedback">Informe 11 dígitos se optar por preencher.</div>
                                     </div>
                                     <div class="mb-3">
                                         <label for="editDataNascimento" class="form-label">Data de Nascimento</label>
                                         <input type="date" class="form-control" id="editDataNascimento" name="dataNascimento" required>
+                                        <div class="invalid-feedback">Informe a data de nascimento.</div>
                                     </div>
                                     <div class="mb-3">
                                         <label for="editObjetivo" class="form-label">Objetivo</label>
@@ -151,7 +157,7 @@
                                 </div>
                                 <div class="modal-footer">
                                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
-                                    <button type="submit" class="btn btn-primary">Salvar Alterações</button>
+                                    <button type="submit" id="btnSalvarEdicao" class="btn btn-primary" disabled>Salvar Alterações</button>
                                 </div>
                             </form>
                         </div>
@@ -266,6 +272,82 @@
             
             // Máscara para os dois campos de Telefone
             $('#telefone, #editTelefone').mask('(00) 00000-0000');
+
+            // Validação em tempo real do formulário de cadastro
+            const form = document.getElementById('formCadastrarAluno');
+            const btn = document.getElementById('btnCadastrarAluno');
+            const cpfInput = document.getElementById('cpf');
+            const senhaInput = document.getElementById('senha');
+            const telInput = document.getElementById('telefone');
+            // Referências do formulário de edição
+            const formEdit = document.getElementById('formEditarAluno');
+            const btnEdit = document.getElementById('btnSalvarEdicao');
+            const editNomeInput = document.getElementById('editNome');
+            const editEmailInput = document.getElementById('editEmail');
+            const editTelInput = document.getElementById('editTelefone');
+            const editDataInput = document.getElementById('editDataNascimento');
+
+            function cpfValido(valor) {
+                // Apenas verifica se há 11 dígitos numéricos (permite CPFs fictícios)
+                return ((valor || '').replace(/\D/g, '').length === 11);
+            }
+
+            function marcarValido(input, valido) {
+                input.classList.toggle('is-invalid', !valido);
+                input.classList.toggle('is-valid', valido);
+            }
+
+            function checarCampos() {
+                const cpfOk = cpfValido(cpfInput.value);
+                marcarValido(cpfInput, cpfOk);
+                const telDigits = (telInput.value || '').replace(/\D/g, '');
+                const telOk = telDigits.length === 0 || telDigits.length === 11; // opcional, mas se preencher precisa ter 11
+                marcarValido(telInput, telOk);
+                btn.disabled = !(cpfOk && telOk);
+            }
+
+            ['input','change','keyup','blur'].forEach(evt => {
+                cpfInput.addEventListener(evt, checarCampos);
+                telInput.addEventListener(evt, checarCampos);
+            });
+            checarCampos();
+
+            // Impede envio se inválido
+            form.addEventListener('submit', function(e){
+                checarCampos();
+                if (btn.disabled) {
+                    e.preventDefault();
+                }
+            });
+
+            // Validação do formulário de edição
+            function checarCamposEdit() {
+                const nomeOk = editNomeInput.value.trim().length > 0;
+                marcarValido(editNomeInput, nomeOk);
+                const emailOk = editEmailInput.checkValidity();
+                marcarValido(editEmailInput, emailOk);
+                const telDigits = (editTelInput.value || '').replace(/\D/g, '');
+                const telOk = telDigits.length === 0 || telDigits.length === 11;
+                marcarValido(editTelInput, telOk);
+                const dataOk = editDataInput.value !== '';
+                marcarValido(editDataInput, dataOk);
+                btnEdit.disabled = !(nomeOk && emailOk && telOk && dataOk);
+            }
+
+            ['input','change','keyup','blur'].forEach(evt => {
+                editNomeInput.addEventListener(evt, checarCamposEdit);
+                editEmailInput.addEventListener(evt, checarCamposEdit);
+                editTelInput.addEventListener(evt, checarCamposEdit);
+                editDataInput.addEventListener(evt, checarCamposEdit);
+            });
+            checarCamposEdit();
+
+            formEdit.addEventListener('submit', function(e){
+                checarCamposEdit();
+                if (btnEdit.disabled) {
+                    e.preventDefault();
+                }
+            });
         });
         // Auto-dismiss para mensagens flash
         document.addEventListener('DOMContentLoaded', function() {
@@ -384,6 +466,14 @@
             
             const modal = new bootstrap.Modal(document.getElementById('editarAlunoModal'));
             modal.show();
+            // Checar validação após preencher
+            setTimeout(() => {
+                const evt = new Event('input');
+                document.getElementById('editNome').dispatchEvent(evt);
+                document.getElementById('editEmail').dispatchEvent(evt);
+                document.getElementById('editTelefone').dispatchEvent(evt);
+                document.getElementById('editDataNascimento').dispatchEvent(evt);
+            }, 50);
         }
     </script>
 </body>

@@ -59,11 +59,12 @@
                                 <h5 class="modal-title">Cadastrar Novo Instrutor</h5>
                                 <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
                             </div>
-                            <form th:action="@{/instrutor/instrutores/cadastrar}" method="post">
+                            <form id="formCadastrarInstrutor" th:action="@{/instrutor/instrutores/cadastrar}" method="post" novalidate>
                                 <div class="modal-body">
                                     <div class="mb-3">
                                         <label class="form-label">CPF</label>
                                         <input type="text" class="form-control" id="cpfInstrutor" name="cpf" placeholder="000.000.000-00" required>
+                                        <div class="invalid-feedback">Informe um CPF válido com 11 dígitos.</div>
                                     </div>
                                     <div class="mb-3">
                                         <label class="form-label">Nome</label>
@@ -76,14 +77,15 @@
                                     <div class="mb-3">
                                         <label class="form-label">Telefone</label>
                                         <input type="text" class="form-control" id="telefoneInstrutor" name="telefone" placeholder="(00) 00000-0000">
+                                        <div class="invalid-feedback">Informe 11 dígitos se optar por preencher.</div>
                                     </div>
                                     <div class="mb-3">
                                         <label class="form-label">Senha</label>
                                         <input type="password" class="form-control" name="senha" required>
                                     </div>
                                     <div class="mb-3">
-                                        <label class="form-label">Data de Início</label>
-                                        <input type="date" class="form-control" name="dataInicio">
+                                        <label class="form-label">Data de Nascimento</label>
+                                        <input type="date" class="form-control" name="dataNascimento">
                                     </div>
                                     <div class="form-check">
                                         <input class="form-check-input" type="checkbox" id="novoAdmin" name="admin">
@@ -92,7 +94,7 @@
                                 </div>
                                 <div class="modal-footer">
                                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
-                                    <button type="submit" class="btn btn-primary">Cadastrar</button>
+                                    <button type="submit" id="btnCadastrarInstrutor" class="btn btn-primary" disabled>Cadastrar</button>
                                 </div>
                             </form>
                         </div>
@@ -120,10 +122,6 @@
                                     <div class="mb-3">
                                         <label class="form-label">Telefone</label>
                                         <input type="text" class="form-control" id="editInstrutorTelefone" name="telefone">
-                                    </div>
-                                    <div class="mb-3">
-                                        <label class="form-label">Data de Início</label>
-                                        <input type="date" class="form-control" id="editInstrutorDataInicio" name="dataInicio">
                                     </div>
                                     <div class="form-check">
                                         <input class="form-check-input" type="checkbox" id="editInstrutorAdmin" name="admin">
@@ -209,14 +207,13 @@
                                 <td th:text="${i.nome}">Maria</td>
                                 <td th:text="${i.email}">maria@email.com</td>
                                 <td th:text="${i.telefone != null && i.telefone.length() == 11 ? i.telefone.replaceAll('(\d{2})(\d{5})(\d{4})', '($1) $2-$3') : i.telefone}"> (11) 99999-9999 </td>
-                                <td th:text="${#temporals.format(i.diaQueComecouTrabalhar, 'dd/MM/yyyy')}">01/01/2024</td>
+                                <td th:text="${i.dataCadastro != null ? #temporals.format(i.dataCadastro, 'dd/MM/yyyy') : (i.diaQueComecouTrabalhar != null ? #temporals.format(i.diaQueComecouTrabalhar, 'dd/MM/yyyy') : '—')}">—</td>
                                 <td>
                                     <button class="btn btn-sm btn-warning" onclick="editarInstrutorLinha(this)"
                                         th:data-cpf="${i.cpf}"
                                         th:data-nome="${i.nome}"
                                         th:data-email="${i.email}"
                                         th:data-telefone="${i.telefone}"
-                                        th:data-data="${#temporals.format(i.diaQueComecouTrabalhar, 'yyyy-MM-dd')}"
                                         th:data-admin="${i.admin}">Editar</button>
                                     <form th:action="@{/instrutor/instrutores/excluir/{cpf}(cpf=${i.cpf})}" method="post" style="display:inline;"
                                         onsubmit="return confirm('Tem certeza que deseja excluir este instrutor?')">
@@ -236,9 +233,38 @@
 
     <script th:inline="javascript">
     $(document).ready(function(){
-        // ATIVAÇÃO DAS MÁSCARAS
+        // Máscaras
         $('#cpfInstrutor').mask('000.000.000-00');
         $('#telefoneInstrutor, #editInstrutorTelefone').mask('(00) 00000-0000');
+
+        // Validação CPF/Telefone no cadastro de instrutor
+        const formI = document.getElementById('formCadastrarInstrutor');
+        const btnI = document.getElementById('btnCadastrarInstrutor');
+        const cpfI = document.getElementById('cpfInstrutor');
+        const telI = document.getElementById('telefoneInstrutor');
+
+        function cpfValido(valor) {
+            // Apenas verifica se há 11 dígitos numéricos (permite CPFs fictícios)
+            return ((valor || '').replace(/\D/g, '').length === 11);
+        }
+        function marcarValido(input, valido){
+            input.classList.toggle('is-invalid', !valido);
+            input.classList.toggle('is-valid', valido);
+        }
+        function checarI(){
+            const cpfOk = cpfValido(cpfI.value); marcarValido(cpfI, cpfOk);
+            const telDigits = (telI.value||'').replace(/\D/g,'');
+            const telOk = telDigits.length===0 || telDigits.length===11; marcarValido(telI, telOk);
+            btnI.disabled = !(cpfOk && telOk);
+        }
+        ['input','change','keyup','blur'].forEach(evt=>{
+            cpfI.addEventListener(evt, checarI);
+            telI.addEventListener(evt, checarI);
+        });
+        checarI();
+        formI.addEventListener('submit', function(e){
+            checarI(); if(btnI.disabled){ e.preventDefault(); }
+        });
     });
 
     // CORREÇÃO DO CLIQUE NA LINHA DA TABELA
@@ -292,12 +318,6 @@
                     const nome = linha.cells[1].textContent.trim();
                     const email = linha.cells[2].textContent.trim();
                     const telefone = linha.cells[3].textContent.trim();
-                    const dataText = linha.cells[4].textContent.trim();
-                    let dataIso = '';
-                    if(dataText){
-                        const parts = dataText.split('/');
-                        if(parts.length===3){ dataIso = parts[2]+'-'+parts[1].padStart(2,'0')+'-'+parts[0].padStart(2,'0'); }
-                    }
                     const adminText = linha.cells[5].textContent.trim();
                     const admin = adminText.toLowerCase().includes('sim');
                     document.getElementById('editInstrutorCpf').value = cpf;
@@ -305,7 +325,6 @@
                     document.getElementById('editInstrutorEmail').value = email;
                     document.getElementById('editInstrutorTelefone').value = telefone;
                     $('#editInstrutorTelefone').trigger('input');
-                    document.getElementById('editInstrutorDataInicio').value = dataIso;
                     document.getElementById('editInstrutorAdmin').checked = admin;
                     const modalEdit = new bootstrap.Modal(document.getElementById('editarInstrutorModal'));
                     modalEdit.show();
@@ -332,14 +351,12 @@
             const nome = button.getAttribute('data-nome');
             const email = button.getAttribute('data-email');
             const telefone = button.getAttribute('data-telefone');
-            const dataInicio = button.getAttribute('data-data');
             const admin = button.getAttribute('data-admin') === 'true';
             document.getElementById('editInstrutorCpf').value = cpf;
             document.getElementById('editInstrutorNome').value = nome;
             document.getElementById('editInstrutorEmail').value = email;
             document.getElementById('editInstrutorTelefone').value = telefone;
             $('#editInstrutorTelefone').trigger('input');
-            document.getElementById('editInstrutorDataInicio').value = dataInicio || '';
             document.getElementById('editInstrutorAdmin').checked = admin;
             const modalEdit = new bootstrap.Modal(document.getElementById('editarInstrutorModal'));
             modalEdit.show();

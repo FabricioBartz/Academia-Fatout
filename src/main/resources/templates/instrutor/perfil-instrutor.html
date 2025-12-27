@@ -58,7 +58,14 @@
                         </div>
                         <div class="row">
                             <div class="col-md-6 mb-3">
-                                <p><strong>Início na Academia:</strong> <span th:text="${#temporals.format(instrutorPerfil.diaQueComecouTrabalhar, 'dd/MM/yyyy')}">01/01/2024</span></p>
+                                <p><strong>Início na Academia:</strong>
+                                    <span th:text="${instrutorPerfil.dataCadastro != null ? #temporals.format(instrutorPerfil.dataCadastro, 'dd/MM/yyyy') : (instrutorPerfil.diaQueComecouTrabalhar != null ? #temporals.format(instrutorPerfil.diaQueComecouTrabalhar, 'dd/MM/yyyy') : '—')}">—</span>
+                                </p>
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <p><strong>Data de Nascimento:</strong>
+                                    <span th:text="${instrutorPerfil.dataNascimento != null ? #temporals.format(instrutorPerfil.dataNascimento, 'dd/MM/yyyy') : '—'}">—</span>
+                                </p>
                             </div>
                         </div>
                         <hr>

@@ -334,12 +334,24 @@ public class InstrutorController {
                                 Model model,
                                 RedirectAttributes ra) {
         try {
+            // Validação básica de CPF antes de persistir
+            String cpfDigits = cpf == null ? "" : cpf.replaceAll("[^0-9]", "");
+            if (cpfDigits.length() != 11) {
+                ra.addFlashAttribute("msgErro", "CPF inválido. Informe 11 dígitos.");
+                return "redirect:/instrutor/alunos";
+            }
+
             Aluno aluno = new Aluno();
-            aluno.setCpf(cpf.replaceAll("[^0-9]", ""));
+            aluno.setCpf(cpfDigits);
             aluno.setNome(nome);
             aluno.setEmail(email);
             if (telefone != null && !telefone.trim().isEmpty()) {
-                aluno.setTelefone(telefone.replaceAll("[^0-9]", ""));
+                String telDigits = telefone.replaceAll("[^0-9]", "");
+                if (telDigits.length() != 11) {
+                    ra.addFlashAttribute("msgErro", "Telefone inválido. Use 11 dígitos (DDD + número).");
+                    return "redirect:/instrutor/alunos";
+                }
+                aluno.setTelefone(telDigits);
             }
             aluno.setSenha(senha);
             if (dataNascimento != null && !dataNascimento.trim().isEmpty()) {
@@ -352,12 +364,16 @@ public class InstrutorController {
             ra.addFlashAttribute("msgSucesso", "Aluno cadastrado com sucesso.");
             return "redirect:/instrutor/alunos";
         } catch (Exception e) {
-            model.addAttribute("error", "Erro ao cadastrar aluno: " + e.getMessage());
-            Instrutor instrutor = instrutorService.listarTodos().get(0);
-            model.addAttribute("instrutor", instrutor);
-            model.addAttribute("alunos", alunoService.listarTodos());
-            return "instrutor/alunos-instrutor";
+            // Em caso de erro inesperado, usar flash e redirecionar para evitar resposta comprometida
+            ra.addFlashAttribute("msgErro", "Erro ao cadastrar aluno: " + e.getMessage());
+            return "redirect:/instrutor/alunos";
         }
+    }
+
+    // Evita WARN de GET não suportado: redireciona para a listagem
+    @GetMapping("/alunos/cadastrar")
+    public String getCadastrarAluno() {
+        return "redirect:/instrutor/alunos";
     }
     
     @PostMapping("/alunos/editar")
@@ -374,7 +390,12 @@ public class InstrutorController {
             alunoAtualizado.setNome(nome);
             alunoAtualizado.setEmail(email);
             if (telefone != null && !telefone.trim().isEmpty()) {
-                alunoAtualizado.setTelefone(telefone);
+                String telDigits = telefone.replaceAll("[^0-9]", "");
+                if (telDigits.length() != 11) {
+                    ra.addFlashAttribute("msgErro", "Telefone inválido. Use 11 dígitos (DDD + número).");
+                    return "redirect:/instrutor/alunos";
+                }
+                alunoAtualizado.setTelefone(telDigits);
             }
             if (dataNascimento != null && !dataNascimento.trim().isEmpty()) {
                 alunoAtualizado.setDataNascimento(LocalDate.parse(dataNascimento));
@@ -386,11 +407,8 @@ public class InstrutorController {
             ra.addFlashAttribute("msgSucesso", "Aluno atualizado com sucesso.");
             return "redirect:/instrutor/alunos";
         } catch (Exception e) {
-            model.addAttribute("error", "Erro ao atualizar aluno: " + e.getMessage());
-            Instrutor instrutor = instrutorService.listarTodos().get(0);
-            model.addAttribute("instrutor", instrutor);
-            model.addAttribute("alunos", alunoService.listarTodos());
-            return "instrutor/alunos-instrutor";
+            ra.addFlashAttribute("msgErro", "Erro ao atualizar aluno: " + e.getMessage());
+            return "redirect:/instrutor/alunos";
         }
     }
     
@@ -1015,7 +1033,7 @@ public class InstrutorController {
                                      @RequestParam String email,
                                      @RequestParam(required = false) String telefone,
                                      @RequestParam String senha,
-                                     @RequestParam(required = false, name = "dataInicio") String dataInicio,
+                                     @RequestParam(required = false, name = "dataNascimento") String dataNascimento,
                                      @RequestParam(required = false, name = "admin") Boolean admin,
                                      HttpSession session,
                                      RedirectAttributes ra) {
@@ -1024,16 +1042,31 @@ public class InstrutorController {
             return "redirect:/instrutor/dashboard";
         }
         try {
+            String cpfDigits = cpf == null ? "" : cpf.replaceAll("[^0-9]", "");
+            if (cpfDigits.length() != 11) {
+                ra.addFlashAttribute("msgErro", "CPF inválido. Informe 11 dígitos.");
+                return "redirect:/instrutor/instrutores";
+            }
             Instrutor novo = new Instrutor();
-            novo.setCpf(cpf.replaceAll("[^0-9]", ""));
+            novo.setCpf(cpfDigits);
             novo.setNome(nome);
             novo.setEmail(email);
             if (telefone != null && !telefone.trim().isEmpty()) {
-                novo.setTelefone(telefone.replaceAll("[^0-9]", ""));
+                String telDigits = telefone.replaceAll("[^0-9]", "");
+                if (telDigits.length() != 11) {
+                    ra.addFlashAttribute("msgErro", "Telefone inválido. Use 11 dígitos (DDD + número).");
+                    return "redirect:/instrutor/instrutores";
+                }
+                novo.setTelefone(telDigits);
             }
             novo.setSenha(senha);
-            if (dataInicio != null && !dataInicio.trim().isEmpty()) {
-                novo.setDiaQueComecouTrabalhar(java.time.LocalDate.parse(dataInicio));
+            // Data de nascimento informada no cadastro
+            if (dataNascimento != null && !dataNascimento.trim().isEmpty()) {
+                novo.setDataNascimento(java.time.LocalDate.parse(dataNascimento));
+            }
+            // Registrar data de cadastro no sistema
+            if (novo.getDataCadastro() == null) {
+                novo.setDataCadastro(java.time.LocalDate.now());
             }
             novo.setAdmin(Boolean.TRUE.equals(admin));
             instrutorService.cadastrarInstrutor(novo);
