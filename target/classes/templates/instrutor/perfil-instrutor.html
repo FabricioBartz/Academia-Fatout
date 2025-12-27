@@ -97,9 +97,10 @@
             nome: "[[${instrutorPerfil.nome}]]"
         };
         function editarInstrutor(){
-            // Redireciona para tela de edição (usa modal da lista)
-            window.history.back(); // volta à lista para usar o modal
-            // opcionalmente poderíamos ter uma rota de edição dedicada
+            // Abrir página dedicada de edição em nova aba
+            if(!instrutorPerfil.cpf){ alert('CPF do instrutor não encontrado'); return; }
+            const url = '/instrutor/instrutores/editar/' + encodeURIComponent(instrutorPerfil.cpf);
+            window.open(url, '_blank');
         }
         function removerInstrutor(){
             if(!instrutorPerfil.cpf){ alert('CPF não encontrado'); return; }

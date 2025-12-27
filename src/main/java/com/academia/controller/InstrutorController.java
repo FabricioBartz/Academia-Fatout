@@ -1081,6 +1081,36 @@ public class InstrutorController {
         return "redirect:/instrutor/instrutores";
     }
 
+    // Página dedicada para edição de perfil de instrutor (abre em nova aba)
+    @GetMapping("/instrutores/editar/{cpf}")
+    public String editarInstrutorPage(@PathVariable String cpf,
+                                      Model model,
+                                      HttpSession session,
+                                      RedirectAttributes ra) {
+        Instrutor atual = (Instrutor) session.getAttribute("instrutor");
+        if (atual == null) {
+            atual = instrutorService.listarTodos().isEmpty() ? null : instrutorService.listarTodos().get(0);
+        }
+        // Somente admin
+        if (atual == null || !atual.isAdmin()) {
+            return "redirect:/instrutor/dashboard";
+        }
+        // Evitar edição de si próprio por esta tela (como na ação POST)
+        if (atual.getCpf().equals(cpf)) {
+            ra.addFlashAttribute("msgErro", "Você não pode editar a si mesmo nesta tela.");
+            return "redirect:/instrutor/instrutores";
+        }
+        model.addAttribute("instrutor", atual);
+
+        Instrutor alvo = instrutorService.buscarPorCpf(cpf).orElse(null);
+        if (alvo == null) {
+            ra.addFlashAttribute("msgErro", "Instrutor não encontrado.");
+            return "redirect:/instrutor/instrutores";
+        }
+        model.addAttribute("instrutorPerfil", alvo);
+        return "instrutor/editar-instrutor";
+    }
+
     @PostMapping("/instrutores/excluir/{cpf}")
     public String excluirInstrutor(@PathVariable String cpf,
                                    HttpSession session,

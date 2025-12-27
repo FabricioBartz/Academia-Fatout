@@ -48,7 +48,7 @@
                         <button type="submit" class="btn btn-outline-primary btn-sm">🔍</button>
                     </form>
                 </div>
-                <p>Turmas de todos os instrutores. Use a busca para filtrar.</p>
+                <p class="text-muted">Turmas de todos os instrutores disponíveis.</p>
 
                 <div th:if="${turmasDisponiveis == null || #lists.isEmpty(turmasDisponiveis)}" class="alert alert-info">
                     Não há turmas disponíveis no momento.
