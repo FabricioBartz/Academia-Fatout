@@ -1,7 +1,5 @@
 CREATE DATABASE  IF NOT EXISTS `academia_db` /*!40100 DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci */ /*!80016 DEFAULT ENCRYPTION='N' */;
 USE `academia_db`;
--- Migração: renomear coluna data_cadastro para data_inicio (execute uma vez em bancos existentes)
--- ALTER TABLE `pessoa` CHANGE COLUMN `data_cadastro` `data_inicio` DATE DEFAULT NULL;
 -- MySQL dump 10.13  Distrib 8.0.44, for Win64 (x86_64)
 --
 -- Host: localhost    Database: academia_db
@@ -40,7 +38,7 @@ CREATE TABLE `aluno` (
 
 LOCK TABLES `aluno` WRITE;
 /*!40000 ALTER TABLE `aluno` DISABLE KEYS */;
-INSERT INTO `aluno` VALUES ('02673548900','Perder peso'),('12345678901','ganhar massa'),('55555555555','Condicionamento Físico'),('98765432100','Emagrecimento');
+INSERT INTO `aluno` VALUES ('02673548900','Perder peso'),('02784570000','ganhar massa'),('08897510064','ficar definido'),('12345678901','ganhar massa'),('55555555555','Condicionamento Físico'),('98765432100','Emagrecimento');
 /*!40000 ALTER TABLE `aluno` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -139,7 +137,7 @@ CREATE TABLE `exercicio` (
 
 LOCK TABLES `exercicio` WRITE;
 /*!40000 ALTER TABLE `exercicio` DISABLE KEYS */;
-INSERT INTO `exercicio` VALUES (1,'Supino Reto','Barra e Banco','Peito','Deite-se no banco, segure a barra com as mãos afastadas na largura dos ombros. Desça a barra até o peito e empurre para cima.','Exercício básico para desenvolvimento do peitoral.'),(2,'Agachamento Livre','Barra','Pernas','Posicione a barra nos ombros, desça flexionando os joelhos até formar 90 graus e retorne à posição inicial.','Exercício fundamental para desenvolvimento das pernas'),(3,'Agachamento Livre com Barra','Rack de Agachamento e Barra','Pernas (Quadríceps e Glúteos) ','Em pé, segure a barra na altura da parte superior do peito com as mãos um pouco além da largura dos ombros. Empurre a barra para cima da cabeça até os braços esticarem totalmente, mantendo o abdômen e glúteos bem contraídos para não curvar as costas.','O clássico teste de força de empurrar para a parte superior do corpo. Diferente do supino, este exige muito mais estabilização de todo o tronco por ser feito em pé.');
+INSERT INTO `exercicio` VALUES (1,'Supino Reto','Barra e Banco','Peito','Deite-se no banco, segure a barra com as mãos afastadas na largura dos ombros. Desça a barra até o peito e empurre para cima.','Exercício básico para desenvolvimento do peitoral.\r\n'),(2,'Agachamento Livre','Barra','Pernas','Posicione a barra nos ombros, desça flexionando os joelhos até formar 90 graus e retorne à posição inicial.','Exercício fundamental para desenvolvimento das pernas'),(3,'Agachamento Livre com Barra','Rack de Agachamento e Barra','Pernas (Quadríceps e Glúteos) ','Em pé, segure a barra na altura da parte superior do peito com as mãos um pouco além da largura dos ombros. Empurre a barra para cima da cabeça até os braços esticarem totalmente, mantendo o abdômen e glúteos bem contraídos para não curvar as costas.','O clássico teste de força de empurrar para a parte superior do corpo. Diferente do supino, este exige muito mais estabilização de todo o tronco por ser feito em pé.');
 /*!40000 ALTER TABLE `exercicio` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -164,7 +162,7 @@ CREATE TABLE `exercicio_plano` (
   KEY `IDX_exercicio_plano_plano` (`id_plano`),
   CONSTRAINT `FK_exercicio_plano_exercicio` FOREIGN KEY (`id_exercicio`) REFERENCES `exercicio` (`id_exercicio`) ON DELETE CASCADE,
   CONSTRAINT `FK_exercicio_plano_plano` FOREIGN KEY (`id_plano`) REFERENCES `plano_de_treino` (`id_plano`) ON DELETE CASCADE
-) ENGINE=InnoDB AUTO_INCREMENT=89 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=94 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -173,7 +171,7 @@ CREATE TABLE `exercicio_plano` (
 
 LOCK TABLES `exercicio_plano` WRITE;
 /*!40000 ALTER TABLE `exercicio_plano` DISABLE KEYS */;
-INSERT INTO `exercicio_plano` VALUES (77,2,6,5,12,NULL,NULL,NULL),(78,1,6,1,10,NULL,NULL,NULL),(79,1,6,1,10,NULL,NULL,NULL),(80,2,6,2,12,NULL,NULL,NULL),(85,2,4,5,12,NULL,NULL,NULL),(86,2,4,2,12,NULL,NULL,NULL),(87,2,7,5,12,NULL,NULL,NULL),(88,2,7,2,12,NULL,NULL,NULL);
+INSERT INTO `exercicio_plano` VALUES (85,2,4,5,12,NULL,NULL,NULL),(86,2,4,2,12,NULL,NULL,NULL),(87,2,7,5,12,NULL,NULL,NULL),(88,2,7,2,12,NULL,NULL,NULL),(92,2,6,5,12,NULL,NULL,NULL),(93,1,6,1,10,NULL,NULL,NULL);
 /*!40000 ALTER TABLE `exercicio_plano` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -199,7 +197,7 @@ CREATE TABLE `instrutor` (
 
 LOCK TABLES `instrutor` WRITE;
 /*!40000 ALTER TABLE `instrutor` DISABLE KEYS */;
-INSERT INTO `instrutor` VALUES ('11111111111','2020-03-15',1),('22222222222','2021-06-10',0);
+INSERT INTO `instrutor` VALUES ('11111111111','2020-03-15',1),('22222222222','2024-10-12',0),('33333333333','2024-12-27',1);
 /*!40000 ALTER TABLE `instrutor` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -232,7 +230,7 @@ CREATE TABLE `pessoa` (
 
 LOCK TABLES `pessoa` WRITE;
 /*!40000 ALTER TABLE `pessoa` DISABLE KEYS */;
-INSERT INTO `pessoa` VALUES ('02673548900','Aluno Teste 05','alunoteste05@gmail.com','51998758231','B00,.','2000-04-16',NULL,NULL,NULL),('11111111111','Carlos Silva','carlos@academia.com','11999999999','123','1980-01-01',NULL,NULL,NULL),('12345678901','João Silva','joao@email.com','11987654321','123','1995-03-14',NULL,NULL,NULL),('22222222222','Ana Costa','ana@academia.com','11988888888','123','1985-05-20',NULL,NULL,NULL),('55555555555','Pedro Oliveira','pedro@email.com','11955555555','123','1990-11-30',NULL,NULL,NULL),('98765432100','Maria Santos','maria@email.com','11976543210','123','1992-07-22',NULL,NULL,NULL);
+INSERT INTO `pessoa` VALUES ('02673548900','Aluno Teste 05','alunoteste05@gmail.com','51998758230','B00,.','2000-04-16',NULL,NULL,'2025-12-16'),('02784570000','Fabricio Bartz','fabricio@aluno.com','51996568623','B123,.','1995-07-16',NULL,NULL,'2024-12-27'),('08897510064','Arthur Alves','arthur@aluno.com','53994755625','123','2001-09-22',NULL,NULL,'2025-12-27'),('11111111111','Carlos Silva','carlos@academia.com','11999999999','123','1980-01-01',NULL,NULL,NULL),('12345678901','João Silva','joao@email.com','11987654321','123','1995-03-14',NULL,NULL,'2025-12-14'),('22222222222','Ana Costa','ana@academia.com','11988888882','123','1985-05-20',NULL,NULL,'2024-10-12'),('33333333333','Instrutor teste','instrutorteste@academia.com','53998169734','B123,.','1995-02-23',NULL,NULL,'2024-12-27'),('55555555555','Pedro Oliveira','pedro@email.com','11955555555','123','1990-11-30',NULL,NULL,'2025-12-17'),('98765432100','Maria Santos','maria@email.com','11976543210','123','1992-07-22',NULL,NULL,'2025-12-25');
 /*!40000 ALTER TABLE `pessoa` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -266,7 +264,7 @@ CREATE TABLE `plano_de_treino` (
 
 LOCK TABLES `plano_de_treino` WRITE;
 /*!40000 ALTER TABLE `plano_de_treino` DISABLE KEYS */;
-INSERT INTO `plano_de_treino` VALUES (4,'12345678901','11111111111','2025-12-16',NULL,'treino do joao','teste para ver se esta funcionando o campo observação','QUA,SEX'),(6,'02673548900','11111111111','2025-12-16',NULL,'plano de treino teste','teste para ver se esta funcionando o campo observação','TER,QUA'),(7,'12345678901','11111111111','2025-12-17',NULL,'treino de teste','teste para ver se esta funcionando o campo observação','QUA,QUI,SEX');
+INSERT INTO `plano_de_treino` VALUES (4,'12345678901','11111111111','2025-12-16',NULL,'treino do joao','teste para ver se esta funcionando o campo observação','QUA,SEX'),(6,'02673548900','11111111111','2025-12-16',NULL,'plano de treino teste','teste para ver se esta funcionando o campo observação','TER,QUA,SAB,DOM'),(7,'12345678901','11111111111','2025-12-17',NULL,'treino de teste','teste para ver se esta funcionando o campo observação','QUA,QUI,SEX');
 /*!40000 ALTER TABLE `plano_de_treino` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -310,4 +308,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2025-12-25 16:15:30
+-- Dump completed on 2025-12-27  5:05:11
