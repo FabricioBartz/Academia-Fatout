@@ -75,6 +75,7 @@
                                     <td th:text="${#temporals.format(t.horaAula,'HH:mm')}">10:00</td>
                                     <td>
                                         <form th:action="@{/aluno/turmas/desmatricular/{id}(id=${t.id})}" method="post" onsubmit="return confirm('Deseja desmatricular-se desta turma?')">
+                                            <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}">
                                             <button type="submit" class="btn btn-outline-danger btn-sm">Desmatricular</button>
                                         </form>
                                     </td>

@@ -1,5 +1,7 @@
 CREATE DATABASE  IF NOT EXISTS `academia_db` /*!40100 DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci */ /*!80016 DEFAULT ENCRYPTION='N' */;
 USE `academia_db`;
+-- Migração: renomear coluna data_cadastro para data_inicio (execute uma vez em bancos existentes)
+-- ALTER TABLE `pessoa` CHANGE COLUMN `data_cadastro` `data_inicio` DATE DEFAULT NULL;
 -- MySQL dump 10.13  Distrib 8.0.44, for Win64 (x86_64)
 --
 -- Host: localhost    Database: academia_db
@@ -217,7 +219,7 @@ CREATE TABLE `pessoa` (
   `data_nascimento` date DEFAULT NULL,
   `endereco` varchar(255) DEFAULT NULL,
   `usuario` varchar(45) DEFAULT NULL,
-  `data_cadastro` date DEFAULT NULL,
+  `data_inicio` date DEFAULT NULL,
   PRIMARY KEY (`cpf`),
   UNIQUE KEY `UK_Pessoa_email` (`email`),
   CONSTRAINT `chk_cpf_format` CHECK (regexp_like(`cpf`,_utf8mb4'^[0-9]{11}$'))

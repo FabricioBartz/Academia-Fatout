@@ -57,6 +57,9 @@ public class AlunoService {
                 aluno.setEmail(alunoAtualizado.getEmail());
                 aluno.setTelefone(alunoAtualizado.getTelefone());
                 aluno.setDataNascimento(alunoAtualizado.getDataNascimento());
+                if (alunoAtualizado.getDataCadastro() != null) {
+                    aluno.setDataCadastro(alunoAtualizado.getDataCadastro());
+                }
                 aluno.setEndereco(alunoAtualizado.getEndereco());
                 aluno.setObjetivo(alunoAtualizado.getObjetivo());
                 return alunoRepository.save(aluno);

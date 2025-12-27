@@ -56,6 +56,12 @@ public class InstrutorService {
                 instrutor.setEmail(instrutorAtualizado.getEmail());
                 instrutor.setTelefone(instrutorAtualizado.getTelefone());
                 instrutor.setDiaQueComecouTrabalhar(instrutorAtualizado.getDiaQueComecouTrabalhar());
+                if (instrutorAtualizado.getDataCadastro() != null) {
+                    instrutor.setDataCadastro(instrutorAtualizado.getDataCadastro());
+                }
+                if (instrutorAtualizado.getDataNascimento() != null) {
+                    instrutor.setDataNascimento(instrutorAtualizado.getDataNascimento());
+                }
                 instrutor.setAdmin(instrutorAtualizado.isAdmin());
                 return instrutorRepository.save(instrutor);
             })

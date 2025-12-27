@@ -34,7 +34,8 @@
             <div class="logo">🏋️ Academia FatOut</div>
             <h3 class="text-center mb-4">Login Instrutor</h3>
             
-            <form th:action="@{/instrutor/login}" method="post">
+                <form th:action="@{/instrutor/login}" method="post">
+                    <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}">
                 <div class="mb-3">
                     <label for="email" class="form-label">Email</label>
                     <input type="email" class="form-control" id="email" name="email" 

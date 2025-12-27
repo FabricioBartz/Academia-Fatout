@@ -74,6 +74,9 @@
                         <div th:if="${error}" class="alert alert-danger" th:text="${error}"></div>
 
                         <div class="mb-3">
+                            <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}">
+                            
+                            
                             <label class="form-label">Nome do Treino</label>
                             <input type="text" class="form-control" name="nome" th:value="${plano.nome}" placeholder="Ex: Treino A - Peito e Tríceps" required>
                         </div>

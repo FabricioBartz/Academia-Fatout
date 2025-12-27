@@ -73,6 +73,7 @@
                                 <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
                             </div>
                             <form th:action="@{/instrutor/turmas/criar}" method="post">
+                                <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}">
                                 <div class="modal-body">
                                     <div class="mb-3">
                                         <label for="titulo" class="form-label">Nome</label>
@@ -113,6 +114,7 @@
                                 <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
                             </div>
                             <form th:action="@{/instrutor/turmas/editar}" method="post">
+                                <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}">
                                 <input type="hidden" id="editId" name="id">
                                 <div class="modal-body">
                                     <div class="mb-3">
@@ -172,6 +174,7 @@
                                 <td>
                                     <button class="btn btn-sm btn-warning" onclick="editarTurma(this)" th:data-id="${turma.id}" th:data-titulo="${turma.titulo}" th:data-descricao="${turma.descricao}" th:data-data="${#temporals.format(turma.dataDaAula, 'yyyy-MM-dd')}" th:data-hora="${#temporals.format(turma.horaAula, 'HH:mm')}" th:data-vagas="${turma.vagas}">Editar</button>
                                     <form method="post" th:action="@{/instrutor/turmas/excluir/{id}(id=${turma.id})}" style="display:inline;" onsubmit="return confirm('Tem certeza que deseja excluir esta turma?')">
+                                        <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}">
                                         <button type="submit" class="btn btn-sm btn-danger">Excluir</button>
                                     </form>
                                 </td>

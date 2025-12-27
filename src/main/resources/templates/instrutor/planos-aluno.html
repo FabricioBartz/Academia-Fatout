@@ -39,7 +39,7 @@
         <div class="col-md-9">
             <div class="d-flex align-items-center justify-content-between mb-4" style="height: 45px;">
                 <div class="d-flex align-items-center">
-                    <a th:href="@{'/instrutor/alunos/perfil/' + ${aluno.cpf}}" class="btn btn-secondary btn-sm me-3">← Voltar</a>
+                    <a th:href="@{/instrutor/alunos/perfil/{cpf}(cpf=${aluno.cpf})}" class="btn btn-secondary btn-sm me-3">← Voltar</a>
                     <h1 class="mb-0">Planos de Treino</h1>
                     <span class="text-muted ms-3" th:text="${aluno.nome}">João Silva</span>
                 </div>
@@ -74,8 +74,9 @@
                                         <td th:text="${plano.diasSemana}">SEG,QUA,SEX</td>
                                         <td th:text="${plano.exercicios.size()}">2</td>
                                         <td>
-                                            <a th:href="@{'/instrutor/alunos/planos/' + ${aluno.cpf} + '/' + ${plano.id} + '/editar'}" class="btn btn-warning btn-sm">Editar</a>
-                                            <form th:action="@{'/instrutor/alunos/planos/' + ${aluno.cpf} + '/' + ${plano.id} + '/excluir'}" method="post" style="display:inline-block" onsubmit="return confirmarExclusaoPlano()">
+                                            <a th:href="@{/instrutor/alunos/planos/{cpf}/{id}/editar(cpf=${aluno.cpf}, id=${plano.id})}" class="btn btn-warning btn-sm">Editar</a>
+                                            <form th:action="@{/instrutor/alunos/planos/{cpf}/{id}/excluir(cpf=${aluno.cpf}, id=${plano.id})}" method="post" style="display:inline-block" onsubmit="return confirmarExclusaoPlano()">
+                                                <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}">
                                                 <button type="submit" class="btn btn-danger btn-sm">Excluir</button>
                                             </form>
                                         </td>

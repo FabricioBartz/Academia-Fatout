@@ -151,6 +151,10 @@
                                         <div class="invalid-feedback">Informe a data de nascimento.</div>
                                     </div>
                                     <div class="mb-3">
+                                        <label for="editDataInicio" class="form-label">Início na Academia</label>
+                                        <input type="date" class="form-control" id="editDataInicio" name="dataInicio">
+                                    </div>
+                                    <div class="mb-3">
                                         <label for="editObjetivo" class="form-label">Objetivo</label>
                                         <input type="text" class="form-control" id="editObjetivo" name="objetivo">
                                     </div>
@@ -249,6 +253,7 @@
                                         th:data-email="${aluno.email}"
                                         th:data-telefone="${aluno.telefone}"
                                         th:data-data="${#temporals.format(aluno.dataNascimento, 'yyyy-MM-dd')}"
+                                        th:data-inicio="${aluno.dataCadastro != null ? #temporals.format(aluno.dataCadastro, 'yyyy-MM-dd') : ''}"
                                         th:data-objetivo="${aluno.objetivo}">Editar</button>
                                     <form method="post" th:action="@{/instrutor/alunos/excluir/{cpf}(cpf=${aluno.cpf})}" style="display:inline;" onsubmit="event.stopPropagation(); return confirm('Tem certeza que deseja excluir este aluno?')" onclick="event.stopPropagation()">
                                         <button type="submit" class="btn btn-sm btn-danger" onclick="event.stopPropagation()">Excluir</button>
@@ -264,6 +269,20 @@
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.mask/1.14.16/jquery.mask.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
+    <!-- Injeta token CSRF automaticamente em todos os formulários POST desta página -->
+    <script th:inline="javascript">
+        const CSRF_PARAM = '[[${_csrf.parameterName}]]';
+        const CSRF_TOKEN = '[[${_csrf.token}]]';
+        document.addEventListener('DOMContentLoaded', function(){
+            Array.from(document.forms).forEach(f => {
+                if ((f.method || 'GET').toUpperCase() !== 'POST') return;
+                if (f.querySelector('input[name="'+CSRF_PARAM+'"]')) return;
+                const input = document.createElement('input');
+                input.type = 'hidden'; input.name = CSRF_PARAM; input.value = CSRF_TOKEN;
+                f.appendChild(input);
+            });
+        });
+    </script>
     <script>
 
         $(document).ready(function(){
@@ -286,6 +305,7 @@
             const editEmailInput = document.getElementById('editEmail');
             const editTelInput = document.getElementById('editTelefone');
             const editDataInput = document.getElementById('editDataNascimento');
+            const editInicioInput = document.getElementById('editDataInicio');
 
             function cpfValido(valor) {
                 // Apenas verifica se há 11 dígitos numéricos (permite CPFs fictícios)
@@ -330,8 +350,9 @@
                 const telOk = telDigits.length === 0 || telDigits.length === 11;
                 marcarValido(editTelInput, telOk);
                 const dataOk = editDataInput.value !== '';
+                const inicioOk = true; // campo opcional
                 marcarValido(editDataInput, dataOk);
-                btnEdit.disabled = !(nomeOk && emailOk && telOk && dataOk);
+                btnEdit.disabled = !(nomeOk && emailOk && telOk && dataOk && inicioOk);
             }
 
             ['input','change','keyup','blur'].forEach(evt => {
@@ -339,6 +360,7 @@
                 editEmailInput.addEventListener(evt, checarCamposEdit);
                 editTelInput.addEventListener(evt, checarCamposEdit);
                 editDataInput.addEventListener(evt, checarCamposEdit);
+                editInicioInput.addEventListener(evt, checarCamposEdit);
             });
             checarCamposEdit();
 
@@ -406,6 +428,7 @@
                         const email = btn.getAttribute('data-email') || linha.cells[2].textContent.trim();
                         const telefone = btn.getAttribute('data-telefone') || linha.cells[3].textContent.trim();
                         const dataIso = btn.getAttribute('data-data') || '';
+                        const inicioIso = btn.getAttribute('data-inicio') || '';
                         const objetivo = btn.getAttribute('data-objetivo') || '';
                         document.getElementById('editCpf').value = cpf;
                         document.getElementById('editNome').value = nome;
@@ -413,6 +436,7 @@
                         document.getElementById('editTelefone').value = telefone;
                         $('#editTelefone').trigger('input'); //máscara do telefone
                         document.getElementById('editDataNascimento').value = dataIso;
+                        document.getElementById('editDataInicio').value = inicioIso;
                         document.getElementById('editObjetivo').value = objetivo;
                         const modal = new bootstrap.Modal(document.getElementById('editarAlunoModal'));
                         modal.show();
@@ -473,6 +497,7 @@
                 document.getElementById('editEmail').dispatchEvent(evt);
                 document.getElementById('editTelefone').dispatchEvent(evt);
                 document.getElementById('editDataNascimento').dispatchEvent(evt);
+                document.getElementById('editDataInicio').dispatchEvent(evt);
             }, 50);
         }
     </script>

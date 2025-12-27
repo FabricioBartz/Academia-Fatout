@@ -23,8 +23,8 @@ public abstract class Pessoa {
     @Column(name = "data_nascimento")
     private LocalDate dataNascimento;
     
-    // Data de cadastro no sistema
-    @Column(name = "data_cadastro")
+    // Data de início na academia (antes: data_cadastro)
+    @Column(name = "data_inicio")
     private LocalDate dataCadastro;
     
     private String endereco;

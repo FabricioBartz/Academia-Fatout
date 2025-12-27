@@ -1,7 +1,9 @@
 package com.academia.service;
 
 import com.academia.model.AvaliacaoFisica;
+import com.academia.model.Aluno;
 import com.academia.repository.AvaliacaoRepository;
+import com.academia.repository.AlunoRepository;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
@@ -12,9 +14,11 @@ import java.util.Optional;
 public class AvaliacaoService {
     
     private final AvaliacaoRepository avaliacaoRepository;
+    private final AlunoRepository alunoRepository;
     
-    public AvaliacaoService(AvaliacaoRepository avaliacaoRepository) {
+    public AvaliacaoService(AvaliacaoRepository avaliacaoRepository, AlunoRepository alunoRepository) {
         this.avaliacaoRepository = avaliacaoRepository;
+        this.alunoRepository = alunoRepository;
     }
     
     // Criar nova avaliação
@@ -37,7 +41,12 @@ public class AvaliacaoService {
         if (avaliacao.getPeso() != null && avaliacao.getAltura() != null) {
             avaliacao.setImc(avaliacao.getPeso() / (avaliacao.getAltura() * avaliacao.getAltura()));
         }
-        
+        // Se o aluno não tem data de início definida, usar a data da primeira avaliação
+        Aluno aluno = avaliacao.getAluno();
+        if (aluno != null && aluno.getDataCadastro() == null && avaliacao.getData() != null) {
+            aluno.setDataCadastro(avaliacao.getData());
+            alunoRepository.save(aluno);
+        }
         return avaliacaoRepository.save(avaliacao);
     }
     

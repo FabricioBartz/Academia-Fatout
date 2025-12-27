@@ -99,25 +99,10 @@ public class InstrutorController {
             alunos = alunoService.listarTodos();
             model.addAttribute("q", "");
         }
-        // Mapa de início (data de cadastro no sistema; fallback: menor data entre primeiro plano e primeira avaliação)
+        // Mapa de início: usar exclusivamente a data editável do aluno (data de início na academia)
         java.util.Map<String, java.time.LocalDate> inicioPorAluno = new java.util.HashMap<>();
         for (Aluno a : alunos) {
-            java.time.LocalDate inicio = a.getDataCadastro();
-            // Primeiro plano
-            var planos = planoTreinoService.listarPorAluno(a.getCpf());
-            for (var p : planos) {
-                if (p.getDataCriacao() != null) {
-                    inicio = (inicio == null || p.getDataCriacao().isBefore(inicio)) ? p.getDataCriacao() : inicio;
-                }
-            }
-            // Primeira avaliação
-            var avals = avaliacaoService.listarPorAluno(a.getCpf());
-            for (var av : avals) {
-                if (av.getData() != null) {
-                    inicio = (inicio == null || av.getData().isBefore(inicio)) ? av.getData() : inicio;
-                }
-            }
-            inicioPorAluno.put(a.getCpf(), inicio);
+            inicioPorAluno.put(a.getCpf(), a.getDataCadastro());
         }
         model.addAttribute("alunos", alunos);
         model.addAttribute("inicioPorAluno", inicioPorAluno);
@@ -382,6 +367,7 @@ public class InstrutorController {
                              @RequestParam String email,
                              @RequestParam(required = false) String telefone,
                              @RequestParam(required = false) String dataNascimento,
+                             @RequestParam(required = false) String dataInicio,
                              @RequestParam(required = false) String objetivo,
                              Model model,
                              RedirectAttributes ra) {
@@ -402,6 +388,9 @@ public class InstrutorController {
             }
             if (objetivo != null && !objetivo.trim().isEmpty()) {
                 alunoAtualizado.setObjetivo(objetivo);
+            }
+            if (dataInicio != null && !dataInicio.trim().isEmpty()) {
+                alunoAtualizado.setDataCadastro(java.time.LocalDate.parse(dataInicio));
             }
             alunoService.atualizarAluno(cpf, alunoAtualizado);
             ra.addFlashAttribute("msgSucesso", "Aluno atualizado com sucesso.");
@@ -437,23 +426,8 @@ public class InstrutorController {
         }
         
         model.addAttribute("aluno", aluno);
-        // Calcular data de início (primeiro plano/avaliação) para exibir no perfil
-        java.time.LocalDate inicioAluno = null;
-        var planosAluno = planoTreinoService.listarPorAluno(aluno.getCpf());
-        for (var p : planosAluno) {
-            var d = p.getDataCriacao();
-            if (d != null) {
-                inicioAluno = (inicioAluno == null || d.isBefore(inicioAluno)) ? d : inicioAluno;
-            }
-        }
-        var avalsAluno = avaliacaoService.listarPorAluno(aluno.getCpf());
-        for (var a : avalsAluno) {
-            var d = a.getData();
-            if (d != null) {
-                inicioAluno = (inicioAluno == null || d.isBefore(inicioAluno)) ? d : inicioAluno;
-            }
-        }
-        model.addAttribute("inicioAluno", inicioAluno);
+        // Exibir a data de início na academia do aluno (data editável)
+        model.addAttribute("inicioAluno", aluno.getDataCadastro());
         // Histórico de planos de treino
         var planos = planoTreinoService.listarHistorico(aluno.getCpf());
         model.addAttribute("planos", planos);
@@ -966,6 +940,7 @@ public class InstrutorController {
                                    @RequestParam String email,
                                    @RequestParam(required = false) String telefone,
                                    @RequestParam(required = false) String dataNascimento,
+                                   @RequestParam(required = false) String dataInicio,
                                    @RequestParam(required = false) String objetivo,
                                    Model model,
                                    RedirectAttributes ra) {
@@ -981,6 +956,9 @@ public class InstrutorController {
             }
             if (objetivo != null && !objetivo.trim().isEmpty()) {
                 alunoAtualizado.setObjetivo(objetivo);
+            }
+            if (dataInicio != null && !dataInicio.trim().isEmpty()) {
+                alunoAtualizado.setDataCadastro(java.time.LocalDate.parse(dataInicio));
             }
             alunoService.atualizarAluno(cpf, alunoAtualizado);
             ra.addFlashAttribute("msgSucesso", "Aluno atualizado com sucesso.");
@@ -1083,6 +1061,7 @@ public class InstrutorController {
                                   @RequestParam String email,
                                   @RequestParam(required = false) String telefone,
                                   @RequestParam(required = false, name = "dataInicio") String dataInicio,
+                                  @RequestParam(required = false, name = "dataNascimento") String dataNascimento,
                                   @RequestParam(required = false, name = "admin") Boolean admin,
                                   HttpSession session,
                                   RedirectAttributes ra) {
@@ -1104,7 +1083,13 @@ public class InstrutorController {
                 atualizado.setTelefone(telefone.replaceAll("[^0-9]", ""));
             }
             if (dataInicio != null && !dataInicio.trim().isEmpty()) {
-                atualizado.setDiaQueComecouTrabalhar(java.time.LocalDate.parse(dataInicio));
+                java.time.LocalDate inicio = java.time.LocalDate.parse(dataInicio);
+                atualizado.setDiaQueComecouTrabalhar(inicio);
+                // também persistir em Pessoa (data_inicio)
+                atualizado.setDataCadastro(inicio);
+            }
+            if (dataNascimento != null && !dataNascimento.trim().isEmpty()) {
+                atualizado.setDataNascimento(java.time.LocalDate.parse(dataNascimento));
             }
             atualizado.setAdmin(Boolean.TRUE.equals(admin));
             instrutorService.atualizarInstrutor(cpf.replaceAll("[^0-9]", ""), atualizado);

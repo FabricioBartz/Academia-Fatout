@@ -129,7 +129,8 @@ public class AlunoController {
     public String treino(Model model, HttpSession session) {
         Aluno aluno = (Aluno) session.getAttribute("aluno");
         if (aluno == null) {
-            aluno = alunoService.listarTodos().isEmpty() ? null : alunoService.listarTodos().get(0);
+            // Sem aluno na sessão: exigir login para evitar erro na view
+            return "redirect:/aluno/login";
         }
         model.addAttribute("aluno", aluno);
         if (aluno != null) {
@@ -145,7 +146,8 @@ public class AlunoController {
     public String detalhePlanoAluno(@PathVariable Long id, Model model, HttpSession session) {
         Aluno aluno = (Aluno) session.getAttribute("aluno");
         if (aluno == null) {
-            aluno = alunoService.listarTodos().isEmpty() ? null : alunoService.listarTodos().get(0);
+            // Sem aluno na sessão: exigir login para evitar erro na view
+            return "redirect:/aluno/login";
         }
         model.addAttribute("aluno", aluno);
         var plano = planoTreinoService.buscarPorId(id).orElse(null);

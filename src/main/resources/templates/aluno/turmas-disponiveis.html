@@ -79,11 +79,13 @@
                                 <td>
                                     <div th:if="${turmasMatriculadasIds != null && turmasMatriculadasIds.contains(t.id)}">
                                         <form th:action="@{/aluno/turmas/desmatricular/{id}(id=${t.id})}" method="post" onsubmit="return confirm('Confirmar desmatrícula desta turma?')">
+                                            <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}">
                                             <button type="submit" class="btn btn-outline-danger btn-sm btn-matricula">Desmatricular</button>
                                         </form>
                                     </div>
                                     <div th:if="${turmasMatriculadasIds == null || !turmasMatriculadasIds.contains(t.id)}">
                                         <form th:action="@{/aluno/turmas/matricular/{id}(id=${t.id})}" method="post" onsubmit="return confirm('Confirmar matrícula nesta turma?')">
+                                            <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}">
                                             <button type="submit" class="btn btn-outline-success btn-sm btn-matricula" th:disabled="${t.vagasDisponiveis == 0}">Matricular</button>
                                         </form>
                                     </div>

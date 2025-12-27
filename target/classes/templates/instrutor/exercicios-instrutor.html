@@ -7,6 +7,20 @@
     <link th:href="@{/css/style.css}" rel="stylesheet">
 </head>
 <body>
+        <!-- Injeta token CSRF automaticamente em todos os formulários POST desta página -->
+        <script th:inline="javascript">
+            const CSRF_PARAM = '[[${_csrf.parameterName}]]';
+            const CSRF_TOKEN = '[[${_csrf.token}]]';
+            document.addEventListener('DOMContentLoaded', function(){
+                Array.from(document.forms).forEach(f => {
+                    if ((f.method || 'GET').toUpperCase() !== 'POST') return;
+                    if (f.querySelector('input[name="'+CSRF_PARAM+'"]')) return;
+                    const input = document.createElement('input');
+                    input.type = 'hidden'; input.name = CSRF_PARAM; input.value = CSRF_TOKEN;
+                    f.appendChild(input);
+                });
+            });
+        </script>
     <!-- Navbar idêntica ao painel principal, apenas com cor preta -->
     <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
         <div class="container">

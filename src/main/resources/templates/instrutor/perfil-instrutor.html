@@ -59,7 +59,7 @@
                         <div class="row">
                             <div class="col-md-6 mb-3">
                                 <p><strong>Início na Academia:</strong>
-                                    <span th:text="${instrutorPerfil.dataCadastro != null ? #temporals.format(instrutorPerfil.dataCadastro, 'dd/MM/yyyy') : (instrutorPerfil.diaQueComecouTrabalhar != null ? #temporals.format(instrutorPerfil.diaQueComecouTrabalhar, 'dd/MM/yyyy') : '—')}">—</span>
+                                    <span th:text="${instrutorPerfil.dataCadastro != null ? #temporals.format(instrutorPerfil.dataCadastro, 'dd/MM/yyyy') : '—'}">—</span>
                                 </p>
                             </div>
                             <div class="col-md-6 mb-3">
@@ -98,16 +98,21 @@
         </div>
     </div>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
+    <!-- CSRF helpers -->
+    <script th:inline="javascript">
+        const CSRF_PARAM = '[[${_csrf.parameterName}]]';
+        const CSRF_TOKEN = '[[${_csrf.token}]]';
+    </script>
     <script>
         const instrutorPerfil = {
             cpf: "[[${instrutorPerfil.cpf}]]",
             nome: "[[${instrutorPerfil.nome}]]"
         };
         function editarInstrutor(){
-            // Abrir página dedicada de edição em nova aba
+            // Navegar para a página de edição na mesma aba
             if(!instrutorPerfil.cpf){ alert('CPF do instrutor não encontrado'); return; }
             const url = '/instrutor/instrutores/editar/' + encodeURIComponent(instrutorPerfil.cpf);
-            window.open(url, '_blank');
+            window.location.href = url;
         }
         function removerInstrutor(){
             if(!instrutorPerfil.cpf){ alert('CPF não encontrado'); return; }
@@ -115,6 +120,12 @@
                 const form = document.createElement('form');
                 form.method = 'post';
                 form.action = '/instrutor/instrutores/excluir/' + encodeURIComponent(instrutorPerfil.cpf);
+                // incluir CSRF
+                if (typeof CSRF_PARAM !== 'undefined') {
+                    const input = document.createElement('input');
+                    input.type = 'hidden'; input.name = CSRF_PARAM; input.value = CSRF_TOKEN;
+                    form.appendChild(input);
+                }
                 document.body.appendChild(form);
                 form.submit();
             }

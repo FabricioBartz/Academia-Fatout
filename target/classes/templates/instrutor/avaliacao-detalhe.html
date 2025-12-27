@@ -61,6 +61,7 @@
             <div class="d-flex justify-content-end gap-2 mb-3">
                 <a th:href="@{'/instrutor/alunos/avaliacoes/' + ${aluno.cpf} + '/' + ${avaliacao.id} + '/editar'}" class="btn btn-warning btn-sm">Editar</a>
                 <form class="d-inline" th:action="@{'/instrutor/alunos/avaliacoes/' + ${aluno.cpf} + '/' + ${avaliacao.id} + '/excluir'}" method="post" onsubmit="return confirm('Tem certeza que deseja excluir esta avaliação? Esta ação não pode ser desfeita.');">
+                        <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}">
                     <button type="submit" class="btn btn-danger btn-sm">Excluir</button>
                 </form>
             </div>

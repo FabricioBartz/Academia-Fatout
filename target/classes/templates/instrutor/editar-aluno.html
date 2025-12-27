@@ -58,6 +58,7 @@
                 </div>
                 <!-- Form na mesma coluna para remover qualquer espaço entre título e conteúdo -->
                 <form th:action="@{/instrutor/alunos/editar/{cpf}(cpf=${aluno.cpf})}" method="post" class="card p-3 mt-0">
+                    <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}">
                     
                     <div th:if="${error}" class="alert alert-danger mb-2" th:text="${error}"></div>
                     
@@ -73,13 +74,19 @@
                     
                     <div class="mb-2">
                         <label for="telefone" class="form-label">Telefone</label>
-                        <input type="text" class="form-control" id="telefone" name="telefone" th:value="${aluno.telefone}">
+                        <input type="text" class="form-control" id="telefone" name="telefone" th:value="${aluno.telefone}" required>
+                        <div class="invalid-feedback">Informe DDD + número com 11 dígitos.</div>
                     </div>
                     
                     <div class="mb-2">
                         <label for="dataNascimento" class="form-label">Data de Nascimento</label>
                         <input type="date" class="form-control" id="dataNascimento" name="dataNascimento" 
                                th:value="${#temporals.format(aluno.dataNascimento, 'yyyy-MM-dd')}">
+                    </div>
+                    <div class="mb-2">
+                        <label for="dataInicio" class="form-label">Início na Academia</label>
+                        <input type="date" class="form-control" id="dataInicio" name="dataInicio"
+                               th:value="${aluno.dataCadastro != null ? #temporals.format(aluno.dataCadastro, 'yyyy-MM-dd') : ''}">
                     </div>
                     
                     <div class="mb-2">
@@ -101,9 +108,21 @@
     <script>
         
         $(document).ready(function(){
-             // Aplica a máscara no campo de telefone desta página
-             $('#telefone').mask('(00) 00000-0000');
-         });
+            // Máscara fixa para 11 dígitos (DDD + 9 dígitos)
+            $('#telefone').mask('(00) 00000-0000');
+
+            function validarTelefone(){
+                var digits = $('#telefone').val().replace(/\D/g, '');
+                var valido = (digits.length === 11);
+                $('#telefone').toggleClass('is-invalid', !valido);
+                $('form.card button[type="submit"]').prop('disabled', !valido);
+            }
+
+            // Valida ao carregar e em mudanças
+            validarTelefone();
+            $('#telefone').on('input blur', validarTelefone);
+            // Não tornar data de início obrigatória; sem validação adicional
+        });
 
         document.addEventListener('DOMContentLoaded', function() {
             const alerts = document.querySelectorAll('.flash-alert');
