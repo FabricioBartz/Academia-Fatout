@@ -237,15 +237,15 @@
                                 <td th:text="${aluno.telefone != null && aluno.telefone.length() == 11 ? aluno.telefone.replaceAll('(\d{2})(\d{5})(\d{4})', '($1) $2-$3') : aluno.telefone}">(11) 98765-4321</td>
                                 <td th:text="${inicioPorAluno[aluno.cpf] != null ? #temporals.format(inicioPorAluno[aluno.cpf], 'dd/MM/yyyy') : '—'}">—</td>
                                 <td>
-                                    <button class="btn btn-sm btn-warning" onclick="editarAluno(this)"
+                                    <button class="btn btn-sm btn-warning" onclick="event.stopPropagation(); editarAluno(this)"
                                         th:data-cpf="${aluno.cpf}"
                                         th:data-nome="${aluno.nome}"
                                         th:data-email="${aluno.email}"
                                         th:data-telefone="${aluno.telefone}"
                                         th:data-data="${#temporals.format(aluno.dataNascimento, 'yyyy-MM-dd')}"
                                         th:data-objetivo="${aluno.objetivo}">Editar</button>
-                                    <form method="post" th:action="@{/instrutor/alunos/excluir/{cpf}(cpf=${aluno.cpf})}" style="display:inline;" onsubmit="return confirm('Tem certeza que deseja excluir este aluno?')">
-                                        <button type="submit" class="btn btn-sm btn-danger">Excluir</button>
+                                    <form method="post" th:action="@{/instrutor/alunos/excluir/{cpf}(cpf=${aluno.cpf})}" style="display:inline;" onsubmit="event.stopPropagation(); return confirm('Tem certeza que deseja excluir este aluno?')" onclick="event.stopPropagation()">
+                                        <button type="submit" class="btn btn-sm btn-danger" onclick="event.stopPropagation()">Excluir</button>
                                     </form>
                                 </td>
                             </tr>
@@ -312,8 +312,10 @@
             const linhas = document.querySelectorAll('table tbody tr');
             let alunoEncontrado = false;
             for (const linha of linhas) {
-                const celCpf = linha.cells[0].textContent.trim();
-                if (celCpf === cpf) {
+                // Comparar usando CPF limpo (sem máscara)
+                const celCpf = linha.getAttribute('data-cpf');
+                const cpfLimpo = cpf.replace(/\D/g, '');
+                if (celCpf === cpfLimpo) {
                     alunoEncontrado = true;
                     // Buscar botão Editar dentro da linha para obter os dados completos
                     const btn = linha.querySelector('button.btn-warning');
@@ -327,6 +329,7 @@
                         document.getElementById('editNome').value = nome;
                         document.getElementById('editEmail').value = email;
                         document.getElementById('editTelefone').value = telefone;
+                        $('#editTelefone').trigger('input'); //máscara do telefone
                         document.getElementById('editDataNascimento').value = dataIso;
                         document.getElementById('editObjetivo').value = objetivo;
                         const modal = new bootstrap.Modal(document.getElementById('editarAlunoModal'));
@@ -375,6 +378,7 @@
             document.getElementById('editNome').value = nome;
             document.getElementById('editEmail').value = email;
             document.getElementById('editTelefone').value = telefone;
+            $('#editTelefone').trigger('input'); //máscara do telefone
             document.getElementById('editDataNascimento').value = dataNascimento;
             document.getElementById('editObjetivo').value = objetivo;
             

@@ -50,10 +50,10 @@
                         <hr>
                         <div class="row">
                             <div class="col-md-6 mb-3">
-                                <p><strong>CPF:</strong> <span th:text="${instrutorPerfil.cpf}">12345678901</span></p>
+                                <p><strong>CPF:</strong> <span th:text="${instrutorPerfil.cpf.replaceAll('(\d{3})(\d{3})(\d{3})(\d{2})', '$1.$2.$3-$4')}">123.456.789-01</span></p>
                             </div>
                             <div class="col-md-6 mb-3">
-                                <p><strong>Telefone:</strong> <span th:text="${instrutorPerfil.telefone}">11987654321</span></p>
+                                <p><strong>Telefone:</strong> <span th:text="${instrutorPerfil.telefone != null && instrutorPerfil.telefone.length() == 11 ? instrutorPerfil.telefone.replaceAll('(\d{2})(\d{5})(\d{4})', '($1) $2-$3') : instrutorPerfil.telefone}">(11) 98765-4321</span></p>
                             </div>
                         </div>
                         <div class="row">

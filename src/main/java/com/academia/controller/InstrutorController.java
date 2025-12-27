@@ -1025,11 +1025,11 @@ public class InstrutorController {
         }
         try {
             Instrutor novo = new Instrutor();
-            novo.setCpf(cpf);
+            novo.setCpf(cpf.replaceAll("[^0-9]", ""));
             novo.setNome(nome);
             novo.setEmail(email);
             if (telefone != null && !telefone.trim().isEmpty()) {
-                novo.setTelefone(telefone);
+                novo.setTelefone(telefone.replaceAll("[^0-9]", ""));
             }
             novo.setSenha(senha);
             if (dataInicio != null && !dataInicio.trim().isEmpty()) {
@@ -1054,12 +1054,13 @@ public class InstrutorController {
                                   HttpSession session,
                                   RedirectAttributes ra) {
         Instrutor atual = (Instrutor) session.getAttribute("instrutor");
-        if (atual == null || !atual.isAdmin()) {
-            return "redirect:/instrutor/dashboard";
+        // Fallback para sessão vazia (ex.: nova aba)
+        if (atual == null) {
+            var todos = instrutorService.listarTodos();
+            atual = todos.isEmpty() ? null : todos.get(0);
         }
-        // Não permitir editar a si mesmo via essa tela (para evitar remoção acidental futura)
-        if (atual.getCpf().equals(cpf)) {
-            ra.addFlashAttribute("msgErro", "Você não pode editar a si mesmo nesta tela.");
+        if (atual == null || !atual.isAdmin()) {
+            ra.addFlashAttribute("msgErro", "Acesso negado: somente administradores podem editar instrutores.");
             return "redirect:/instrutor/instrutores";
         }
         try {
@@ -1067,13 +1068,13 @@ public class InstrutorController {
             atualizado.setNome(nome);
             atualizado.setEmail(email);
             if (telefone != null && !telefone.trim().isEmpty()) {
-                atualizado.setTelefone(telefone);
+                atualizado.setTelefone(telefone.replaceAll("[^0-9]", ""));
             }
             if (dataInicio != null && !dataInicio.trim().isEmpty()) {
                 atualizado.setDiaQueComecouTrabalhar(java.time.LocalDate.parse(dataInicio));
             }
             atualizado.setAdmin(Boolean.TRUE.equals(admin));
-            instrutorService.atualizarInstrutor(cpf, atualizado);
+            instrutorService.atualizarInstrutor(cpf.replaceAll("[^0-9]", ""), atualizado);
             ra.addFlashAttribute("msgSucesso", "Instrutor atualizado com sucesso.");
         } catch (RuntimeException ex) {
             ra.addFlashAttribute("msgErro", ex.getMessage());
@@ -1093,11 +1094,7 @@ public class InstrutorController {
         }
         // Somente admin
         if (atual == null || !atual.isAdmin()) {
-            return "redirect:/instrutor/dashboard";
-        }
-        // Evitar edição de si próprio por esta tela (como na ação POST)
-        if (atual.getCpf().equals(cpf)) {
-            ra.addFlashAttribute("msgErro", "Você não pode editar a si mesmo nesta tela.");
+            ra.addFlashAttribute("msgErro", "Acesso negado: somente administradores podem editar instrutores.");
             return "redirect:/instrutor/instrutores";
         }
         model.addAttribute("instrutor", atual);
