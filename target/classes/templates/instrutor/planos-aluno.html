@@ -52,7 +52,7 @@
             <div class="card">
                 <div class="card-body">
                     <div class="mb-3 d-flex justify-content-between align-items-center">
-                        <a th:href="@{/instrutor/alunos/plano/{cpf}(cpf=${aluno.cpf})}" class="btn btn-primary">Criar Plano de Treino</a>
+                        <a th:href="@{/instrutor/alunos/plano/{cpf}(cpf=${aluno.cpf})}" class="btn btn-primary btn-cadastrar btn-planos-treino">Criar Plano de Treino</a>
                     </div>
                     <div th:if="${planos == null or planos.isEmpty()}" class="alert alert-info">Sem treinos cadastrados.</div>
                     <div th:if="${planos != null and !planos.isEmpty()}">

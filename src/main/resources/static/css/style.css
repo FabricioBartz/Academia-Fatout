@@ -1,3 +1,69 @@
+/* --- PADRONIZAÇÃO TOTAL ACADEMIA FATOUT (ESTILO GOOGLE M3 CINZA) --- */
+
+/* Lista de todas as classes de botões do seu sistema */
+.btn-planos-treino,
+.btn-realizar-avaliacao,
+.btn-primary,
+.btn-outline-success,
+.btn-outline-danger,
+.btn-warning, 
+.btn-danger, 
+.btn-outline-dark,
+.btn-secondary {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    
+    /* Cores Neutras do Google */
+    background-color: #f1f3f4 !important; 
+    color: #3c4043 !important;            
+    border: 1px solid #dadce0 !important; 
+    
+    /* Dimensões Padronizadas (Pequeno e Elegante) */
+    padding: 6px 16px !important;  
+    font-size: 13px !important;
+    font-weight: 500 !important;
+    text-decoration: none !important;
+    
+    /* Formato Pílula Material 3 */
+    border-radius: 100px !important;
+    
+    transition: all 0.2s ease-in-out;
+    cursor: pointer;
+    box-shadow: none !important;
+}
+
+/* Efeito de Hover Unificado para todos os botões */
+.btn-planos-treino:hover,
+.btn-realizar-avaliacao:hover,
+.btn-primary:hover,
+.btn-outline-success:hover,
+.btn-outline-danger:hover,
+.btn-warning:hover, 
+.btn-danger:hover, 
+.btn-outline-dark:hover,
+.btn-secondary:hover {
+    background-color: #e8eaed !important; 
+    border-color: #d2d4d7 !important;
+    color: #202124 !important;
+    box-shadow: 0 1px 2px 0 rgba(60,64,67,0.3) !important;
+}
+
+/* Efeito de Clique (Active) Unificado */
+.btn-planos-treino:active,
+.btn-realizar-avaliacao:active,
+.btn-primary:active,
+.btn-outline-success:active,
+.btn-outline-danger:active,
+.btn-warning:active, 
+.btn-danger:active, 
+.btn-outline-dark:active,
+.btn-secondary:active {
+    background-color: #dee1e3 !important;
+    box-shadow: none !important;
+}
+
+
 /* Estilos gerais */
 body {
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
@@ -82,3 +148,156 @@ body {
     .flash-slot { min-width: 180px; max-width: 220px; height: 26px; min-height: 26px; }
     .flash-alert { font-size: 0.75rem; padding: 0.1rem 0.35rem; }
 }
+
+/* =============================
+   Botões – Padronização Global
+   =============================
+   Objetivo: centralizar a aparência dos botões usados nas páginas para facilitar personalização.
+   Observação: mantemos as classes do Bootstrap já usadas no HTML e aplicamos overrides aqui.
+
+/* Estilo Unificado Google Material 3 - Editar, Excluir, Sair e Voltar */
+.btn-warning, 
+.btn-danger, 
+.btn-outline-dark,
+.btn-secondary {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    
+    /* Cores neutras do Google (Material 3 Neutral Tonal) */
+    background-color: #f1f3f4 !important; 
+    color: #3c4043 !important;            
+    border: 1px solid #dadce0 !important; 
+    
+    /* Dimensões padronizadas e compactas */
+    padding: 6px 16px !important;  
+    font-size: 13px !important;
+    font-weight: 500 !important;
+    text-decoration: none !important;
+    
+    /* Formato pílula (Rounded) */
+    border-radius: 100px !important;
+    
+    transition: all 0.2s ease-in-out;
+    cursor: pointer;
+    box-shadow: none !important;
+}
+
+/* Efeito de Hover para todos */
+.btn-warning:hover, 
+.btn-danger:hover, 
+.btn-outline-dark:hover,
+.btn-secondary:hover {
+    background-color: #e8eaed !important; 
+    border-color: #d2d4d7 !important;
+    color: #202124 !important;
+    box-shadow: 0 1px 2px 0 rgba(60,64,67,0.3) !important;
+}
+
+/* Efeito de Clique para todos */
+.btn-warning:active, 
+.btn-danger:active, 
+.btn-outline-dark:active,
+.btn-secondary:active {
+    background-color: #dee1e3 !important;
+    box-shadow: none !important;
+}
+
+
+/* Tamanho pequeno consistente */
+.btn.btn-sm {
+    padding: 0.25rem 0.6rem;
+    font-size: 0.85rem;
+}
+
+/* Espaçamento padrão entre botões de ação */
+.btn + .btn {
+    margin-left: 0.25rem;
+}
+
+/* =============================
+   Botão Pesquisar (com ícone de lupa)
+   =============================
+   Onde são aplicados:
+   - templates/instrutor/turmas-instrutor.html (form de busca de turmas)
+   - templates/aluno/turmas-disponiveis.html (form de busca de turmas disponíveis)
+   Dica: aplique a classe .btn-pesquisar junto com .btn, .btn-outline-*, .btn-sm.
+*/
+.btn-pesquisar {
+    position: relative;
+    padding-left: 2rem; /* espaço para o ícone */
+}
+.btn-sm.btn-pesquisar { padding-left: 1.7rem; }
+.btn-pesquisar::before {
+    content: "";
+    display: inline-block;
+    width: 16px; height: 16px;
+    position: absolute; left: 0.6rem; top: 50%; transform: translateY(-50%);
+    background-repeat: no-repeat; background-size: contain;
+    /* Ícone padrão (cinza) */
+    background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%236c757d'><path d='M15.5 14h-.79l-.28-.27A6.471 6.471 0 0016 9.5 6.5 6.5 0 109.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0A4.5 4.5 0 1114 9.5 4.5 4.5 0 019.5 14z'/></svg>");
+}
+.btn-outline-primary.btn-pesquisar::before,
+.btn-primary.btn-pesquisar::before {
+    /* Ícone azul para botões primários */
+    background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%234a6cf7'><path d='M15.5 14h-.79l-.28-.27A6.471 6.471 0 0016 9.5 6.5 6.5 0 109.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0A4.5 4.5 0 1114 9.5 4.5 4.5 0 019.5 14z'/></svg>");
+}
+.btn-outline-secondary.btn-pesquisar::before,
+.btn-secondary.btn-pesquisar::before {
+    /* Ícone cinza para botões secundários */
+    background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%236c757d'><path d='M15.5 14h-.79l-.28-.27A6.471 6.471 0 0016 9.5 6.5 6.5 0 109.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0A4.5 4.5 0 1114 9.5 4.5 4.5 0 019.5 14z'/></svg>");
+}
+
+/* =============================
+   Botões em Janelas Pop-up (Modais)
+   =============================
+   Onde são aplicados:
+   - Modal de confirmação global (confirm-modal.js):
+     templates/* (injetado em diversas páginas) – seletor: #systemConfirmModal
+   - Modais de cadastro/edição:
+     templates/instrutor/turmas-instrutor.html (Criar/Editar Turma)
+     templates/instrutor/instrutores-instrutor.html (Cadastrar/Editar Instrutor)
+     templates/instrutor/alunos-instrutor.html (Cadastrar/Editar Aluno)
+
+   Use os estilos abaixo para padronizar ações dentro de modais (Confirmar/Cancelar).
+*/
+
+/* Confirmar em modais (padrão: vermelho para ações destrutivas; pode trocar aqui) */
+#systemConfirmModal .modal-footer .btn[data-action="confirm"] {
+    background-color: #e55353;
+    border-color: #dc3f3f;
+    color: #fff;
+}
+#systemConfirmModal .modal-footer .btn[data-action="confirm"]:hover,
+#systemConfirmModal .modal-footer .btn[data-action="confirm"]:focus {
+    background-color: #d94444;
+    border-color: #c93636;
+}
+
+/* Cancelar em modais */
+#systemConfirmModal .modal-footer .btn[data-action="cancel"] {
+    color: #6c757d;
+    border-color: #6c757d;
+    background-color: transparent;
+}
+#systemConfirmModal .modal-footer .btn[data-action="cancel"]:hover,
+#systemConfirmModal .modal-footer .btn[data-action="cancel"]:focus {
+    color: #fff;
+    background-color: #6c757d;
+    border-color: #6c757d;
+}
+
+/* Espaçamento e alinhamento padrão para rodapés de modais */
+.modal-footer .btn { min-width: 110px; }
+
+/* =============================
+   Botões de Cadastrar
+   =============================
+    Onde são aplicados:
+   - templates/instrutor/instrutores-instrutor.html (botão "Cadastrar" no modal)
+   - templates/instrutor/alunos-instrutor.html (botão "Cadastrar Aluno" no modal)
+    - templates/instrutor/planos-aluno.html (link "Criar Plano de Treino")
+   - também pode ser usado em outros pontos de cadastro, adicionando a classe .btn-cadastrar
+
+   Observação: os botões de cadastrar são, por padrão, .btn-primary; aqui oferecemos uma
+   classe adicional (.btn-cadastrar) para fácil customização sem alterar o tipo de ação.

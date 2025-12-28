@@ -45,7 +45,7 @@
                     </div>
                     <form class="d-flex" th:action="@{/aluno/turmas/disponiveis}" method="get" style="max-width: 360px; width: 100%;">
                         <input type="text" class="form-control form-control-sm me-2" name="q" placeholder="Pesquisar por nome" th:value="${q}">
-                        <button type="submit" class="btn btn-outline-primary btn-sm">🔍</button>
+                           <button class="btn btn-outline-secondary btn-pesquisar" type="submit" aria-label="Pesquisar" title="Pesquisar"></button>
                     </form>
                 </div>
                 <p class="text-muted">Turmas de todos os instrutores disponíveis.</p>
