@@ -217,6 +217,50 @@ public class AlunoController {
         return "aluno/turmas-disponiveis";
     }
 
+    // Detalhe de uma turma (origem: Minhas Turmas)
+    @GetMapping("/turmas/{id}")
+    public String detalheTurmaAluno(@PathVariable Long id, Model model, HttpSession session) {
+        Aluno aluno = (Aluno) session.getAttribute("aluno");
+        if (aluno == null) {
+            aluno = alunoService.listarTodos().isEmpty() ? null : alunoService.listarTodos().get(0);
+        }
+        if (aluno == null) {
+            return "redirect:/aluno/login";
+        }
+        var turmaOpt = turmaService.buscarPorId(id);
+        if (turmaOpt.isEmpty()) {
+            return "redirect:/aluno/turmas";
+        }
+        var turma = turmaOpt.get();
+        model.addAttribute("aluno", aluno);
+        model.addAttribute("turma", turma);
+        model.addAttribute("alunosTurma", turma.getAlunos()); // exibir apenas nomes na view
+        model.addAttribute("backUrl", "/aluno/turmas");
+        return "aluno/turma-detalhe";
+    }
+
+    // Detalhe de uma turma (origem: Turmas Disponíveis)
+    @GetMapping("/turmas/disponiveis/{id}")
+    public String detalheTurmaDisponivel(@PathVariable Long id, Model model, HttpSession session) {
+        Aluno aluno = (Aluno) session.getAttribute("aluno");
+        if (aluno == null) {
+            aluno = alunoService.listarTodos().isEmpty() ? null : alunoService.listarTodos().get(0);
+        }
+        if (aluno == null) {
+            return "redirect:/aluno/login";
+        }
+        var turmaOpt = turmaService.buscarPorId(id);
+        if (turmaOpt.isEmpty()) {
+            return "redirect:/aluno/turmas/disponiveis";
+        }
+        var turma = turmaOpt.get();
+        model.addAttribute("aluno", aluno);
+        model.addAttribute("turma", turma);
+        model.addAttribute("alunosTurma", turma.getAlunos());
+        model.addAttribute("backUrl", "/aluno/turmas/disponiveis");
+        return "aluno/turma-detalhe";
+    }
+
     // Matricular aluno em turma
     @PostMapping("/turmas/matricular/{id}")
     public String matricularEmTurma(@PathVariable Long id, HttpSession session, RedirectAttributes ra) {

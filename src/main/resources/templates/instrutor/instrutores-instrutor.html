@@ -230,7 +230,7 @@
                                         th:data-nascimento="${i.dataNascimento != null ? #temporals.format(i.dataNascimento, 'yyyy-MM-dd') : ''}"
                                         th:data-admin="${i.admin}">Editar</button>
                                     <form th:action="@{/instrutor/instrutores/excluir/{cpf}(cpf=${i.cpf})}" method="post" style="display:inline;"
-                                        onsubmit="return confirm('Tem certeza que deseja excluir este instrutor?')">
+                                        onsubmit="return handleConfirmSubmit(event)" data-confirm="Tem certeza que deseja excluir este instrutor?">
                                         <button type="submit" class="btn btn-sm btn-danger">Excluir</button>
                                     </form>
                                 </td>
@@ -244,6 +244,8 @@
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.mask/1.14.16/jquery.mask.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
+    <script th:src="@{/js/confirm-modal.js}"></script>
+    <script th:src="@{/js/confirm-modal.js}"></script>
     <!-- Injeta token CSRF automaticamente em todos os formulários POST desta página -->
     <script th:inline="javascript">
         const CSRF_PARAM = '[[${_csrf.parameterName}]]';
@@ -366,17 +368,19 @@
         function confirmarExclusaoInstrutor(){
             const cpf = document.getElementById('selectInstrutorExcluir').value;
             if(!cpf){ alert('Selecione um instrutor!'); return; }
-            if(!confirm('Tem certeza que deseja excluir este instrutor?')) return;
-            const action = '/instrutor/instrutores/excluir/' + encodeURIComponent(cpf);
-            const form = document.createElement('form');
-            form.method = 'post';
-            form.action = action;
-            // CSRF para formulário dinâmico
-            const input = document.createElement('input');
-            input.type = 'hidden'; input.name = CSRF_PARAM; input.value = CSRF_TOKEN;
-            form.appendChild(input);
-            document.body.appendChild(form);
-            form.submit();
+            showConfirm('Tem certeza que deseja excluir este instrutor?').then(function(ok){
+                if(!ok) return;
+                const action = '/instrutor/instrutores/excluir/' + encodeURIComponent(cpf);
+                const form = document.createElement('form');
+                form.method = 'post';
+                form.action = action;
+                // CSRF para formulário dinâmico
+                const input = document.createElement('input');
+                input.type = 'hidden'; input.name = CSRF_PARAM; input.value = CSRF_TOKEN;
+                form.appendChild(input);
+                document.body.appendChild(form);
+                form.submit();
+            });
         }
 
         function editarInstrutorLinha(button){

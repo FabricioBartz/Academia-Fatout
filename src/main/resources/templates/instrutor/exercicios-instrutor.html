@@ -182,7 +182,7 @@
                                 <td th:text="${exercicio.equipamento}">Equipamento</td>
                                 <td>
                                     <button class="btn btn-sm btn-warning" onclick="editarExercicio(this)" th:data-id="${exercicio.id}" th:data-nome="${exercicio.nome}" th:data-equipamento="${exercicio.equipamento}" th:data-grupo="${exercicio.grupoMuscular}" th:data-instrucoes="${exercicio.instrucoes}" th:data-descricao="${exercicio.descricao}">Editar</button>
-                                    <form method="post" th:action="@{/instrutor/exercicios/excluir/{id}(id=${exercicio.id})}" style="display:inline;" onsubmit="return confirm('Tem certeza que deseja excluir este exercício?')">
+                                    <form method="post" th:action="@{/instrutor/exercicios/excluir/{id}(id=${exercicio.id})}" style="display:inline;" onsubmit="return handleConfirmSubmit(event)" data-confirm="Tem certeza que deseja excluir este exercício?">
                                         <button type="submit" class="btn btn-sm btn-danger">Excluir</button>
                                     </form>
                                 </td>
@@ -194,6 +194,7 @@
         </div>
     </div>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
+    <script th:src="@{/js/confirm-modal.js}"></script>
     <script>
         // Auto-dismiss para mensagens flash
         document.addEventListener('DOMContentLoaded', function() {

@@ -195,14 +195,16 @@
                 alert('Erro: CPF do aluno não encontrado');
                 return;
             }
-            if (confirm('Tem certeza que deseja remover este aluno? Essa ação não pode ser desfeita!')) {
+            showConfirm('Tem certeza que deseja remover este aluno? Essa ação não pode ser desfeita!').then(function(ok){
+                if(!ok) return;
                 const form = document.createElement('form');
                 form.method = 'post';
                 form.action = '/instrutor/alunos/excluir/' + encodeURIComponent(alunoData.cpf);
                 document.body.appendChild(form);
                 form.submit();
-            }
+            });
         }
     </script>
+    <script th:src="@{/js/confirm-modal.js}"></script>
 </body>
 </html>

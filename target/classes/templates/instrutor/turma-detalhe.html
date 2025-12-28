@@ -82,7 +82,7 @@
                                 <ul class="list-group" th:if="${alunos != null && !#lists.isEmpty(alunos)}">
                                     <li class="list-group-item d-flex justify-content-between align-items-center" th:each="a : ${alunos}">
                                         <span th:text="${a.nome} + ' (' + ${a.cpf} + ')'">João Silva</span>
-                                        <form th:action="@{/instrutor/turmas/{id}/remover-aluno/{cpf}(id=${turma.id}, cpf=${a.cpf})}" method="post" onsubmit="return confirm('Remover este aluno da turma?')">
+                                        <form th:action="@{/instrutor/turmas/{id}/remover-aluno/{cpf}(id=${turma.id}, cpf=${a.cpf})}" method="post" onsubmit="return handleConfirmSubmit(event)" data-confirm="Remover este aluno da turma?">
                                             <button type="submit" class="btn btn-outline-danger btn-sm">Remover</button>
                                         </form>
                                     </li>
@@ -95,5 +95,6 @@
         </div>
     </div>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
+    <script th:src="@{/js/confirm-modal.js}"></script>
 </body>
 </html>
