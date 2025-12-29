@@ -4,9 +4,10 @@
 .btn-planos-treino,
 .btn-realizar-avaliacao,
 .btn-primary,
+.btn-danger,
 .btn-outline-success,
 .btn-outline-danger,
-.btn-warning, /*botao editar*/
+
 .btn-outline-dark,
 .btn-secondary {
     display: inline-flex;
@@ -14,8 +15,8 @@
     justify-content: center;
     
     /* Cores Neutras do Google */
-    background-color: #f1f3f4 !important; 
-    color: #3c4043 !important;            
+    background-color: #4a6cf7 !important; 
+    color: #ffffff !important;            
     border: 1px solid #dadce0 !important; 
     
     /* Dimensões Padronizadas (Pequeno e Elegante) */
@@ -36,14 +37,14 @@
 .btn-planos-treino:hover,
 .btn-realizar-avaliacao:hover,
 .btn-primary:hover,
+.btn-danger:hover,
 .btn-outline-success:hover,
-.btn-outline-danger:hover,
-.btn-warning:hover, 
+.btn-outline-danger:hover, 
 .btn-outline-dark:hover,
 .btn-secondary:hover {
-    background-color: #e8eaed !important; 
+    background-color: #2d43a6 !important; 
     border-color: #d2d4d7 !important;
-    color: #202124 !important;
+    color: #ffffff !important;
     box-shadow: 0 1px 2px 0 rgba(60,64,67,0.3) !important;
 }
 
@@ -51,9 +52,9 @@
 .btn-planos-treino:active,
 .btn-realizar-avaliacao:active,
 .btn-primary:active,
+.btn-danger:active,
 .btn-outline-success:active,
 .btn-outline-danger:active,
-.btn-warning:active, 
 .btn-outline-dark:active,
 .btn-secondary:active {
     background-color: #dee1e3 !important;
@@ -153,7 +154,7 @@ body {
    Observação: mantemos as classes do Bootstrap já usadas no HTML e aplicamos overrides aqui.
 
 /* Estilo Unificado Google Material 3 - Excluir, Sair e Voltar */
-.btn-danger, 
+.btn-warning, /*botao editar*/ 
 .btn-outline-dark,
 .btn-secondary {
     display: inline-flex;
@@ -161,8 +162,8 @@ body {
     justify-content: center;
     
     /* Cores neutras do Google (Material 3 Neutral Tonal) */
-    background-color: #4a6cf7 !important; 
-    color: #ffffff !important;            
+    background-color: #f1f3f4 !important; 
+    color: #3c4043 !important;            
     border: 1px solid #dadce0 !important; 
     
     /* Dimensões padronizadas e compactas */
@@ -180,17 +181,17 @@ body {
 }
 
 /* Efeito de Hover para todos */
-.btn-danger:hover,
+.btn-warning:hover,
 .btn-outline-dark:hover,
 .btn-secondary:hover {
-    background-color: #2d43a6 !important; 
+    background-color: #e8eaed !important; 
     border-color: #d2d4d7 !important;
-    color: #ffffff !important;
+    color: #3c4043 !important;
     box-shadow: 0 1px 2px 0 rgba(60,64,67,0.3) !important;
 }
 
 /* Efeito de Clique para todos */
-.btn-danger:active,
+.btn-warning:active,
 .btn-outline-dark:active,
 .btn-secondary:active {
     background-color: #dee1e3 !important;

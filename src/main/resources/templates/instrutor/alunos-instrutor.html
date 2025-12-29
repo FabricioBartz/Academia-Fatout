@@ -479,6 +479,7 @@
             const email = button.getAttribute('data-email');
             const telefone = button.getAttribute('data-telefone');
             const dataNascimento = button.getAttribute('data-data');
+            const inicioIso = button.getAttribute('data-inicio') || '';
             const objetivo = button.getAttribute('data-objetivo');
             
             document.getElementById('editCpf').value = cpf;
@@ -487,6 +488,7 @@
             document.getElementById('editTelefone').value = telefone;
             $('#editTelefone').trigger('input'); //máscara do telefone
             document.getElementById('editDataNascimento').value = dataNascimento;
+            document.getElementById('editDataInicio').value = inicioIso;
             document.getElementById('editObjetivo').value = objetivo;
             
             const modal = new bootstrap.Modal(document.getElementById('editarAlunoModal'));
