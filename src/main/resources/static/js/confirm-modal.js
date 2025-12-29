@@ -1,11 +1,30 @@
 (function(){
-  // Create a Bootstrap modal for confirmations if not present
-  function ensureModal(){
-    let modal = document.getElementById('systemConfirmModal');
-    if (modal) return modal;
+  // Detect current role (aluno/instrutor) based on body or URL
+  function detectRole(){
+    var role = (document.body && document.body.dataset && document.body.dataset.role) || '';
+    if (role) return role.toLowerCase();
+    var path = (window.location && window.location.pathname || '').toLowerCase();
+    if (path.indexOf('/instrutor') !== -1) return 'instrutor';
+    if (path.indexOf('/aluno') !== -1) return 'aluno';
+    return 'default';
+  }
+
+  // Create a Bootstrap modal for confirmations, role-scoped
+  function ensureModal(role){
+    role = role || detectRole();
+    var modalId = 'systemConfirmModal';
+    var modalClass = 'confirm-modal-default';
+    if (role === 'aluno') { modalId = 'systemConfirmModalAluno'; modalClass = 'confirm-modal-aluno'; }
+    else if (role === 'instrutor') { modalId = 'systemConfirmModalInstrutor'; modalClass = 'confirm-modal-instrutor'; }
+
+    var modal = document.getElementById(modalId) || document.getElementById('systemConfirmModal');
+    if (modal && modal.id === modalId) return modal;
+    if (modal && modal.id === 'systemConfirmModal' && role === 'default') return modal;
+
+    // Create new modal element
     modal = document.createElement('div');
-    modal.id = 'systemConfirmModal';
-    modal.className = 'modal fade';
+    modal.id = modalId;
+    modal.className = 'modal fade ' + modalClass;
     modal.tabIndex = -1;
     modal.setAttribute('aria-hidden','true');
     modal.innerHTML = [
@@ -16,7 +35,7 @@
       '      <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>',
       '    </div>',
       '    <div class="modal-body">',
-      '      <p id="systemConfirmMessage" class="mb-0"></p>',
+      '      <p class="mb-0" data-role="message"></p>',
       '    </div>',
       '    <div class="modal-footer">',
       '      <button type="button" class="btn btn-secondary" data-action="cancel">Cancelar</button>',
@@ -34,9 +53,10 @@
     var confirmText = options.confirmText || 'Confirmar';
     var cancelText = options.cancelText || 'Cancelar';
     var titleText = options.title || 'Confirmar ação';
+    var role = (options.role || detectRole());
 
-    var modalEl = ensureModal();
-    var msgEl = modalEl.querySelector('#systemConfirmMessage');
+    var modalEl = ensureModal(role);
+    var msgEl = modalEl.querySelector('[data-role="message"]');
     var confirmBtn = modalEl.querySelector('[data-action="confirm"]');
     var cancelBtn = modalEl.querySelector('[data-action="cancel"]');
     var titleEl = modalEl.querySelector('.modal-title');

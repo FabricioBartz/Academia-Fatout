@@ -7,7 +7,6 @@
 .btn-outline-success,
 .btn-outline-danger,
 .btn-warning, 
-.btn-danger, 
 .btn-outline-dark,
 .btn-secondary {
     display: inline-flex;
@@ -40,7 +39,6 @@
 .btn-outline-success:hover,
 .btn-outline-danger:hover,
 .btn-warning:hover, 
-.btn-danger:hover, 
 .btn-outline-dark:hover,
 .btn-secondary:hover {
     background-color: #e8eaed !important; 
@@ -56,7 +54,6 @@
 .btn-outline-success:active,
 .btn-outline-danger:active,
 .btn-warning:active, 
-.btn-danger:active, 
 .btn-outline-dark:active,
 .btn-secondary:active {
     background-color: #dee1e3 !important;
@@ -156,7 +153,6 @@ body {
    Observação: mantemos as classes do Bootstrap já usadas no HTML e aplicamos overrides aqui.
 
 /* Estilo Unificado Google Material 3 - Editar, Excluir, Sair e Voltar */
-.btn-warning, 
 .btn-danger, 
 .btn-outline-dark,
 .btn-secondary {
@@ -165,8 +161,8 @@ body {
     justify-content: center;
     
     /* Cores neutras do Google (Material 3 Neutral Tonal) */
-    background-color: #f1f3f4 !important; 
-    color: #3c4043 !important;            
+    background-color: #4a6cf7 !important; 
+    color: #ffffff !important;            
     border: 1px solid #dadce0 !important; 
     
     /* Dimensões padronizadas e compactas */
@@ -185,18 +181,18 @@ body {
 
 /* Efeito de Hover para todos */
 .btn-warning:hover, 
-.btn-danger:hover, 
+.btn-danger:hover,
 .btn-outline-dark:hover,
 .btn-secondary:hover {
-    background-color: #e8eaed !important; 
+    background-color: #2d43a6 !important; 
     border-color: #d2d4d7 !important;
-    color: #202124 !important;
+    color: #ffffff !important;
     box-shadow: 0 1px 2px 0 rgba(60,64,67,0.3) !important;
 }
 
 /* Efeito de Clique para todos */
 .btn-warning:active, 
-.btn-danger:active, 
+.btn-danger:active,
 .btn-outline-dark:active,
 .btn-secondary:active {
     background-color: #dee1e3 !important;
@@ -251,18 +247,10 @@ body {
 /* =============================
    Botões em Janelas Pop-up (Modais)
    =============================
-   Onde são aplicados:
-   - Modal de confirmação global (confirm-modal.js):
-     templates/* (injetado em diversas páginas) – seletor: #systemConfirmModal
-   - Modais de cadastro/edição:
-     templates/instrutor/turmas-instrutor.html (Criar/Editar Turma)
-     templates/instrutor/instrutores-instrutor.html (Cadastrar/Editar Instrutor)
-     templates/instrutor/alunos-instrutor.html (Cadastrar/Editar Aluno)
-
    Use os estilos abaixo para padronizar ações dentro de modais (Confirmar/Cancelar).
 */
 
-/* Confirmar em modais (padrão: vermelho para ações destrutivas; pode trocar aqui) */
+Padrão global (fallback) 
 #systemConfirmModal .modal-footer .btn[data-action="confirm"] {
     background-color: #e55353;
     border-color: #dc3f3f;
@@ -274,7 +262,6 @@ body {
     border-color: #c93636;
 }
 
-/* Cancelar em modais */
 #systemConfirmModal .modal-footer .btn[data-action="cancel"] {
     color: #6c757d;
     border-color: #6c757d;
@@ -287,17 +274,83 @@ body {
     border-color: #6c757d;
 }
 
-/* Espaçamento e alinhamento padrão para rodapés de modais */
-.modal-footer .btn { min-width: 110px; }
+/* =============================
+   Modais de Confirmação – Aluno
+   ============================= */
+.confirm-modal-aluno .modal-content { border-top: 4px solid #45a049; }
+.confirm-modal-aluno .modal-header .modal-title { color: #2f6e32; }
+.confirm-modal-aluno .modal-footer .btn[data-action="confirm"] {
+    background-color: #45a049; /* verde aluno */
+    border-color: #3f9043;
+    color: #fff;
+}
+.confirm-modal-aluno .modal-footer .btn[data-action="confirm"]:hover,
+.confirm-modal-aluno .modal-footer .btn[data-action="confirm"]:focus {
+    background-color: #3e8e41;
+    border-color: #367c39;
+}
+.confirm-modal-aluno .modal-footer .btn[data-action="cancel"] {
+    color: #6c757d;
+    border-color: #6c757d;
+    background-color: transparent;
+}
+.confirm-modal-aluno .modal-footer .btn[data-action="cancel"]:hover,
+.confirm-modal-aluno .modal-footer .btn[data-action="cancel"]:focus {
+    color: #fff;
+    background-color: #6c757d;
+    border-color: #6c757d;
+}
 
 /* =============================
-   Botões de Cadastrar
-   =============================
-    Onde são aplicados:
-   - templates/instrutor/instrutores-instrutor.html (botão "Cadastrar" no modal)
-   - templates/instrutor/alunos-instrutor.html (botão "Cadastrar Aluno" no modal)
-    - templates/instrutor/planos-aluno.html (link "Criar Plano de Treino")
-   - também pode ser usado em outros pontos de cadastro, adicionando a classe .btn-cadastrar
+   Modais de Confirmação – Instrutor
+   ============================= */
+.confirm-modal-instrutor .modal-content { border-top: 4px solid #4a6cf7; }
+.confirm-modal-instrutor .modal-header .modal-title { color: #2d43a6; }
+.confirm-modal-instrutor .modal-footer .btn[data-action="confirm"] {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    
+    /* Cores neutras do Google (Material 3 Neutral Tonal) */
+    background-color: #4a6cf7 !important; 
+    color: #ffffff !important;            
+    border: 1px solid #dadce0 !important; 
+    
+    /* Dimensões padronizadas e compactas */
+    padding: 6px 16px !important;  
+    font-size: 13px !important;
+    font-weight: 500 !important;
+    text-decoration: none !important;
+    
+    /* Formato pílula (Rounded) */
+    border-radius: 100px !important;
+    
+    transition: all 0.2s ease-in-out;
+    cursor: pointer;
+    box-shadow: none !important;
+}
 
-   Observação: os botões de cadastrar são, por padrão, .btn-primary; aqui oferecemos uma
-   classe adicional (.btn-cadastrar) para fácil customização sem alterar o tipo de ação.
+.confirm-modal-instrutor .modal-footer .btn[data-action="confirm"]:hover{
+    background-color: #2d43a6 !important; 
+    border-color: #d2d4d7 !important;
+    color: #ffffff !important;
+    box-shadow: 0 1px 2px 0 rgba(60,64,67,0.3) !important;
+}
+.confirm-modal-instrutor .modal-footer .btn[data-action="confirm"]:focus {
+    background-color: #dee1e3 !important;
+    box-shadow: none !important;
+}
+.confirm-modal-instrutor .modal-footer .btn[data-action="cancel"] {
+    color: #6c757d;
+    border-color: #6c757d;
+    background-color: transparent;
+}
+.confirm-modal-instrutor .modal-footer .btn[data-action="cancel"]:hover,
+.confirm-modal-instrutor .modal-footer .btn[data-action="cancel"]:focus {
+    color: #fff;
+    background-color: #6c757d;
+    border-color: #6c757d;
+}
+
+/* Espaçamento e alinhamento padrão para rodapés de modais */
+.modal-footer .btn { min-width: 110px; }
