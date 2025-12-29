@@ -6,7 +6,7 @@
 .btn-primary,
 .btn-outline-success,
 .btn-outline-danger,
-.btn-warning, 
+.btn-warning, /*botao editar*/
 .btn-outline-dark,
 .btn-secondary {
     display: inline-flex;
@@ -152,7 +152,7 @@ body {
    Objetivo: centralizar a aparência dos botões usados nas páginas para facilitar personalização.
    Observação: mantemos as classes do Bootstrap já usadas no HTML e aplicamos overrides aqui.
 
-/* Estilo Unificado Google Material 3 - Editar, Excluir, Sair e Voltar */
+/* Estilo Unificado Google Material 3 - Excluir, Sair e Voltar */
 .btn-danger, 
 .btn-outline-dark,
 .btn-secondary {
@@ -180,7 +180,6 @@ body {
 }
 
 /* Efeito de Hover para todos */
-.btn-warning:hover, 
 .btn-danger:hover,
 .btn-outline-dark:hover,
 .btn-secondary:hover {
@@ -191,7 +190,6 @@ body {
 }
 
 /* Efeito de Clique para todos */
-.btn-warning:active, 
 .btn-danger:active,
 .btn-outline-dark:active,
 .btn-secondary:active {
@@ -250,7 +248,7 @@ body {
    Use os estilos abaixo para padronizar ações dentro de modais (Confirmar/Cancelar).
 */
 
-Padrão global (fallback) 
+/*Padrão global (fallback) 
 #systemConfirmModal .modal-footer .btn[data-action="confirm"] {
     background-color: #e55353;
     border-color: #dc3f3f;
@@ -272,7 +270,7 @@ Padrão global (fallback)
     color: #fff;
     background-color: #6c757d;
     border-color: #6c757d;
-}
+}*/
 
 /* =============================
    Modais de Confirmação – Aluno
@@ -341,15 +339,37 @@ Padrão global (fallback)
     box-shadow: none !important;
 }
 .confirm-modal-instrutor .modal-footer .btn[data-action="cancel"] {
-    color: #6c757d;
-    border-color: #6c757d;
-    background-color: transparent;
+     display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    
+    /* Cores Neutras do Google */
+    background-color: #f1f3f4 !important; 
+    color: #3c4043 !important;            
+    border: 1px solid #dadce0 !important; 
+    
+    /* Dimensões Padronizadas (Pequeno e Elegante) */
+    padding: 6px 16px !important;  
+    font-size: 13px !important;
+    font-weight: 500 !important;
+    text-decoration: none !important;
+    
+    /* Formato Pílula Material 3 */
+    border-radius: 100px !important;
+    
+    transition: all 0.2s ease-in-out;
+    cursor: pointer;
+    box-shadow: none !important;
 }
-.confirm-modal-instrutor .modal-footer .btn[data-action="cancel"]:hover,
+.confirm-modal-instrutor .modal-footer .btn[data-action="cancel"]:hover{
+    background-color: #e8eaed !important; 
+    border-color: #d2d4d7 !important;
+    color: #202124 !important;
+    box-shadow: 0 1px 2px 0 rgba(60,64,67,0.3) !important;
+}
 .confirm-modal-instrutor .modal-footer .btn[data-action="cancel"]:focus {
-    color: #fff;
-    background-color: #6c757d;
-    border-color: #6c757d;
+    background-color: #dee1e3 !important;
+    box-shadow: none !important;
 }
 
 /* Espaçamento e alinhamento padrão para rodapés de modais */
