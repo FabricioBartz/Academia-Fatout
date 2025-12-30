@@ -1,6 +1,6 @@
 /* --- PADRONIZAÇÃO TOTAL ACADEMIA FATOUT (ESTILO GOOGLE M3 CINZA) --- */
 
-/* Lista de todas as classes de botões do seu sistema */
+/* Lista de botões do sistema */
 .btn-planos-treino,
 .btn-realizar-avaliacao,
 .btn-primary,
@@ -30,7 +30,7 @@
     box-shadow: none !important;
 }
 
-/* Efeito de Hover Unificado para todos os botões */
+/* Efeito de Hover Unificado para os botões */
 .btn-planos-treino:hover,
 .btn-realizar-avaliacao:hover,
 .btn-primary:hover,
@@ -296,60 +296,56 @@ body {
    - templates/aluno/turmas-disponiveis.html (form de busca de turmas disponíveis)
    Dica: aplique a classe .btn-pesquisar junto com .btn, .btn-outline-*, .btn-sm.
 */
+/* --- BOTÃO PESQUISAR (ESTILO GOOGLE M3) --- */
+
 .btn-pesquisar {
+    display: inline-flex;
+    align-items: center;
     position: relative;
-    padding-left: 2rem; /* espaço para o ícone */
+    /* Ajuste de padding: mais espaço na esquerda para a lupa, e o mesmo dos outros na direita */
+    padding: 6px 16px 6px 2.4rem !important; 
+    
+    background-color: #f1f3f4 !important;
+    color: #3c4043 !important;
+    border: 1px solid #dadce0 !important;
+    border-radius: 100px !important; /* Formato pílula */
+    
+    font-size: 13px !important;
+    font-weight: 500 !important;
+    cursor: pointer;
+    transition: all 0.2s ease;
 }
-.btn-sm.btn-pesquisar { padding-left: 1.7rem; }
+
+/* Estado de Hover */
+.btn-pesquisar:hover {
+    background-color: #e8eaed !important;
+    border-color: #d2d4d7 !important;
+    color: #202124 !important;
+    box-shadow: 0 1px 2px 0 rgba(60,64,67,0.3) !important;
+}
+
+/* Configuração da Lupa (Ícone antes do texto) */
 .btn-pesquisar::before {
     content: "";
     display: inline-block;
-    width: 16px; height: 16px;
-    position: absolute; left: 0.6rem; top: 50%; transform: translateY(-50%);
-    background-repeat: no-repeat; background-size: contain;
-    /* Ícone padrão (cinza) */
-    background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%236c757d'><path d='M15.5 14h-.79l-.28-.27A6.471 6.471 0 0016 9.5 6.5 6.5 0 109.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0A4.5 4.5 0 1114 9.5 4.5 4.5 0 019.5 14z'/></svg>");
-}
-.btn-outline-primary.btn-pesquisar::before,
-.btn-primary.btn-pesquisar::before {
-    /* Ícone azul para botões primários */
-    background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%234a6cf7'><path d='M15.5 14h-.79l-.28-.27A6.471 6.471 0 0016 9.5 6.5 6.5 0 109.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0A4.5 4.5 0 1114 9.5 4.5 4.5 0 019.5 14z'/></svg>");
-}
-.btn-outline-secondary.btn-pesquisar::before,
-.btn-secondary.btn-pesquisar::before {
-    /* Ícone cinza para botões secundários */
-    background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%236c757d'><path d='M15.5 14h-.79l-.28-.27A6.471 6.471 0 0016 9.5 6.5 6.5 0 109.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0A4.5 4.5 0 1114 9.5 4.5 4.5 0 019.5 14z'/></svg>");
+    width: 16px; 
+    height: 16px;
+    position: absolute; 
+    left: 0.8rem; /* Posição da lupa dentro da pílula */
+    top: 50%; 
+    transform: translateY(-50%);
+    background-repeat: no-repeat; 
+    background-size: contain;
+    
+    /* Ícone da lupa original do Google (Cinza escuro #5f6368) */
+    background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%235f6368'><path d='M15.5 14h-.79l-.28-.27A6.471 6.471 0 0016 9.5 6.5 6.5 0 109.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0A4.5 4.5 0 1114 9.5 4.5 4.5 0 019.5 14z'/></svg>");
 }
 
-/* =============================
-   Botões em Janelas Pop-up (Modais)
-   =============================
-   Use os estilos abaixo para padronizar ações dentro de modais (Confirmar/Cancelar).
-*/
-
-/*Padrão global (fallback) 
-#systemConfirmModal .modal-footer .btn[data-action="confirm"] {
-    background-color: #e55353;
-    border-color: #dc3f3f;
-    color: #fff;
-}
-#systemConfirmModal .modal-footer .btn[data-action="confirm"]:hover,
-#systemConfirmModal .modal-footer .btn[data-action="confirm"]:focus {
-    background-color: #d94444;
-    border-color: #c93636;
+/* Ajuste específico para o tamanho SM do Bootstrap se necessário */
+.btn-sm.btn-pesquisar {
+    padding: 4px 14px 4px 2.2rem !important;
 }
 
-#systemConfirmModal .modal-footer .btn[data-action="cancel"] {
-    color: #6c757d;
-    border-color: #6c757d;
-    background-color: transparent;
-}
-#systemConfirmModal .modal-footer .btn[data-action="cancel"]:hover,
-#systemConfirmModal .modal-footer .btn[data-action="cancel"]:focus {
-    color: #fff;
-    background-color: #6c757d;
-    border-color: #6c757d;
-}*/
 
 /* =============================
    Modais de Confirmação – Aluno
