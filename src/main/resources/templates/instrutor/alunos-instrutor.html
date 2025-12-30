@@ -271,6 +271,16 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.mask/1.14.16/jquery.mask.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
     <script th:src="@{/js/confirm-modal.js}"></script>
+    <!-- Abre modal via parâmetro showModal=cadastrarAluno -->
+    <script th:inline="javascript">
+        document.addEventListener('DOMContentLoaded', function(){
+            var show = /*[[${#lists.isEmpty(param.showModal) ? '' : param.showModal.get(0)}]]*/ '';
+            if (show === 'cadastrarAluno') {
+                var el = document.getElementById('cadastrarAlunoModal');
+                if (el) { try { new bootstrap.Modal(el).show(); } catch (e) {} }
+            }
+        });
+    </script>
     <!-- Injeta token CSRF automaticamente em todos os formulários POST desta página -->
     <script th:inline="javascript">
         const CSRF_PARAM = '[[${_csrf.parameterName}]]';
