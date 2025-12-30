@@ -65,6 +65,43 @@ body {
     box-shadow: 0 2px 4px rgba(0,0,0,0.1);
 }
 
+/* =============================
+   Cabeçalhos por Papel
+   =============================
+   Unifica visual do header (navbar) para aluno vs instrutor.
+   Usa variáveis definidas em :root e força estilo com !important
+   para vencer inline styles existentes.
+*/
+body[data-role="instrutor"] .navbar {
+    background-color: var(--header-instrutor-bg) !important;
+    color: var(--header-instrutor-fg) !important;
+    box-shadow: var(--header-shadow) !important;
+    border-bottom: 1px solid #e0e3e7 !important;
+}
+body[data-role="aluno"] .navbar {
+    background-color: var(--header-aluno-bg) !important;
+    color: var(--header-aluno-fg) !important;
+    box-shadow: var(--header-shadow) !important;
+    border-bottom: 1px solid #e0e3e7 !important;
+}
+/* Texto e links dentro do header */
+body[data-role="instrutor"] .navbar .navbar-brand,
+body[data-role="instrutor"] .navbar .navbar-text,
+body[data-role="instrutor"] .navbar .nav-link {
+    color: var(--header-instrutor-fg) !important;
+}
+body[data-role="aluno"] .navbar .navbar-brand,
+body[data-role="aluno"] .navbar .navbar-text,
+body[data-role="aluno"] .navbar .nav-link {
+    color: var(--header-aluno-fg) !important;
+}
+/* Hover dos links do navbar */
+body[data-role="instrutor"] .navbar .nav-link:hover { opacity: .9; }
+body[data-role="aluno"] .navbar .nav-link:hover { opacity: .9; }
+/* Botões no header seguem o tema do papel */
+body[data-role="instrutor"] .navbar .btn { border-color: #ffffff55 !important; }
+body[data-role="aluno"] .navbar .btn { border-color: #ffffff55 !important; }
+
 .card {
     border-radius: 10px;
     box-shadow: 0 4px 6px rgba(0,0,0,0.1);
@@ -538,6 +575,13 @@ form.d-flex input[name="q"]:focus + .btn-pesquisar {
     --pesquisa-focus-ring: rgba(74,108,247,0.25); /* anel de foco */
     --pesquisa-height: 32px;          /* altura padrão */
     --pesquisa-height-sm: 28px;       /* altura compacta */
+
+    /* Cabeçalhos – Variáveis por papel */
+    --header-instrutor-bg: #4a6cf7;   /* azul instrutor */
+    --header-instrutor-fg: #ffffff;
+    --header-aluno-bg: #45a049;       /* verde aluno */
+    --header-aluno-fg: #ffffff;
+    --header-shadow: 0 2px 6px rgba(0,0,0,0.12);
 }
 
 /* Base dos cards de estatísticas no painel do instrutor */
@@ -654,18 +698,20 @@ form.d-flex input[name="q"] + .btn-pesquisar {
 
 /* Cor do item selecionado no Menu (Estilo Material 3) */
 .list-group-item.active {
-    background-color: #f1f3f4 !important; /* Lilás claro de fundo */
-    color: #21005D !important;            /* Texto roxo escuro */
-    border-color: #dadce0 !important;      /* Remove a borda azul */
+    background-color: #f1f3f4 !important; 
+    color: #21005D !important;            
+    border-color: #dadce0 !important;     
     font-weight: 600;                      /* Deixa o texto um pouco mais forte */
     border-radius: 8px;                    /* Leve arredondamento para parecer um botão do Google */
 }
 
 /* Efeito ao passar o mouse nos itens que NÃO estão ativos */
 .list-group-item-action:hover {
-    background-color: #e8eaed !important; /* Lilás claro de fundo */
-    color: #21005D !important;            /* Texto roxo escuro */
-    border-color: #dadce0 !important;      /* Remove a borda azul */
+    background-color: #e8eaed !important; 
+    color: #21005D !important;            
+    border-color: #dadce0 !important;     
     font-weight: 600;                      /* Deixa o texto um pouco mais forte */
     border-radius: 8px; 
 }
+
+
