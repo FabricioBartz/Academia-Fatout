@@ -196,6 +196,7 @@ body {
 
 /* Botoes do aluno - Ver historico, ver plano*/
 
+.btn-turma-dashboard,
 .btn-outline-success{
     display: inline-flex;
     align-items: center;
@@ -221,6 +222,7 @@ body {
 }
 
 /* Efeito de Hover para todos */
+.btn-turma-dashboard:hover,
 .btn-outline-success:hover {
     background-color: #2f6e32 !important; 
     border-color: #d2d4d7 !important;
@@ -229,6 +231,7 @@ body {
 }
 
 /* Efeito de Clique para todos */
+.btn-turma-dashboard:active,
 .btn-outline-success:active {
     background-color: #dee1e3 !important;
     box-shadow: none !important;
@@ -244,6 +247,46 @@ body {
 .btn + .btn {
     margin-left: 0.25rem;
 }
+/* Botoes do dashboard - exercicios*/
+
+.btn-addexercicio-dashboard{
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    
+    /* Cores neutras do Google (Material 3 Neutral Tonal) */
+    background-color: #14b8d4 !important; 
+    color: #ffffff !important;            
+    border: 1px solid #dadce0 !important; 
+    
+    /* Dimensões padronizadas e compactas */
+    padding: 6px 16px !important;  
+    font-size: 13px !important;
+    font-weight: 500 !important;
+    text-decoration: none !important;
+    
+    /* Formato pílula (Rounded) */
+    border-radius: 100px !important;
+    
+    transition: all 0.2s ease-in-out;
+    cursor: pointer;
+    box-shadow: none !important;
+}
+
+/* Efeito de Hover para todos */
+.btn-addexercicio-dashboard:hover {
+    background-color: #0d8ca6 !important; 
+    border-color: #d2d4d7 !important;
+    color: #ffffff !important;
+    box-shadow: 0 1px 2px 0 rgba(60,64,67,0.3) !important;
+}
+
+/* Efeito de Clique para todos */
+.btn-addexercicio-dashboard:active {
+    background-color: #dee1e3 !important;
+    box-shadow: none !important;
+}
+
 
 /* =============================
    Botão Pesquisar (com ícone de lupa)
@@ -435,3 +478,84 @@ body {
 
 /* Espaçamento e alinhamento padrão para rodapés de modais */
 .modal-footer .btn { min-width: 110px; }
+
+/* =============================
+   Painel do Instrutor – Cards
+   =============================
+   Objetivo: permitir personalização INDIVIDUAL dos três cards
+   do painel principal do instrutor sem alterar o HTML.
+   Como editar:
+   - Ajuste as variáveis abaixo para cada card.
+   - Elas sobrescrevem as cores do Bootstrap (bg-primary/success/info).
+*/
+
+/* Variáveis de personalização por card (valores padrão) */
+:root {
+    /* Card 1 – Alunos */
+    --instrutor-card-alunos-bg: #4a6cf7;   /* fundo */
+    --instrutor-card-alunos-fg: #ffffff;   /* texto */
+    --instrutor-card-alunos-shadow: 0 8px 20px rgba(74,108,247,0.25);
+
+    /* Card 2 – Minhas Turmas */
+    --instrutor-card-turmas-bg: #45a049;   /* verde escuro agradável */
+    --instrutor-card-turmas-fg: #ffffff;
+    --instrutor-card-turmas-shadow: 0 8px 20px rgba(31,122,84,0.25);
+
+    /* Card 3 – Exercícios */
+    --instrutor-card-exercicios-bg: #14b8d4; /* azul água */
+    --instrutor-card-exercicios-fg: #ffffff;
+    --instrutor-card-exercicios-shadow: 0 8px 20px rgba(20,184,212,0.25);
+}
+
+/* Base dos cards de estatísticas no painel do instrutor */
+body[data-role="instrutor"] .col-md-9 > .row:first-of-type .card {
+    border-radius: 16px;
+    transition: transform .15s ease, box-shadow .15s ease, filter .15s ease;
+    box-shadow: 0 6px 14px rgba(0,0,0,0.12);
+}
+body[data-role="instrutor"] .col-md-9 > .row:first-of-type .card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 10px 24px rgba(0,0,0,0.18);
+    filter: brightness(0.98);
+}
+
+/* Card 1 – Alunos */
+body[data-role="instrutor"] .col-md-9 > .row:first-of-type > .col-md-4:nth-child(1) .card {
+    background-color: var(--instrutor-card-alunos-bg) !important;
+    color: var(--instrutor-card-alunos-fg) !important;
+    box-shadow: var(--instrutor-card-alunos-shadow);
+}
+body[data-role="instrutor"] .col-md-9 > .row:first-of-type > .col-md-4:nth-child(1) .card .card-title,
+body[data-role="instrutor"] .col-md-9 > .row:first-of-type > .col-md-4:nth-child(1) .card .dashboard-stats,
+body[data-role="instrutor"] .col-md-9 > .row:first-of-type > .col-md-4:nth-child(1) .card .card-text {
+    color: var(--instrutor-card-alunos-fg) !important;
+}
+
+/* Card 2 – Minhas Turmas */
+body[data-role="instrutor"] .col-md-9 > .row:first-of-type > .col-md-4:nth-child(2) .card {
+    background-color: var(--instrutor-card-turmas-bg) !important;
+    color: var(--instrutor-card-turmas-fg) !important;
+    box-shadow: var(--instrutor-card-turmas-shadow);
+}
+body[data-role="instrutor"] .col-md-9 > .row:first-of-type > .col-md-4:nth-child(2) .card .card-title,
+body[data-role="instrutor"] .col-md-9 > .row:first-of-type > .col-md-4:nth-child(2) .card .dashboard-stats,
+body[data-role="instrutor"] .col-md-9 > .row:first-of-type > .col-md-4:nth-child(2) .card .card-text {
+    color: var(--instrutor-card-turmas-fg) !important;
+}
+
+/* Card 3 – Exercícios */
+body[data-role="instrutor"] .col-md-9 > .row:first-of-type > .col-md-4:nth-child(3) .card {
+    background-color: var(--instrutor-card-exercicios-bg) !important;
+    color: var(--instrutor-card-exercicios-fg) !important;
+    box-shadow: var(--instrutor-card-exercicios-shadow);
+}
+body[data-role="instrutor"] .col-md-9 > .row:first-of-type > .col-md-4:nth-child(3) .card .card-title,
+body[data-role="instrutor"] .col-md-9 > .row:first-of-type > .col-md-4:nth-child(3) .card .dashboard-stats,
+body[data-role="instrutor"] .col-md-9 > .row:first-of-type > .col-md-4:nth-child(3) .card .card-text {
+    color: var(--instrutor-card-exercicios-fg) !important;
+}
+
+/* Ajustes finos para números grandes */
+body[data-role="instrutor"] .col-md-9 > .row:first-of-type .dashboard-stats {
+    letter-spacing: .5px;
+}
