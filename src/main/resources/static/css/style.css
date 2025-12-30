@@ -5,9 +5,6 @@
 .btn-realizar-avaliacao,
 .btn-primary,
 .btn-danger,
-.btn-outline-success,
-.btn-outline-danger,
-
 .btn-outline-dark,
 .btn-secondary {
     display: inline-flex;
@@ -39,8 +36,6 @@
 .btn-primary:hover,
 .btn-danger:hover,
 .btn-outline-success:hover,
-.btn-outline-danger:hover, 
-.btn-outline-dark:hover,
 .btn-secondary:hover {
     background-color: #2d43a6 !important; 
     border-color: #d2d4d7 !important;
@@ -54,8 +49,6 @@
 .btn-primary:active,
 .btn-danger:active,
 .btn-outline-success:active,
-.btn-outline-danger:active,
-.btn-outline-dark:active,
 .btn-secondary:active {
     background-color: #dee1e3 !important;
     box-shadow: none !important;
@@ -156,6 +149,7 @@ body {
 /* Estilo Unificado Google Material 3 - Excluir, Sair e Voltar */
 .btn-warning, /*botao editar*/ 
 .btn-outline-dark,
+.btn-outline-danger,
 .btn-secondary {
     display: inline-flex;
     align-items: center;
@@ -183,6 +177,7 @@ body {
 /* Efeito de Hover para todos */
 .btn-warning:hover,
 .btn-outline-dark:hover,
+.btn-outline-danger:hover,
 .btn-secondary:hover {
     background-color: #e8eaed !important; 
     border-color: #d2d4d7 !important;
@@ -193,11 +188,51 @@ body {
 /* Efeito de Clique para todos */
 .btn-warning:active,
 .btn-outline-dark:active,
+.btn-outline-danger:active,
 .btn-secondary:active {
     background-color: #dee1e3 !important;
     box-shadow: none !important;
 }
 
+/* Botoes do aluno - Ver historico, ver plano*/
+
+.btn-outline-success{
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    
+    /* Cores neutras do Google (Material 3 Neutral Tonal) */
+    background-color: #45a049 !important; 
+    color: #ffffff !important;            
+    border: 1px solid #dadce0 !important; 
+    
+    /* Dimensões padronizadas e compactas */
+    padding: 6px 16px !important;  
+    font-size: 13px !important;
+    font-weight: 500 !important;
+    text-decoration: none !important;
+    
+    /* Formato pílula (Rounded) */
+    border-radius: 100px !important;
+    
+    transition: all 0.2s ease-in-out;
+    cursor: pointer;
+    box-shadow: none !important;
+}
+
+/* Efeito de Hover para todos */
+.btn-outline-success:hover {
+    background-color: #2f6e32 !important; 
+    border-color: #d2d4d7 !important;
+    color: #ffffff !important;
+    box-shadow: 0 1px 2px 0 rgba(60,64,67,0.3) !important;
+}
+
+/* Efeito de Clique para todos */
+.btn-outline-success:active {
+    background-color: #dee1e3 !important;
+    box-shadow: none !important;
+}
 
 /* Tamanho pequeno consistente */
 .btn.btn-sm {
@@ -276,17 +311,42 @@ body {
 /* =============================
    Modais de Confirmação – Aluno
    ============================= */
+.btn-outline-success,   
 .confirm-modal-aluno .modal-content { border-top: 4px solid #45a049; }
 .confirm-modal-aluno .modal-header .modal-title { color: #2f6e32; }
 .confirm-modal-aluno .modal-footer .btn[data-action="confirm"] {
-    background-color: #45a049; /* verde aluno */
-    border-color: #3f9043;
-    color: #fff;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    
+    /* Cores neutras do Google (Material 3 Neutral Tonal) */
+    background-color: #45a049 !important; 
+    color: #ffffff !important;            
+    border: 1px solid #dadce0 !important; 
+    
+    /* Dimensões padronizadas e compactas */
+    padding: 6px 16px !important;  
+    font-size: 13px !important;
+    font-weight: 500 !important;
+    text-decoration: none !important;
+    
+    /* Formato pílula (Rounded) */
+    border-radius: 100px !important;
+    
+    transition: all 0.2s ease-in-out;
+    cursor: pointer;
+    box-shadow: none !important;
 }
-.confirm-modal-aluno .modal-footer .btn[data-action="confirm"]:hover,
+
+.confirm-modal-aluno .modal-footer .btn[data-action="confirm"]:hover{
+    background-color: #2f6e32 !important; 
+    border-color: #d2d4d7 !important;
+    color: #ffffff !important;
+    box-shadow: 0 1px 2px 0 rgba(60,64,67,0.3) !important;
+}
 .confirm-modal-aluno .modal-footer .btn[data-action="confirm"]:focus {
-    background-color: #3e8e41;
-    border-color: #367c39;
+    background-color: #dee1e3 !important;
+    box-shadow: none !important;
 }
 .confirm-modal-aluno .modal-footer .btn[data-action="cancel"] {
     color: #6c757d;
