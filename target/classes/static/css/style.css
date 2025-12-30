@@ -305,9 +305,9 @@ body {
     /* Ajuste de padding: mais espaço na esquerda para a lupa, e o mesmo dos outros na direita */
     padding: 6px 16px 6px 2.4rem !important; 
     
-    background-color: #f1f3f4 !important;
-    color: #3c4043 !important;
-    border: 1px solid #dadce0 !important;
+    background-color: var(--pesquisa-bg) !important;
+    color: var(--pesquisa-fg) !important;
+    border: 1px solid var(--pesquisa-border) !important;
     border-radius: 100px !important; /* Formato pílula */
     
     font-size: 13px !important;
@@ -344,6 +344,35 @@ body {
 /* Ajuste específico para o tamanho SM do Bootstrap se necessário */
 .btn-sm.btn-pesquisar {
     padding: 4px 14px 4px 2.2rem !important;
+}
+
+/* Grupo unificado: input + botão se comportam como um único componente */
+form.d-flex input[name="q"].me-2 { margin-right: 0 !important; }
+form.d-flex input[name="q"] + .btn-pesquisar {
+    background-color: var(--pesquisa-bg) !important;
+    color: var(--pesquisa-fg) !important;
+    border-color: var(--pesquisa-border) !important;
+}
+/* Conectar as bordas para efeito "input-group" */
+form.d-flex input[name="q"] + .btn-pesquisar {
+    border-top-left-radius: 0 !important;
+    border-bottom-left-radius: 0 !important;
+}
+form.d-flex input[name="q"] {
+    border-top-right-radius: 0 !important;
+    border-bottom-right-radius: 0 !important;
+}
+/* Alturas alinhadas pelo mesmo token */
+form.d-flex input[name="q"],
+form.d-flex input.form-control-sm[name="q"],
+form.d-flex .btn-pesquisar,
+form.d-flex .btn-sm.btn-pesquisar {
+    height: auto; /* deixa o conteúdo definir, mas ajustamos via padding */
+}
+/* Foco conjunto: quando o input recebe foco, aplicamos anel também ao botão */
+form.d-flex input[name="q"]:focus + .btn-pesquisar {
+    box-shadow: 0 0 0 3px var(--pesquisa-focus-ring) !important;
+    border-color: #c7c9cc !important;
 }
 
 
@@ -501,6 +530,14 @@ body {
     --instrutor-card-exercicios-bg: #14b8d4; /* azul água */
     --instrutor-card-exercicios-fg: #ffffff;
     --instrutor-card-exercicios-shadow: 0 8px 20px rgba(20,184,212,0.25);
+
+    /* Barra de Pesquisa – Variáveis de personalização */
+    --pesquisa-bg: #f1f3f4;            /* fundo padrão */
+    --pesquisa-fg: #202124;           /* texto */
+    --pesquisa-border: #dadce0;       /* cor da borda */
+    --pesquisa-focus-ring: rgba(74,108,247,0.25); /* anel de foco */
+    --pesquisa-height: 32px;          /* altura padrão */
+    --pesquisa-height-sm: 28px;       /* altura compacta */
 }
 
 /* Base dos cards de estatísticas no painel do instrutor */
@@ -554,4 +591,81 @@ body[data-role="instrutor"] .col-md-9 > .row:first-of-type > .col-md-4:nth-child
 /* Ajustes finos para números grandes */
 body[data-role="instrutor"] .col-md-9 > .row:first-of-type .dashboard-stats {
     letter-spacing: .5px;
+}
+/* =============================
+   Barra de Pesquisa (input) – ao lado do .btn-pesquisar
+   =============================
+   Onde são aplicados:
+   - templates/instrutor/turmas-instrutor.html (input[type="search"], name="q")
+   - templates/aluno/turmas-disponiveis.html (input.form-control-sm, name="q")
+   Objetivo: permitir edição do estilo da barra diretamente aqui.
+*/
+/* Padrão: altura e visual harmonizados com Material 3 neutro */
+form.d-flex input[name="q"] {
+    background-color: var(--pesquisa-bg) !important;
+    color: var(--pesquisa-fg) !important;
+    border: 1px solid var(--pesquisa-border) !important;
+    /* Pílula à esquerda, quadrado à direita para continuidade com o botão */
+    border-radius: 100px 0 0 100px !important;
+    border-right-width: 0 !important;
+    height: var(--pesquisa-height) !important;
+    padding: 6px 14px !important;
+    line-height: 1.2 !important;
+    transition: box-shadow .15s ease, border-color .15s ease, background-color .15s ease;
+}
+/* Compacto: usado quando o input tem .form-control-sm */
+form.d-flex input.form-control-sm[name="q"] {
+    height: var(--pesquisa-height-sm) !important;
+    padding: 4px 12px !important;
+}
+/* Placeholder mais suave */
+form.d-flex input[name="q"]::placeholder {
+    color: #6c757d !important;
+    opacity: .9;
+}
+/* Foco com anel suave e fundo claro */
+form.d-flex input[name="q"]:focus {
+    background-color: #ffffff !important;
+    border-color: #c7c9cc !important;
+    box-shadow: 0 0 0 3px var(--pesquisa-focus-ring) !important;
+    outline: none !important;
+}
+/* Alinhar altura do botão de pesquisa ao input */
+.btn-pesquisar {
+    height: var(--pesquisa-height) !important;
+    border-radius: 100px !important;
+}
+.btn-sm.btn-pesquisar {
+    height: var(--pesquisa-height-sm) !important;
+}
+/* Quando adjacente ao input, o botão mantém continuidade (quadrado à esquerda) */
+form.d-flex input[name="q"] + .btn-pesquisar {
+    border-radius: 0 100px 100px 0 !important;
+    border-left-width: 0 !important;
+}
+@media (max-width: 576px) {
+    /* Em telas pequenas, garantir boa cliqueabilidade */
+    form.d-flex {
+        gap: .25rem;
+        width: 100%;
+    }
+    form.d-flex input[name="q"] { width: 100%; }
+}
+
+/* Cor do item selecionado no Menu (Estilo Material 3) */
+.list-group-item.active {
+    background-color: #f1f3f4 !important; /* Lilás claro de fundo */
+    color: #21005D !important;            /* Texto roxo escuro */
+    border-color: #dadce0 !important;      /* Remove a borda azul */
+    font-weight: 600;                      /* Deixa o texto um pouco mais forte */
+    border-radius: 8px;                    /* Leve arredondamento para parecer um botão do Google */
+}
+
+/* Efeito ao passar o mouse nos itens que NÃO estão ativos */
+.list-group-item-action:hover {
+    background-color: #e8eaed !important; /* Lilás claro de fundo */
+    color: #21005D !important;            /* Texto roxo escuro */
+    border-color: #dadce0 !important;      /* Remove a borda azul */
+    font-weight: 600;                      /* Deixa o texto um pouco mais forte */
+    border-radius: 8px; 
 }

@@ -1,3 +1,4 @@
+## Como Rodar (Desenvolvimento)
 execute o seguinte comando no terminal:
 
 mvn -DskipTests spring-boot:run
