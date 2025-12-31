@@ -9,13 +9,16 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.13.1/font/bootstrap-icons.min.css">
 </head>
 <body data-role="instrutor">
-    <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
+<!--Nome do usuário-->
+   <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
         <div class="container">
-            <a class="navbar-brand" href="#">Academia FatOut</a>
-            <div class="navbar-text text-white">
-                Instrutor: <span th:text="${instrutor.nome}">Carlos Silva</span>
-                <a href="/" class="btn btn-outline-dark btn-sm ms-3">Sair</a>
-            </div>
+             <a class="navbar-brand" href="#">Academia FatOut</a>
+                <div class="navbar-text text-white d-flex align-items-center"><span class="me-3">Instrutor: <strong th:text="${instrutor.nome}">Carlos Silva</strong></span>
+                    <div class="profile-nav-container me-3"><img th:if="${instrutor.fotoPerfil != null && !#strings.isEmpty(instrutor.fotoPerfil)}" th:src="@{'/uploads/perfis/' + ${instrutor.fotoPerfil}}" alt="Foto" class="nav-avatar">
+                    <i th:unless="${instrutor.fotoPerfil != null && !#strings.isEmpty(instrutor.fotoPerfil)}" class="bi bi-person-circle nav-avatar-icon"></i>
+                </div>
+                <a href="/" class="btn btn-outline-dark btn-sm">Sair</a>
+                </div>
         </div>
     </nav>
 

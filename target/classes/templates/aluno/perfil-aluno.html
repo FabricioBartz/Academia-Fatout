@@ -9,12 +9,15 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.13.1/font/bootstrap-icons.min.css">
 </head>
 <body data-role="aluno">
+    <!--Nome do usuário-->
     <nav class="navbar navbar-expand-lg navbar-dark" style="background-color:#45a049;">
         <div class="container">
             <a class="navbar-brand" href="#">Academia FatOut</a>
-            <div class="navbar-text text-white">
-                Aluno: <span th:text="${aluno.nome}">João Silva</span>
-                <a href="/" class="btn btn-outline-dark btn-sm ms-3">Sair</a>
+            <div class="navbar-text text-white d-flex align-items-center"><span class="me-3">Aluno: <strong th:text="${aluno.nome}">João Silva</strong></span>
+                 <div class="profile-nav-container me-3"><img th:if="${aluno.fotoPerfil != null && !#strings.isEmpty(aluno.fotoPerfil)}" th:src="@{'/uploads/perfis/' + ${aluno.fotoPerfil} + '?v=' + ${#dates.createNow().time}}" alt="Foto" class="nav-avatar">
+                    <i th:unless="${aluno.fotoPerfil != null && !#strings.isEmpty(aluno.fotoPerfil)}" class="bi bi-person-circle nav-avatar-icon"></i>
+                </div>
+                <a href="/" class="btn btn-outline-dark btn-sm">Sair</a>
             </div>
         </div>
     </nav>
@@ -51,7 +54,7 @@
                         <div class="card h-100">
                             <div class="card-body">
                                 <p class="card-text"><strong>Email:</strong> <span th:text="${aluno.email}">email</span></p>
-                                <p class="card-text"><strong>Telefone:</strong><span th:text="${aluno.telefone != null && aluno.telefone.length() == 11 ? aluno.telefone.replaceAll('(\\d{2})(\\d{5})(\\d{4})', '($1) $2-$3') : aluno.telefone}"> (11) 99999-8888</span></p>
+                                <p><strong>Telefone:</strong> <span th:text="${aluno.telefone != null && aluno.telefone.replaceAll('\D', '').length() == 11 ? '(' + aluno.telefone.substring(0,2) + ') ' + aluno.telefone.substring(2,7) + '-' + aluno.telefone.substring(7,11) : aluno.telefone}">(11) 98765-4321</span></p>
                                 <p class="card-text"><strong>Data de Nascimento:</strong><span th:text="${#temporals.format(aluno.dataNascimento, ' dd/MM/yyyy')}">14/03/1995</span></p>
                                 <p class="card-text"><strong>Objetivo:</strong> <span th:text="${aluno.objetivo}">objetivo</span></p>
                                 <p class="card-text"><strong>Início na Academia:</strong>

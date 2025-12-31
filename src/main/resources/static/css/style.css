@@ -747,3 +747,27 @@ form.d-flex input[name="q"] + .btn-pesquisar {
 }
 
 
+/* Container da foto na navbar */
+.profile-nav-container {
+    width: 35px;
+    height: 35px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+/* A foto redonda real */
+.nav-avatar {
+    width: 35px;
+    height: 35px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 1px solid rgba(255, 255, 255, 0.5); /* Bordinha suave */
+}
+
+/* O ícone padrão quando não tem foto */
+.nav-avatar-icon {
+    font-size: 30px; /* Um pouco maior que o texto */
+    color: rgba(255, 255, 255, 0.8);
+    line-height: 1;
+}
