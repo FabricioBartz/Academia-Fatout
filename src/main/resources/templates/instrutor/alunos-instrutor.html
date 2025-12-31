@@ -103,7 +103,8 @@
                                     </div>
                                     <div class="mb-3">
                                         <label for="fotoPerfilCadastro" class="form-label">Foto de Perfil</label>
-                                        <input type="file" id="fotoPerfilCadastro" name="file" class="form-control form-control-pesquisa" accept="image/*">
+                                        <input type="file" id="fotoPerfilCadastro" name="file" class="form-control form-control-pesquisa" accept="image/webp,image/jpeg,image/png">
+                                        <div class="form-text">Formatos: WebP, JPEG ou PNG. Tamanho máx.: 2 MB.</div>
                                     </div>
                                 </div>
                                 <div class="modal-footer">
@@ -156,7 +157,8 @@
                                     </div>
                                     <div class="mb-3">
                                         <label for="fotoPerfilEditar" class="form-label">Foto de Perfil</label>
-                                        <input type="file" id="fotoPerfilEditar" name="file" class="form-control form-control-pesquisa" accept="image/*">
+                                        <input type="file" id="fotoPerfilEditar" name="file" class="form-control form-control-pesquisa" accept="image/webp,image/jpeg,image/png">
+                                        <div class="form-text">Formatos: WebP, JPEG ou PNG. Tamanho máx.: 2 MB.</div>
                                     </div>
                                 </div>
                                 <div class="modal-footer">
@@ -381,6 +383,27 @@
                     e.preventDefault();
                 }
             });
+
+            // Validação client-side arquivos (cadastrar/editar)
+            const maxBytes = 2 * 1024 * 1024; // 2 MB
+            const tiposPermitidos = ['image/webp','image/jpeg','image/png'];
+            function validarArquivo($input, $submit){
+                const f = $input[0].files && $input[0].files[0];
+                if (!f) return;
+                const okTipo = tiposPermitidos.includes(f.type);
+                const okTamanho = f.size <= maxBytes;
+                if (!okTipo || !okTamanho) {
+                    $input.addClass('is-invalid');
+                    const msg = !okTipo ? 'Formato inválido (use WebP/JPEG/PNG).' : 'Arquivo acima de 2 MB.';
+                    $input[0].setCustomValidity(msg);
+                    $submit.prop('disabled', true);
+                } else {
+                    $input.removeClass('is-invalid');
+                    $input[0].setCustomValidity('');
+                }
+            }
+            $('#fotoPerfilCadastro').on('change', function(){ validarArquivo($('#fotoPerfilCadastro'), $('#btnCadastrarAluno')); });
+            $('#fotoPerfilEditar').on('change', function(){ validarArquivo($('#fotoPerfilEditar'), $('#btnSalvarEdicao')); });
         });
         // Auto-dismiss para mensagens flash
         document.addEventListener('DOMContentLoaded', function() {

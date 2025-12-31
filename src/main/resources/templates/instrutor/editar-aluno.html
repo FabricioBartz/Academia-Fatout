@@ -90,7 +90,8 @@
                     </div>
                     <div class="mb-2">
                         <label for="fotoPerfil" class="form-label">Foto de Perfil</label>
-                        <input type="file" class="form-control form-control-pesquisa" id="fotoPerfil" name="file" accept="image/*">
+                        <input type="file" class="form-control form-control-pesquisa" id="fotoPerfil" name="file" accept="image/webp,image/jpeg,image/png">
+                        <div class="form-text">Formatos: WebP, JPEG ou PNG. Tamanho máx.: 2 MB.</div>
                     </div>
                     
                     <div class="mt-2">
@@ -121,6 +122,30 @@
             validarTelefone();
             $('#telefone').on('input blur', validarTelefone);
             // Não tornar data de início obrigatória; sem validação adicional
+            // Validação client-side do arquivo (tipo e tamanho)
+            const maxBytes = 2 * 1024 * 1024; // 2 MB
+            const tiposPermitidos = ['image/webp','image/jpeg','image/png'];
+            const $file = $('#fotoPerfil');
+            const $submit = $('form.card button[type="submit"]');
+            $file.on('change', function(){
+                const f = this.files && this.files[0];
+                if (!f) return;
+                const okTipo = tiposPermitidos.includes(f.type);
+                const okTamanho = f.size <= maxBytes;
+                if (!okTipo || !okTamanho) {
+                    $file.addClass('is-invalid');
+                    const msg = !okTipo ? 'Formato inválido (use WebP/JPEG/PNG).' : 'Arquivo acima de 2 MB.';
+                    $file[0].setCustomValidity(msg);
+                    $submit.prop('disabled', true);
+                } else {
+                    $file.removeClass('is-invalid');
+                    $file[0].setCustomValidity('');
+                    // reabilita apenas se telefone válido também
+                    var digits = $('#telefone').val().replace(/\D/g, '');
+                    var valido = (digits.length === 11);
+                    $submit.prop('disabled', !valido);
+                }
+            });
         });
 
         document.addEventListener('DOMContentLoaded', function() {

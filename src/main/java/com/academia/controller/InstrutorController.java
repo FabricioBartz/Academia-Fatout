@@ -25,6 +25,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
+import org.springframework.beans.factory.annotation.Value;
 
 @Controller
 @RequestMapping("/instrutor")
@@ -36,6 +37,8 @@ public class InstrutorController {
     private final AlunoService alunoService;
     private final AvaliacaoService avaliacaoService;
     private final PlanoTreinoService planoTreinoService;
+    @Value("${app.upload.base-dir:${user.home}/academia/uploads}")
+    private String uploadBaseDir;
     
     public InstrutorController(InstrutorService instrutorService, TurmaService turmaService, ExercicioService exercicioService, AlunoService alunoService, AvaliacaoService avaliacaoService, PlanoTreinoService planoTreinoService) {
         this.instrutorService = instrutorService;
@@ -353,8 +356,20 @@ public class InstrutorController {
             }
             // Upload da foto de perfil, se enviado
             if (file != null && !file.isEmpty()) {
-                // Garante criação das pastas: src/main/resources/static/uploads/perfis
-                Path uploadDir = Paths.get("src", "main", "resources", "static", "uploads", "perfis");
+                // Valida tipo e tamanho
+                String ct = file.getContentType();
+                long max = 2L * 1024 * 1024; // 2 MB
+                boolean tipoValido = ct != null && (ct.equals("image/webp") || ct.equals("image/jpeg") || ct.equals("image/png"));
+                if (!tipoValido) {
+                    ra.addFlashAttribute("msgErro", "Formato de imagem inválido. Use WebP, JPEG ou PNG.");
+                    return "redirect:/instrutor/alunos";
+                }
+                if (file.getSize() > max) {
+                    ra.addFlashAttribute("msgErro", "Arquivo muito grande. Limite: 2 MB.");
+                    return "redirect:/instrutor/alunos";
+                }
+                // Garante criação das pastas externas: uploads/perfis
+                Path uploadDir = Paths.get(uploadBaseDir, "perfis");
                 Files.createDirectories(uploadDir);
                 // Extrai extensão original
                 String original = file.getOriginalFilename();
@@ -414,14 +429,33 @@ public class InstrutorController {
             }
             // Upload da foto de perfil, se enviado
             if (file != null && !file.isEmpty()) {
+                String ct = file.getContentType();
+                long max = 2L * 1024 * 1024; // 2 MB
+                boolean tipoValido = ct != null && (ct.equals("image/webp") || ct.equals("image/jpeg") || ct.equals("image/png"));
+                if (!tipoValido) {
+                    ra.addFlashAttribute("msgErro", "Formato de imagem inválido. Use WebP, JPEG ou PNG.");
+                    return "redirect:/instrutor/alunos";
+                }
+                if (file.getSize() > max) {
+                    ra.addFlashAttribute("msgErro", "Arquivo muito grande. Limite: 2 MB.");
+                    return "redirect:/instrutor/alunos";
+                }
                 String cpfDigits = cpf == null ? "" : cpf.replaceAll("[^0-9]", "");
-                Path uploadDir = Paths.get("src", "main", "resources", "static", "uploads", "perfis");
+                Path uploadDir = Paths.get(uploadBaseDir, "perfis");
                 Files.createDirectories(uploadDir);
                 String original = file.getOriginalFilename();
                 String ext = (original != null && original.lastIndexOf('.') != -1) ? original.substring(original.lastIndexOf('.')) : "";
                 String novoNome = cpfDigits + ext.toLowerCase();
                 Path destino = uploadDir.resolve(novoNome);
                 Files.copy(file.getInputStream(), destino, StandardCopyOption.REPLACE_EXISTING);
+                // Remover foto antiga se nome diferente
+                try {
+                    var atualOpt = alunoService.buscarPorCpf(cpf);
+                    String antigo = atualOpt.map(Aluno::getFotoPerfil).orElse(null);
+                    if (antigo != null && !antigo.isBlank() && !antigo.equals(novoNome)) {
+                        Files.deleteIfExists(uploadDir.resolve(antigo));
+                    }
+                } catch (Exception ignored) {}
                 alunoAtualizado.setFotoPerfil(novoNome);
             }
             alunoService.atualizarAluno(cpf, alunoAtualizado);
@@ -995,14 +1029,33 @@ public class InstrutorController {
             }
             // Upload da foto de perfil, se enviado
             if (file != null && !file.isEmpty()) {
+                String ct = file.getContentType();
+                long max = 2L * 1024 * 1024; // 2 MB
+                boolean tipoValido = ct != null && (ct.equals("image/webp") || ct.equals("image/jpeg") || ct.equals("image/png"));
+                if (!tipoValido) {
+                    ra.addFlashAttribute("msgErro", "Formato de imagem inválido. Use WebP, JPEG ou PNG.");
+                    return "redirect:/instrutor/alunos/perfil/" + cpf;
+                }
+                if (file.getSize() > max) {
+                    ra.addFlashAttribute("msgErro", "Arquivo muito grande. Limite: 2 MB.");
+                    return "redirect:/instrutor/alunos/perfil/" + cpf;
+                }
                 String cpfDigits = cpf == null ? "" : cpf.replaceAll("[^0-9]", "");
-                Path uploadDir = Paths.get("src", "main", "resources", "static", "uploads", "perfis");
+                Path uploadDir = Paths.get(uploadBaseDir, "perfis");
                 Files.createDirectories(uploadDir);
                 String original = file.getOriginalFilename();
                 String ext = (original != null && original.lastIndexOf('.') != -1) ? original.substring(original.lastIndexOf('.')) : "";
                 String novoNome = cpfDigits + ext.toLowerCase();
                 Path destino = uploadDir.resolve(novoNome);
                 Files.copy(file.getInputStream(), destino, StandardCopyOption.REPLACE_EXISTING);
+                // Remover foto antiga se nome diferente
+                try {
+                    var atualOpt = alunoService.buscarPorCpf(cpf);
+                    String antigo = atualOpt.map(Aluno::getFotoPerfil).orElse(null);
+                    if (antigo != null && !antigo.isBlank() && !antigo.equals(novoNome)) {
+                        Files.deleteIfExists(uploadDir.resolve(antigo));
+                    }
+                } catch (Exception ignored) {}
                 alunoAtualizado.setFotoPerfil(novoNome);
             }
             alunoService.atualizarAluno(cpf, alunoAtualizado);

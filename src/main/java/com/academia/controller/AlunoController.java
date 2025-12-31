@@ -20,6 +20,7 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
 import java.time.LocalDate;
+import org.springframework.beans.factory.annotation.Value;
 
 @Controller
 @RequestMapping("/aluno")
@@ -29,6 +30,8 @@ public class AlunoController {
     private final AvaliacaoService avaliacaoService;
     private final PlanoTreinoService planoTreinoService;
     private final TurmaService turmaService;
+    @Value("${app.upload.base-dir:${user.home}/academia/uploads}")
+    private String uploadBaseDir;
     
     public AlunoController(AlunoService alunoService, AvaliacaoService avaliacaoService, PlanoTreinoService planoTreinoService, TurmaService turmaService) {
         this.alunoService = alunoService;
@@ -185,8 +188,19 @@ public class AlunoController {
 
             // Upload da foto de perfil, se enviado
             if (file != null && !file.isEmpty()) {
+                String ct = file.getContentType();
+                long max = 2L * 1024 * 1024; // 2 MB
+                boolean tipoValido = ct != null && (ct.equals("image/webp") || ct.equals("image/jpeg") || ct.equals("image/png"));
+                if (!tipoValido) {
+                    ra.addFlashAttribute("msgErro", "Formato de imagem inválido. Use WebP, JPEG ou PNG.");
+                    return "redirect:/aluno/perfil/editar";
+                }
+                if (file.getSize() > max) {
+                    ra.addFlashAttribute("msgErro", "Arquivo muito grande. Limite: 2 MB.");
+                    return "redirect:/aluno/perfil/editar";
+                }
                 String cpfDigits = cpf == null ? "" : cpf.replaceAll("[^0-9]", "");
-                Path uploadDir = Paths.get("src", "main", "resources", "static", "uploads", "perfis");
+                Path uploadDir = Paths.get(uploadBaseDir, "perfis");
                 Files.createDirectories(uploadDir);
                 String original = file.getOriginalFilename();
                 String ext = (original != null && original.lastIndexOf('.') != -1) ? original.substring(original.lastIndexOf('.')) : "";
@@ -194,13 +208,23 @@ public class AlunoController {
                 Path destino = uploadDir.resolve(novoNome);
                 Files.copy(file.getInputStream(), destino, StandardCopyOption.REPLACE_EXISTING);
                 alunoAtualizado.setFotoPerfil(novoNome);
+                // Agendar remoção do arquivo antigo (se houver e nome diferente)
+                String antigo = sess.getFotoPerfil();
+                if (antigo != null && !antigo.isBlank() && !antigo.equals(novoNome)) {
+                    try { Files.deleteIfExists(uploadDir.resolve(antigo)); } catch (Exception ignored) {}
+                }
             }
 
             // Persistir alterações
+            boolean enviouArquivo = (file != null && !file.isEmpty());
             alunoService.atualizarAluno(cpf, alunoAtualizado);
             // Atualizar objeto de sessão
             alunoService.buscarPorCpf(cpf).ifPresent(a -> session.setAttribute("aluno", a));
-            ra.addFlashAttribute("msgSucesso", "Perfil atualizado com sucesso.");
+            if (enviouArquivo) {
+                ra.addFlashAttribute("msgSucesso", "Foto de perfil atualizada com sucesso.");
+            } else {
+                ra.addFlashAttribute("msgSucesso", "Perfil atualizado com sucesso.");
+            }
             return "redirect:/aluno/perfil";
         } catch (Exception e) {
             ra.addFlashAttribute("msgErro", "Erro ao atualizar perfil: " + e.getMessage());

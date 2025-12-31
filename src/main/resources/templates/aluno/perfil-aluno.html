@@ -39,10 +39,13 @@
                 </div>
             </div>
             <div class="col-md-9">
-                <div class="d-flex align-items-center justify-content-between mb-3">
+                <div class="d-flex align-items-center justify-content-between mb-2">
                     <h1 class="mb-0">[[${aluno.nome}]]</h1>
+                    <div th:if="${msgSucesso}" class="alert alert-success flash-alert mb-0" th:text="${msgSucesso}">Sucesso</div>
+                    <div th:if="${msgErro}" class="alert alert-danger flash-alert mb-0" th:text="${msgErro}">Erro</div>
                     <a th:href="@{/aluno/perfil/editar}" class="btn btn-outline-success btn-sm"> Editar</a>
                 </div>
+                
                 <div class="row g-3">
                     <div class="col-md-8">
                         <div class="card h-100">
@@ -61,7 +64,7 @@
                         <div class="card h-100 d-flex align-items-center justify-content-center">
                             <div class="card-body d-flex flex-column align-items-center justify-content-center">
                                 <div th:if="${aluno.fotoPerfil != null && !#strings.isEmpty(aluno.fotoPerfil)}">
-                                    <img th:src="@{'/uploads/perfis/' + ${aluno.fotoPerfil}}" alt="Foto do Aluno" class="avatar-150"/>
+                                    <img th:src="@{/uploads/perfis/{fn}(fn=${aluno.fotoPerfil}, v=${#dates.createNow().time})}" alt="Foto do Aluno" class="avatar-150"/>
                                 </div>
                                 <div th:if="${aluno.fotoPerfil == null || #strings.isEmpty(aluno.fotoPerfil)}">
                                     <i class="bi bi-person-circle avatar-icon-150"></i>
@@ -74,5 +77,18 @@
             </div>
         </div>
     </div>
+    <script>
+        // Auto-dismiss para mensagens flash
+        document.addEventListener('DOMContentLoaded', function() {
+            const alerts = document.querySelectorAll('.flash-alert');
+            alerts.forEach(a => {
+                setTimeout(() => {
+                    a.classList.add('fade');
+                    a.style.opacity = '0';
+                    setTimeout(() => a.remove(), 300);
+                }, 2000);
+            });
+        });
+    </script>
 </body>
 </html>
