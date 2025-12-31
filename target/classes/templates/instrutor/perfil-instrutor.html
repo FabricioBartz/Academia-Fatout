@@ -58,10 +58,10 @@
                                 <hr>
                                 <div class="row">
                                     <div class="col-md-6 mb-3">
-                                        <p><strong>CPF:</strong> <span th:text="${instrutorPerfil.cpf.replaceAll('(\\d{3})(\\d{3})(\\d{3})(\\d{2})', '$1.$2.$3-$4')}">123.456.789-01</span></p>
+                                        <p><strong>CPF:</strong> <span th:text="${instrutorPerfil.cpf != null && instrutorPerfil.cpf.length() == 11 ? instrutorPerfil.cpf.substring(0,3) + '.' + instrutorPerfil.cpf.substring(3,6) + '.' + instrutorPerfil.cpf.substring(6,9) + '-' + instrutorPerfil.cpf.substring(9,11) : instrutorPerfil.cpf}">123.456.789-01</span></p>
                                     </div>
                                     <div class="col-md-6 mb-3">
-                                        <p><strong>Telefone:</strong> <span th:text="${instrutorPerfil.telefone != null && instrutorPerfil.telefone.length() == 11 ? instrutorPerfil.telefone.replaceAll('(\\d{2})(\\d{5})(\\d{4})', '($1) $2-$3') : instrutorPerfil.telefone}">(11) 98765-4321</span></p>
+                                        <p><strong>Telefone:</strong> <span th:text="${instrutorPerfil.telefone != null && instrutorPerfil.telefone.replaceAll('\D', '').length() == 11 ? '(' + instrutorPerfil.telefone.substring(0,2) + ') ' + instrutorPerfil.telefone.substring(2,7) + '-' + instrutorPerfil.telefone.substring(7,11) : instrutorPerfil.telefone}">(11) 98765-4321</span></p>
                                     </div>
                                 </div>
                                 <div class="row">
