@@ -10,6 +10,9 @@ import java.util.List;
 @PrimaryKeyJoinColumn(name = "cpf")
 public class Instrutor extends Pessoa {
     
+    // Foto de perfil do instrutor (nome do arquivo)
+    private String fotoPerfil;
+
     @Column(name = "dia_que_comecou_trabalhar")
     private LocalDate diaQueComecouTrabalhar;
 
@@ -48,4 +51,7 @@ public class Instrutor extends Pessoa {
     public void cadastrarAluno(Aluno aluno) {
         System.out.println("Aluno " + aluno.getNome() + " cadastrado pelo instrutor " + this.getNome());
     }
+
+    public String getFotoPerfil() { return fotoPerfil; }
+    public void setFotoPerfil(String fotoPerfil) { this.fotoPerfil = fotoPerfil; }
 }

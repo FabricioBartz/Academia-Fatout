@@ -1,3 +1,4 @@
+
 package com.academia.controller;
 
 import com.academia.model.Aluno;
@@ -30,6 +31,16 @@ import org.springframework.beans.factory.annotation.Value;
 @Controller
 @RequestMapping("/instrutor")
 public class InstrutorController {
+
+        @GetMapping("/editar-perfil")
+        public String editarPerfilInstrutor(Model model, HttpSession session) {
+            Instrutor instrutor = (Instrutor) session.getAttribute("instrutor");
+            if (instrutor == null) {
+                instrutor = instrutorService.listarTodos().isEmpty() ? null : instrutorService.listarTodos().get(0);
+            }
+            model.addAttribute("instrutor", instrutor);
+            return "instrutor/editar-perfil";
+        }
     
     private final InstrutorService instrutorService;
     private final TurmaService turmaService;
@@ -478,30 +489,6 @@ public class InstrutorController {
         return "redirect:/instrutor/alunos";
     }
     
-    @GetMapping("/alunos/perfil/{cpf}")
-    public String perfilAluno(@PathVariable String cpf, Model model, HttpSession session) {
-        Instrutor instrutor = (Instrutor) session.getAttribute("instrutor");
-        if (instrutor == null) {
-            instrutor = instrutorService.listarTodos().isEmpty() ? null : instrutorService.listarTodos().get(0);
-        }
-        model.addAttribute("instrutor", instrutor);
-        
-        Aluno aluno = alunoService.buscarPorCpf(cpf).orElse(null);
-        if (aluno == null) {
-            return "redirect:/instrutor/alunos";
-        }
-        
-        model.addAttribute("aluno", aluno);
-        // Exibir a data de início na academia do aluno (data editável)
-        model.addAttribute("inicioAluno", aluno.getDataCadastro());
-        // Histórico de planos de treino
-        var planos = planoTreinoService.listarHistorico(aluno.getCpf());
-        model.addAttribute("planos", planos);
-        // Carregar últimas 5 avaliações (ordenadas por data desc)
-        var avaliacoes = avaliacaoService.listarUltimas5PorAluno(aluno.getCpf());
-        model.addAttribute("avaliacoes", avaliacoes);
-        return "instrutor/perfil-aluno";
-    }
     
     @GetMapping("/alunos/avaliacao/{cpf}")
     public String formularioAvaliacao(@PathVariable String cpf, Model model, HttpSession session) {
@@ -1267,5 +1254,40 @@ public class InstrutorController {
         model.addAttribute("turmas", turmaService.listarPorInstrutor(alvo.getCpf()));
         model.addAttribute("planosInstrutor", planoTreinoService.listarPorInstrutor(alvo.getCpf()));
         return "instrutor/perfil-instrutor";
+    }
+
+    @GetMapping("/alunos/perfil/{cpf}")
+    public String perfilAluno(@PathVariable String cpf, Model model, HttpSession session) {
+        Instrutor instrutor = (Instrutor) session.getAttribute("instrutor");
+        if (instrutor == null) {
+            instrutor = instrutorService.listarTodos().isEmpty() ? null : instrutorService.listarTodos().get(0);
+        }
+        model.addAttribute("instrutor", instrutor);
+        
+        Aluno aluno = alunoService.buscarPorCpf(cpf).orElse(null);
+        if (aluno == null) {
+            return "redirect:/instrutor/alunos";
+        }
+        
+        model.addAttribute("aluno", aluno);
+        // Exibir a data de início na academia do aluno (data editável)
+        model.addAttribute("inicioAluno", aluno.getDataCadastro());
+        // Histórico de planos de treino
+        var planos = planoTreinoService.listarHistorico(aluno.getCpf());
+        model.addAttribute("planos", planos);
+        // Carregar últimas 5 avaliações (ordenadas por data desc)
+        var avaliacoes = avaliacaoService.listarUltimas5PorAluno(aluno.getCpf());
+        model.addAttribute("avaliacoes", avaliacoes);
+        return "instrutor/perfil-aluno";
+    }
+        // Página Meu Perfil do Instrutor (instrutor logado)
+    @GetMapping("/meu_perfil")
+    public String meuPerfil(Model model, HttpSession session) {
+        Instrutor instrutor = (Instrutor) session.getAttribute("instrutor");
+        if (instrutor == null) {
+            instrutor = instrutorService.listarTodos().isEmpty() ? null : instrutorService.listarTodos().get(0);
+        }
+        model.addAttribute("instrutor", instrutor);
+        return "instrutor/meu-perfil";
     }
 }
