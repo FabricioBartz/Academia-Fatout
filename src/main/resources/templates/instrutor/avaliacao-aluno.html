@@ -40,7 +40,7 @@
             <div class="col-md-9">
                 <div class="d-flex align-items-center justify-content-between mb-4" style="height: 45px;">
                     <div class="d-flex align-items-center">
-                        <a th:href="@{/instrutor/alunos}" class="btn btn-secondary btn-sm me-3 btn-voltar-google">
+                        <a th:href="@{/instrutor/alunos/perfil/{cpf}(cpf=${aluno.cpf})}" class="btn btn-secondary btn-sm me-3 btn-voltar-google">
                             <span class="material-symbols-outlined">arrow_back</span>
                             <span></span>
                         </a>

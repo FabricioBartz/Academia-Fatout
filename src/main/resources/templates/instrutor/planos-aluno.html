@@ -21,27 +21,26 @@
 
 <div class="container mt-4">
     <div class="row">
-        <div class="col-md-3">
-            <div class="card">
-                <div class="card-body">
-                    <h5 class="card-title">Menu</h5>
-                    <div class="list-group list-group-flush">
-                        <a th:href="@{/instrutor/painel_principal}" class="list-group-item list-group-item-action">Painel Principal</a>
-                        <a th:href="@{/instrutor/alunos}" class="list-group-item list-group-item-action active">👥 Meus Alunos</a>
-                        <a th:href="@{/instrutor/minhas_turmas}" class="list-group-item list-group-item-action">🏋️ Minhas Turmas</a>
-                        <a th:href="@{/instrutor/exercicios}" class="list-group-item list-group-item-action">💪 Exercícios</a>
-                        <a th:if="${instrutor.admin}" th:href="@{/instrutor/instrutores}" class="list-group-item list-group-item-action">
-                                🧑‍🏫 Instrutores
-                            </a>
+           <!-- Menu -->
+            <div class="col-md-3">
+                <div class="card">
+                    <div class="card-body">
+                        <h5 class="card-title">Menu</h5>
+                        <div class="list-group list-group-flush">
+                            <a th:href="@{/instrutor/painel_principal}" class="list-group-item list-group-item-action">Painel Principal</a>
+                            <a th:href="@{/instrutor/meus_alunos}" class="list-group-item list-group-item-action active"><i class="bi bi-people-fill"></i> Meus Alunos</a>
+                            <a th:href="@{/instrutor/minhas_turmas}" class="list-group-item list-group-item-action"><i class="bi bi-person-lines-fill"></i> Minhas Turmas</a>
+                            <a th:href="@{/instrutor/exercicios}" class="list-group-item list-group-item-action"><i class="bi bi-activity"></i> Exercícios</a>
+                            <a th:if="${instrutor.admin}" th:href="@{/instrutor/instrutores}" class="list-group-item list-group-item-action"><i class="bi bi-person-badge-fill"></i> Instrutores</a>
+                        </div>
                     </div>
                 </div>
             </div>
-        </div>
 
         <div class="col-md-9">
             <div class="d-flex align-items-center justify-content-between mb-4" style="height: 45px;">
                 <div class="d-flex align-items-center">
-                    <a th:href="@{/instrutor/alunos}" class="btn btn-secondary btn-sm me-3 btn-voltar-google">
+                    <a th:href="@{/instrutor/alunos/perfil/{cpf}(cpf=${aluno.cpf})}" class="btn btn-secondary btn-sm me-3 btn-voltar-google">
                         <span class="material-symbols-outlined">arrow_back</span>
                         <span></span>
                     </a>
