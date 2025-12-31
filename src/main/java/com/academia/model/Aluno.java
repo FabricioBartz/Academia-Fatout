@@ -11,6 +11,9 @@ public class Aluno extends Pessoa {
     
     private String objetivo;
     
+    @Column(name = "foto_perfil")
+    private String fotoPerfil; // armazena somente o nome do arquivo
+    
     @ManyToMany
     @JoinTable(
         name = "AlunoTurma",
@@ -45,6 +48,9 @@ public class Aluno extends Pessoa {
     
     public List<PlanoTreino> getPlanosTreino() { return planosTreino; }
     public void setPlanosTreino(List<PlanoTreino> planosTreino) { this.planosTreino = planosTreino; }
+    
+    public String getFotoPerfil() { return fotoPerfil; }
+    public void setFotoPerfil(String fotoPerfil) { this.fotoPerfil = fotoPerfil; }
     
     // Métodos auxiliares
     public void matricularEmTurma(Turma turma) {

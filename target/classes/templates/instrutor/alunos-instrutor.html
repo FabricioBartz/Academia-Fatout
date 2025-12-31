@@ -69,7 +69,7 @@
                                 <h5 class="modal-title">Cadastrar Novo Aluno</h5>
                                 <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
                             </div>
-                            <form id="formCadastrarAluno" th:action="@{/instrutor/alunos/cadastrar}" method="post" novalidate>
+                            <form id="formCadastrarAluno" th:action="@{/instrutor/alunos/cadastrar}" method="post" enctype="multipart/form-data" novalidate>
                                 <div class="modal-body">
                                     <div class="mb-3">
                                         <label for="cpf" class="form-label">CPF</label>
@@ -101,6 +101,10 @@
                                         <label for="objetivo" class="form-label">Objetivo</label>
                                         <input type="text" class="form-control" id="objetivo" name="objetivo">
                                     </div>
+                                    <div class="mb-3">
+                                        <label for="fotoPerfilCadastro" class="form-label">Foto de Perfil</label>
+                                        <input type="file" id="fotoPerfilCadastro" name="file" class="form-control form-control-pesquisa" accept="image/*">
+                                    </div>
                                 </div>
                                 <div class="modal-footer">
                                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
@@ -119,7 +123,7 @@
                                 <h5 class="modal-title">Editar Aluno</h5>
                                 <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
                             </div>
-                            <form id="formEditarAluno" th:action="@{/instrutor/alunos/editar}" method="post" novalidate>
+                            <form id="formEditarAluno" th:action="@{/instrutor/alunos/editar}" method="post" enctype="multipart/form-data" novalidate>
                                 <input type="hidden" id="editCpf" name="cpf">
                                 <div class="modal-body">
                                     <div class="mb-3">
@@ -149,6 +153,10 @@
                                     <div class="mb-3">
                                         <label for="editObjetivo" class="form-label">Objetivo</label>
                                         <input type="text" class="form-control" id="editObjetivo" name="objetivo">
+                                    </div>
+                                    <div class="mb-3">
+                                        <label for="fotoPerfilEditar" class="form-label">Foto de Perfil</label>
+                                        <input type="file" id="fotoPerfilEditar" name="file" class="form-control form-control-pesquisa" accept="image/*">
                                     </div>
                                 </div>
                                 <div class="modal-footer">

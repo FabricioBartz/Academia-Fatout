@@ -715,3 +715,35 @@ form.d-flex input[name="q"] + .btn-pesquisar {
 }
 
 
+/* =============================
+   Avatar / Foto de Perfil
+   ============================= */
+.avatar-150 {
+    width: 150px;
+    height: 150px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 2px solid #e9ecef;
+    background: #f8f9fa;
+}
+.avatar-icon-150 {
+    font-size: 150px;
+    line-height: 1;
+    color: #adb5bd;
+}
+
+/* Input de upload arredondado, estilo pílula */
+.form-control-pesquisa {
+    border-radius: 100px !important;
+    padding: 6px 14px !important;
+    background-color: var(--pesquisa-bg, #f1f3f4) !important;
+    color: var(--pesquisa-fg, #202124) !important;
+    border: 1px solid var(--pesquisa-border, #dadce0) !important;
+}
+.form-control-pesquisa:focus {
+    background-color: #ffffff !important;
+    border-color: #c7c9cc !important;
+    box-shadow: 0 0 0 3px var(--pesquisa-focus-ring, rgba(74,108,247,0.25)) !important;
+}
+
+

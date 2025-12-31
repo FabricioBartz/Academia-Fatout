@@ -52,7 +52,7 @@
                     </div>
                 </div>
                 <!-- Form na mesma coluna para remover qualquer espaço entre título e conteúdo -->
-                <form th:action="@{/instrutor/alunos/editar/{cpf}(cpf=${aluno.cpf})}" method="post" class="card p-3 mt-0">
+                <form th:action="@{/instrutor/alunos/editar/{cpf}(cpf=${aluno.cpf})}" method="post" enctype="multipart/form-data" class="card p-3 mt-0">
                     <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}">
                     
                     <div th:if="${error}" class="alert alert-danger mb-2" th:text="${error}"></div>
@@ -87,6 +87,10 @@
                     <div class="mb-2">
                         <label for="objetivo" class="form-label">Objetivo</label>
                         <input type="text" class="form-control" id="objetivo" name="objetivo" th:value="${aluno.objetivo}">
+                    </div>
+                    <div class="mb-2">
+                        <label for="fotoPerfil" class="form-label">Foto de Perfil</label>
+                        <input type="file" class="form-control form-control-pesquisa" id="fotoPerfil" name="file" accept="image/*">
                     </div>
                     
                     <div class="mt-2">

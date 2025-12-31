@@ -14,6 +14,12 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import jakarta.servlet.http.HttpSession;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+import org.springframework.web.multipart.MultipartFile;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.nio.file.StandardCopyOption;
+import java.time.LocalDate;
 
 @Controller
 @RequestMapping("/aluno")
@@ -123,6 +129,83 @@ public class AlunoController {
             model.addAttribute("inicioAluno", null);
         }
         return "aluno/perfil-aluno";
+    }
+
+    // Formulário para o aluno editar o próprio perfil
+    @GetMapping("/perfil/editar")
+    public String editarPerfilForm(Model model, HttpSession session, RedirectAttributes ra) {
+        Aluno aluno = (Aluno) session.getAttribute("aluno");
+        if (aluno == null) {
+            ra.addFlashAttribute("msgErro", "Faça login para editar seu perfil.");
+            return "redirect:/aluno/login";
+        }
+        model.addAttribute("aluno", aluno);
+        return "aluno/editar-perfil";
+    }
+
+    // Submit da edição do perfil do próprio aluno
+    @PostMapping("/perfil/editar")
+    public String editarPerfilSubmit(@RequestParam String nome,
+                                     @RequestParam String email,
+                                     @RequestParam(required = false) String telefone,
+                                     @RequestParam(required = false) String dataNascimento,
+                                     @RequestParam(required = false) String objetivo,
+                                     @RequestParam(required = false) String endereco,
+                                     @RequestParam(value = "file", required = false) MultipartFile file,
+                                     HttpSession session,
+                                     RedirectAttributes ra,
+                                     Model model) {
+        Aluno sess = (Aluno) session.getAttribute("aluno");
+        if (sess == null) {
+            ra.addFlashAttribute("msgErro", "Sessão expirada. Faça login novamente.");
+            return "redirect:/aluno/login";
+        }
+        String cpf = sess.getCpf();
+        try {
+            Aluno alunoAtualizado = new Aluno();
+            alunoAtualizado.setNome(nome);
+            alunoAtualizado.setEmail(email);
+            if (telefone != null && !telefone.trim().isEmpty()) {
+                String telDigits = telefone.replaceAll("[^0-9]", "");
+                if (telDigits.length() != 11) {
+                    ra.addFlashAttribute("msgErro", "Telefone inválido. Use 11 dígitos (DDD + número).");
+                    return "redirect:/aluno/perfil/editar";
+                }
+                alunoAtualizado.setTelefone(telDigits);
+            }
+            if (dataNascimento != null && !dataNascimento.trim().isEmpty()) {
+                alunoAtualizado.setDataNascimento(LocalDate.parse(dataNascimento));
+            }
+            if (objetivo != null && !objetivo.trim().isEmpty()) {
+                alunoAtualizado.setObjetivo(objetivo);
+            }
+            if (endereco != null && !endereco.trim().isEmpty()) {
+                alunoAtualizado.setEndereco(endereco);
+            }
+
+            // Upload da foto de perfil, se enviado
+            if (file != null && !file.isEmpty()) {
+                String cpfDigits = cpf == null ? "" : cpf.replaceAll("[^0-9]", "");
+                Path uploadDir = Paths.get("src", "main", "resources", "static", "uploads", "perfis");
+                Files.createDirectories(uploadDir);
+                String original = file.getOriginalFilename();
+                String ext = (original != null && original.lastIndexOf('.') != -1) ? original.substring(original.lastIndexOf('.')) : "";
+                String novoNome = cpfDigits + ext.toLowerCase();
+                Path destino = uploadDir.resolve(novoNome);
+                Files.copy(file.getInputStream(), destino, StandardCopyOption.REPLACE_EXISTING);
+                alunoAtualizado.setFotoPerfil(novoNome);
+            }
+
+            // Persistir alterações
+            alunoService.atualizarAluno(cpf, alunoAtualizado);
+            // Atualizar objeto de sessão
+            alunoService.buscarPorCpf(cpf).ifPresent(a -> session.setAttribute("aluno", a));
+            ra.addFlashAttribute("msgSucesso", "Perfil atualizado com sucesso.");
+            return "redirect:/aluno/perfil";
+        } catch (Exception e) {
+            ra.addFlashAttribute("msgErro", "Erro ao atualizar perfil: " + e.getMessage());
+            return "redirect:/aluno/perfil/editar";
+        }
     }
     
     @GetMapping("/treino")

@@ -20,6 +20,11 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import jakarta.servlet.http.HttpSession;
 import java.time.LocalDate;
 import java.time.LocalTime;
+import org.springframework.web.multipart.MultipartFile;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.nio.file.StandardCopyOption;
 
 @Controller
 @RequestMapping("/instrutor")
@@ -316,6 +321,7 @@ public class InstrutorController {
                                 @RequestParam String senha,
                                 @RequestParam(required = false) String dataNascimento,
                                 @RequestParam(required = false) String objetivo,
+                                @RequestParam(value = "file", required = false) MultipartFile file,
                                 Model model,
                                 RedirectAttributes ra) {
         try {
@@ -345,6 +351,19 @@ public class InstrutorController {
             if (objetivo != null && !objetivo.trim().isEmpty()) {
                 aluno.setObjetivo(objetivo);
             }
+            // Upload da foto de perfil, se enviado
+            if (file != null && !file.isEmpty()) {
+                // Garante criação das pastas: src/main/resources/static/uploads/perfis
+                Path uploadDir = Paths.get("src", "main", "resources", "static", "uploads", "perfis");
+                Files.createDirectories(uploadDir);
+                // Extrai extensão original
+                String original = file.getOriginalFilename();
+                String ext = (original != null && original.lastIndexOf('.') != -1) ? original.substring(original.lastIndexOf('.')) : "";
+                String novoNome = cpfDigits + ext.toLowerCase();
+                Path destino = uploadDir.resolve(novoNome);
+                Files.copy(file.getInputStream(), destino, StandardCopyOption.REPLACE_EXISTING);
+                aluno.setFotoPerfil(novoNome);
+            }
             alunoService.cadastrarAluno(aluno);
             ra.addFlashAttribute("msgSucesso", "Aluno cadastrado com sucesso.");
             return "redirect:/instrutor/alunos";
@@ -369,6 +388,7 @@ public class InstrutorController {
                              @RequestParam(required = false) String dataNascimento,
                              @RequestParam(required = false) String dataInicio,
                              @RequestParam(required = false) String objetivo,
+                             @RequestParam(value = "file", required = false) MultipartFile file,
                              Model model,
                              RedirectAttributes ra) {
         try {
@@ -391,6 +411,18 @@ public class InstrutorController {
             }
             if (dataInicio != null && !dataInicio.trim().isEmpty()) {
                 alunoAtualizado.setDataCadastro(java.time.LocalDate.parse(dataInicio));
+            }
+            // Upload da foto de perfil, se enviado
+            if (file != null && !file.isEmpty()) {
+                String cpfDigits = cpf == null ? "" : cpf.replaceAll("[^0-9]", "");
+                Path uploadDir = Paths.get("src", "main", "resources", "static", "uploads", "perfis");
+                Files.createDirectories(uploadDir);
+                String original = file.getOriginalFilename();
+                String ext = (original != null && original.lastIndexOf('.') != -1) ? original.substring(original.lastIndexOf('.')) : "";
+                String novoNome = cpfDigits + ext.toLowerCase();
+                Path destino = uploadDir.resolve(novoNome);
+                Files.copy(file.getInputStream(), destino, StandardCopyOption.REPLACE_EXISTING);
+                alunoAtualizado.setFotoPerfil(novoNome);
             }
             alunoService.atualizarAluno(cpf, alunoAtualizado);
             ra.addFlashAttribute("msgSucesso", "Aluno atualizado com sucesso.");
@@ -942,6 +974,7 @@ public class InstrutorController {
                                    @RequestParam(required = false) String dataNascimento,
                                    @RequestParam(required = false) String dataInicio,
                                    @RequestParam(required = false) String objetivo,
+                                   @RequestParam(value = "file", required = false) MultipartFile file,
                                    Model model,
                                    RedirectAttributes ra) {
         try {
@@ -959,6 +992,18 @@ public class InstrutorController {
             }
             if (dataInicio != null && !dataInicio.trim().isEmpty()) {
                 alunoAtualizado.setDataCadastro(java.time.LocalDate.parse(dataInicio));
+            }
+            // Upload da foto de perfil, se enviado
+            if (file != null && !file.isEmpty()) {
+                String cpfDigits = cpf == null ? "" : cpf.replaceAll("[^0-9]", "");
+                Path uploadDir = Paths.get("src", "main", "resources", "static", "uploads", "perfis");
+                Files.createDirectories(uploadDir);
+                String original = file.getOriginalFilename();
+                String ext = (original != null && original.lastIndexOf('.') != -1) ? original.substring(original.lastIndexOf('.')) : "";
+                String novoNome = cpfDigits + ext.toLowerCase();
+                Path destino = uploadDir.resolve(novoNome);
+                Files.copy(file.getInputStream(), destino, StandardCopyOption.REPLACE_EXISTING);
+                alunoAtualizado.setFotoPerfil(novoNome);
             }
             alunoService.atualizarAluno(cpf, alunoAtualizado);
             ra.addFlashAttribute("msgSucesso", "Aluno atualizado com sucesso.");

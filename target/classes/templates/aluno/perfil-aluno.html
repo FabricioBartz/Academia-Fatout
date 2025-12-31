@@ -39,18 +39,36 @@
                 </div>
             </div>
             <div class="col-md-9">
-                <h1>[[${aluno.nome}]]</h1> <!--como eu faço para aparecer o nome do aluo aqui?"-->
-
-                <div class="card">
-                    <div class="card-body">
-                        
-                        <p class="card-text"><strong>Email:</strong> <span th:text="${aluno.email}">email</span></p>
-                        <p class="card-text"><strong>Telefone:</strong><span th:text="${aluno.telefone != null && aluno.telefone.length() == 11 ? aluno.telefone.replaceAll('(\d{2})(\d{5})(\d{4})', '($1) $2-$3') : aluno.telefone}"> (11) 99999-8888</span></p>
-                        <p class="card-text"><strong>Data de Nascimento:</strong><span th:text="${#temporals.format(aluno.dataNascimento, ' dd/MM/yyyy')}">14/03/1995</span></p>
-                        <p class="card-text"><strong>Objetivo:</strong> <span th:text="${aluno.objetivo}">objetivo</span></p>
-                        <p class="card-text"><strong>Início na Academia:</strong>
-                            <span th:text="${inicioAluno != null ? #temporals.format(inicioAluno, 'dd/MM/yyyy') : '—'}">—</span>
-                        </p>
+                <div class="d-flex align-items-center justify-content-between mb-3">
+                    <h1 class="mb-0">[[${aluno.nome}]]</h1>
+                    <a th:href="@{/aluno/perfil/editar}" class="btn btn-outline-success btn-sm"> Editar</a>
+                </div>
+                <div class="row g-3">
+                    <div class="col-md-8">
+                        <div class="card h-100">
+                            <div class="card-body">
+                                <p class="card-text"><strong>Email:</strong> <span th:text="${aluno.email}">email</span></p>
+                                <p class="card-text"><strong>Telefone:</strong><span th:text="${aluno.telefone != null && aluno.telefone.length() == 11 ? aluno.telefone.replaceAll('(\\d{2})(\\d{5})(\\d{4})', '($1) $2-$3') : aluno.telefone}"> (11) 99999-8888</span></p>
+                                <p class="card-text"><strong>Data de Nascimento:</strong><span th:text="${#temporals.format(aluno.dataNascimento, ' dd/MM/yyyy')}">14/03/1995</span></p>
+                                <p class="card-text"><strong>Objetivo:</strong> <span th:text="${aluno.objetivo}">objetivo</span></p>
+                                <p class="card-text"><strong>Início na Academia:</strong>
+                                    <span th:text="${inicioAluno != null ? #temporals.format(inicioAluno, 'dd/MM/yyyy') : '—'}">—</span>
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="card h-100 d-flex align-items-center justify-content-center">
+                            <div class="card-body d-flex flex-column align-items-center justify-content-center">
+                                <div th:if="${aluno.fotoPerfil != null && !#strings.isEmpty(aluno.fotoPerfil)}">
+                                    <img th:src="@{'/uploads/perfis/' + ${aluno.fotoPerfil}}" alt="Foto do Aluno" class="avatar-150"/>
+                                </div>
+                                <div th:if="${aluno.fotoPerfil == null || #strings.isEmpty(aluno.fotoPerfil)}">
+                                    <i class="bi bi-person-circle avatar-icon-150"></i>
+                                </div>
+                                <div class="mt-2 text-muted" style="font-size: 0.9rem;">Foto de Perfil</div>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>

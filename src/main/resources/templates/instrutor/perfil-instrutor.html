@@ -51,32 +51,43 @@
                 </div>
                 <div class="card mb-4">
                     <div class="card-body">
-                        <h5 class="card-title mb-1" th:text="${instrutorPerfil.nome}">Nome do Instrutor</h5>
-                        <p class="card-text text-muted mb-3" th:text="${instrutorPerfil.email}">email@example.com</p>
-                        <hr>
-                        <div class="row">
-                            <div class="col-md-6 mb-3">
-                                <p><strong>CPF:</strong> <span th:text="${instrutorPerfil.cpf.replaceAll('(\d{3})(\d{3})(\d{3})(\d{2})', '$1.$2.$3-$4')}">123.456.789-01</span></p>
+                        <div class="row g-3 align-items-start">
+                            <div class="col-md-8">
+                                <h5 class="card-title mb-1" th:text="${instrutorPerfil.nome}">Nome do Instrutor</h5>
+                                <p class="card-text text-muted mb-3" th:text="${instrutorPerfil.email}">email@example.com</p>
+                                <hr>
+                                <div class="row">
+                                    <div class="col-md-6 mb-3">
+                                        <p><strong>CPF:</strong> <span th:text="${instrutorPerfil.cpf.replaceAll('(\\d{3})(\\d{3})(\\d{3})(\\d{2})', '$1.$2.$3-$4')}">123.456.789-01</span></p>
+                                    </div>
+                                    <div class="col-md-6 mb-3">
+                                        <p><strong>Telefone:</strong> <span th:text="${instrutorPerfil.telefone != null && instrutorPerfil.telefone.length() == 11 ? instrutorPerfil.telefone.replaceAll('(\\d{2})(\\d{5})(\\d{4})', '($1) $2-$3') : instrutorPerfil.telefone}">(11) 98765-4321</span></p>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-md-6 mb-3">
+                                        <p><strong>Início na Academia:</strong>
+                                            <span th:text="${instrutorPerfil.dataCadastro != null ? #temporals.format(instrutorPerfil.dataCadastro, 'dd/MM/yyyy') : '—'}">—</span>
+                                        </p>
+                                    </div>
+                                    <div class="col-md-6 mb-3">
+                                        <p><strong>Data de Nascimento:</strong>
+                                            <span th:text="${instrutorPerfil.dataNascimento != null ? #temporals.format(instrutorPerfil.dataNascimento, 'dd/MM/yyyy') : '—'}">—</span>
+                                        </p>
+                                    </div>
+                                </div>
+                                <hr>
+                                <button type="button" class="btn btn-warning me-2" onclick="editarInstrutor()">Editar Perfil</button>
+                                <button type="button" class="btn btn-danger" onclick="removerInstrutor()">Remover Instrutor</button>
                             </div>
-                            <div class="col-md-6 mb-3">
-                                <p><strong>Telefone:</strong> <span th:text="${instrutorPerfil.telefone != null && instrutorPerfil.telefone.length() == 11 ? instrutorPerfil.telefone.replaceAll('(\d{2})(\d{5})(\d{4})', '($1) $2-$3') : instrutorPerfil.telefone}">(11) 98765-4321</span></p>
+                            <div class="col-md-4 d-flex align-items-center justify-content-center">
+                                <div class="d-flex flex-column align-items-center">
+                                    <!-- Placeholder de foto por enquanto -->
+                                    <i class="bi bi-person-circle avatar-icon-150"></i>
+                                    <div class="mt-2 text-muted" style="font-size: 0.9rem;">Foto de Perfil</div>
+                                </div>
                             </div>
                         </div>
-                        <div class="row">
-                            <div class="col-md-6 mb-3">
-                                <p><strong>Início na Academia:</strong>
-                                    <span th:text="${instrutorPerfil.dataCadastro != null ? #temporals.format(instrutorPerfil.dataCadastro, 'dd/MM/yyyy') : '—'}">—</span>
-                                </p>
-                            </div>
-                            <div class="col-md-6 mb-3">
-                                <p><strong>Data de Nascimento:</strong>
-                                    <span th:text="${instrutorPerfil.dataNascimento != null ? #temporals.format(instrutorPerfil.dataNascimento, 'dd/MM/yyyy') : '—'}">—</span>
-                                </p>
-                            </div>
-                        </div>
-                        <hr>
-                        <button type="button" class="btn btn-warning me-2" onclick="editarInstrutor()">Editar Perfil</button>
-                        <button type="button" class="btn btn-danger" onclick="removerInstrutor()">Remover Instrutor</button>
                     </div>
                 </div>
                 <div class="card mb-4">

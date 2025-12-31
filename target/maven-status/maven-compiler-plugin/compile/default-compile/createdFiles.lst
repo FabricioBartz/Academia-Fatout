@@ -9,6 +9,7 @@ com\academia\repository\ExercicioRepository.class
 com\academia\model\ExercicioPlano.class
 com\academia\model\AvaliacaoFisica.class
 com\academia\model\Pessoa.class
+com\academia\config\WebConfig.class
 com\academia\model\Aluno.class
 com\academia\service\ExercicioService.class
 com\academia\config\BackfillInicioAlunoRunner.class

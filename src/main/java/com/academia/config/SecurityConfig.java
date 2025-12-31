@@ -42,6 +42,7 @@ public class SecurityConfig {
                                  new AntPathRequestMatcher("/index"),
                                  new AntPathRequestMatcher("/css/**"),
                                  new AntPathRequestMatcher("/js/**"),
+                                 new AntPathRequestMatcher("/uploads/**"),
                                  new AntPathRequestMatcher("/images/**"),
                                  new AntPathRequestMatcher("/webjars/**"),
                                  new AntPathRequestMatcher("/instrutor/login/**"),
