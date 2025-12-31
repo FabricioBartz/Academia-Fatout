@@ -41,6 +41,19 @@ public class InstrutorController {
             model.addAttribute("instrutor", instrutor);
             return "instrutor/editar-perfil";
         }
+
+        @PostMapping("/editar-perfil")
+        public String salvarPerfilInstrutor(@ModelAttribute("instrutor") Instrutor instrutor, HttpSession session, RedirectAttributes ra) {
+            try {
+                instrutorService.atualizarInstrutor(instrutor.getCpf(), instrutor);
+                session.setAttribute("instrutor", instrutor);
+                ra.addFlashAttribute("msgSucesso", "Perfil atualizado com sucesso!");
+            } catch (Exception e) {
+                ra.addFlashAttribute("msgErro", "Erro ao atualizar perfil: " + e.getMessage());
+                return "redirect:/instrutor/editar-perfil";
+            }
+            return "redirect:/instrutor/meu_perfil";
+        }
     
     private final InstrutorService instrutorService;
     private final TurmaService turmaService;
