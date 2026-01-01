@@ -43,51 +43,85 @@ public class InstrutorController {
         }
 
         @PostMapping("/editar-perfil")
-        public String salvarPerfilInstrutor(@ModelAttribute("instrutor") Instrutor instrutor, 
-                                            @RequestParam(value = "file", required = false) MultipartFile file, 
+        public String salvarPerfilInstrutor(@RequestParam String cpf,
+                                            @RequestParam String nome,
+                                            @RequestParam String email,
+                                            @RequestParam(required = false) String telefone,
+                                            @RequestParam(required = false) String dataNascimento,
+                                            @RequestParam(required = false) String dataCadastro,
+                                            @RequestParam(required = false) Boolean admin,
+                                            @RequestParam(value = "file", required = false) MultipartFile file,
                                             @RequestParam(value = "removerFoto", required = false) boolean removerFoto,
                                             HttpSession session, 
                                             RedirectAttributes ra) {
             try {
-                // 1. Limpa o CPF antes de qualquer busca (Garante que a busca não falhe)
-                String cpfLimpo = instrutor.getCpf().replaceAll("\\D", "");
-                instrutor.setCpf(cpfLimpo);
+                // 1. Limpa o CPF (Igual no Aluno)
+                String cpfLimpo = cpf.replaceAll("\\D", "");
 
-                // 2. Limpeza do Telefone (Padrão alternativa d) [cite: 2025-11-19]
-                if (instrutor.getTelefone() != null) {
-                    instrutor.setTelefone(instrutor.getTelefone().replaceAll("\\D", ""));
-                }
+                // 2. Busca o instrutor atual (A FONTE DA VERDADE)
+                Instrutor instrutorExistente = instrutorService.buscarPorCpf(cpfLimpo)
+                        .orElseThrow(() -> new Exception("Instrutor não encontrado"));
 
-                // 3. Busca o instrutor atual para não perder dados que não estão no form
-                Instrutor instrutorAtual = instrutorService.buscarPorCpf(cpfLimpo)
-                                        .orElseThrow(() -> new Exception("Instrutor não encontrado"));
-
-                // 4. Lógica da Foto
-                if (removerFoto) {
-                    instrutor.setFotoPerfil(null); 
-                } else if (file != null && !file.isEmpty()) {
-                    String uploadDir = "src/main/resources/static/uploads/perfis/";
-                    String extensao = file.getOriginalFilename().substring(file.getOriginalFilename().lastIndexOf("."));
-                    String nomeArquivo = cpfLimpo + extensao;
-                    
-                    Path path = Paths.get(uploadDir + nomeArquivo);
-                    Files.createDirectories(path.getParent());
-                    Files.copy(file.getInputStream(), path, StandardCopyOption.REPLACE_EXISTING);
-                    
-                    instrutor.setFotoPerfil(nomeArquivo);
+                // 3. Cria um NOVO objeto para a atualização (Método idêntico ao Aluno)
+                Instrutor instrutorAtualizado = new Instrutor();
+                instrutorAtualizado.setCpf(cpfLimpo);
+                instrutorAtualizado.setNome(nome);
+                instrutorAtualizado.setEmail(email);
+                
+                // Limpa telefone se enviado
+                if (telefone != null && !telefone.trim().isEmpty()) {
+                    instrutorAtualizado.setTelefone(telefone.replaceAll("\\D", ""));
                 } else {
-                    // Mantém a foto antiga se nenhuma ação foi tomada
-                    instrutor.setFotoPerfil(instrutorAtual.getFotoPerfil());
+                    instrutorAtualizado.setTelefone(instrutorExistente.getTelefone());
                 }
 
-                // 5. Salva e atualiza sessão
-                instrutorService.atualizarInstrutor(cpfLimpo, instrutor);
-                session.setAttribute("instrutor", instrutor);
+                // Converte datas com segurança
+                if (dataNascimento != null && !dataNascimento.trim().isEmpty()) {
+                    instrutorAtualizado.setDataNascimento(java.time.LocalDate.parse(dataNascimento));
+                } else {
+                    instrutorAtualizado.setDataNascimento(instrutorExistente.getDataNascimento());
+                }
+                
+                if (dataCadastro != null && !dataCadastro.trim().isEmpty()) {
+                    instrutorAtualizado.setDataCadastro(java.time.LocalDate.parse(dataCadastro));
+                } else {
+                    instrutorAtualizado.setDataCadastro(instrutorExistente.getDataCadastro());
+                }
+
+                // 4. LÓGICA DA FOTO (O seu "Pulo do Gato")
+                if (removerFoto) {
+                    instrutorAtualizado.setFotoPerfil(null);
+                } else if (file != null && !file.isEmpty()) {
+                    // Se enviou arquivo, faz o upload
+                    String uploadDir = "src/main/resources/static/uploads/perfis/"; 
+                    Path uploadPath = Paths.get(uploadDir);
+                    if (!Files.exists(uploadPath)) Files.createDirectories(uploadPath);
+
+                    String extensao = file.getOriginalFilename().substring(file.getOriginalFilename().lastIndexOf("."));
+                    String novoNome = cpfLimpo + extensao;
+                    Files.copy(file.getInputStream(), uploadPath.resolve(novoNome), StandardCopyOption.REPLACE_EXISTING);
+                    
+                    instrutorAtualizado.setFotoPerfil(novoNome);
+                } else {
+                    // SE O CAMPO DE ARQUIVO ESTIVER VAZIO: 
+                    // Atribuímos a foto que já existia no banco para não perder o dado
+                    instrutorAtualizado.setFotoPerfil(instrutorExistente.getFotoPerfil());
+                }
+
+                // 5. PRESERVAÇÃO DE DADOS CRÍTICOS
+                instrutorAtualizado.setSenha(instrutorExistente.getSenha());
+                instrutorAtualizado.setAdmin(admin != null ? admin : instrutorExistente.isAdmin());
+
+                // 6. SALVAR (Igual ao seu instrutorService.atualizarInstrutor)
+                instrutorService.atualizarInstrutor(cpfLimpo, instrutorAtualizado);
+                
+                // Atualiza a sessão para a Navbar mudar na hora
+                session.setAttribute("instrutor", instrutorAtualizado);
                 
                 ra.addFlashAttribute("msgSucesso", "Perfil atualizado com sucesso!");
                 
             } catch (Exception e) {
-                e.printStackTrace(); // Log para ver o erro real no console
+                e.printStackTrace();
                 ra.addFlashAttribute("msgErro", "Erro ao atualizar: " + e.getMessage());
                 return "redirect:/instrutor/editar-perfil";
             }

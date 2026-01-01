@@ -53,20 +53,20 @@
                 </div>
                 <div class="card">
                     <div class="card-body">
-                        <form th:action="@{/instrutor/editar-perfil}" th:object="${instrutor}" method="post" enctype="multipart/form-data">
-                                                        <input type="hidden" th:field="*{cpf}" />
+                        <form th:action="@{/instrutor/editar-perfil}" method="post" enctype="multipart/form-data">
+                                                        <input type="hidden" name="cpf" th:value="${instrutor.cpf}" />
                             <div class="row g-3">
                                 <div class="col-md-6">
                                     <label for="nome" class="form-label">Nome</label>
-                                    <input type="text" class="form-control" id="nome" th:field="*{nome}" required>
+                                    <input type="text" class="form-control" id="nome" name="nome" th:value="${instrutor.nome}" required>
                                 </div>
                                 <div class="col-md-6">
                                     <label for="email" class="form-label">E-mail</label>
-                                    <input type="email" class="form-control" id="email" th:field="*{email}" required>
+                                    <input type="email" class="form-control" id="email" name="email" th:value="${instrutor.email}" required>
                                 </div>
                                 <div class="col-md-6">
                                     <label for="telefone" class="form-label">Telefone</label>
-                                    <input type="text" class="form-control" id="telefone" th:field="*{telefone}">
+                                    <input type="text" class="form-control" id="telefone" name="telefone" th:value="${instrutor.telefone}">
                                 </div>
                                 <div class="col-md-6">
                                     <label for="dataCadastro" class="form-label">Início na Academia</label>
@@ -96,7 +96,7 @@
                             </div>
                                 <div class="col-md-6 d-flex align-items-center">
                                     <div class="form-check mt-4">
-                                        <input class="form-check-input" type="checkbox" id="admin" th:field="*{admin}">
+                                        <input class="form-check-input" type="checkbox" id="admin" name="admin" th:checked="${instrutor.admin}" value="true">
                                         <label class="form-check-label" for="admin">Administrador</label>
                                     </div>
                                 </div>
