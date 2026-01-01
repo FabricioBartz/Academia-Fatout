@@ -43,13 +43,52 @@ public class InstrutorController {
         }
 
         @PostMapping("/editar-perfil")
-        public String salvarPerfilInstrutor(@ModelAttribute("instrutor") Instrutor instrutor, HttpSession session, RedirectAttributes ra) {
+        public String salvarPerfilInstrutor(@ModelAttribute("instrutor") Instrutor instrutor, 
+                                            @RequestParam(value = "file", required = false) MultipartFile file, 
+                                            @RequestParam(value = "removerFoto", required = false) boolean removerFoto,
+                                            HttpSession session, 
+                                            RedirectAttributes ra) {
             try {
-                instrutorService.atualizarInstrutor(instrutor.getCpf(), instrutor);
+                // 1. Limpa o CPF antes de qualquer busca (Garante que a busca não falhe)
+                String cpfLimpo = instrutor.getCpf().replaceAll("\\D", "");
+                instrutor.setCpf(cpfLimpo);
+
+                // 2. Limpeza do Telefone (Padrão alternativa d) [cite: 2025-11-19]
+                if (instrutor.getTelefone() != null) {
+                    instrutor.setTelefone(instrutor.getTelefone().replaceAll("\\D", ""));
+                }
+
+                // 3. Busca o instrutor atual para não perder dados que não estão no form
+                Instrutor instrutorAtual = instrutorService.buscarPorCpf(cpfLimpo)
+                                        .orElseThrow(() -> new Exception("Instrutor não encontrado"));
+
+                // 4. Lógica da Foto
+                if (removerFoto) {
+                    instrutor.setFotoPerfil(null); 
+                } else if (file != null && !file.isEmpty()) {
+                    String uploadDir = "src/main/resources/static/uploads/perfis/";
+                    String extensao = file.getOriginalFilename().substring(file.getOriginalFilename().lastIndexOf("."));
+                    String nomeArquivo = cpfLimpo + extensao;
+                    
+                    Path path = Paths.get(uploadDir + nomeArquivo);
+                    Files.createDirectories(path.getParent());
+                    Files.copy(file.getInputStream(), path, StandardCopyOption.REPLACE_EXISTING);
+                    
+                    instrutor.setFotoPerfil(nomeArquivo);
+                } else {
+                    // Mantém a foto antiga se nenhuma ação foi tomada
+                    instrutor.setFotoPerfil(instrutorAtual.getFotoPerfil());
+                }
+
+                // 5. Salva e atualiza sessão
+                instrutorService.atualizarInstrutor(cpfLimpo, instrutor);
                 session.setAttribute("instrutor", instrutor);
+                
                 ra.addFlashAttribute("msgSucesso", "Perfil atualizado com sucesso!");
+                
             } catch (Exception e) {
-                ra.addFlashAttribute("msgErro", "Erro ao atualizar perfil: " + e.getMessage());
+                e.printStackTrace(); // Log para ver o erro real no console
+                ra.addFlashAttribute("msgErro", "Erro ao atualizar: " + e.getMessage());
                 return "redirect:/instrutor/editar-perfil";
             }
             return "redirect:/instrutor/meu_perfil";
