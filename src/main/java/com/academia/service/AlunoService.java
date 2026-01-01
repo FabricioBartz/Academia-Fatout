@@ -62,9 +62,8 @@ public class AlunoService {
                 }
                 aluno.setEndereco(alunoAtualizado.getEndereco());
                 aluno.setObjetivo(alunoAtualizado.getObjetivo());
-                if (alunoAtualizado.getFotoPerfil() != null && !alunoAtualizado.getFotoPerfil().isBlank()) {
+                    // Corrigido: sempre atualizar o campo fotoPerfil (permitindo null para remoção)
                     aluno.setFotoPerfil(alunoAtualizado.getFotoPerfil());
-                }
                 return alunoRepository.save(aluno);
             })
             .orElseThrow(() -> new RuntimeException("Aluno não encontrado!"));

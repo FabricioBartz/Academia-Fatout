@@ -155,6 +155,7 @@ public class AlunoController {
                                      @RequestParam(required = false) String objetivo,
                                      @RequestParam(required = false) String endereco,
                                      @RequestParam(value = "file", required = false) MultipartFile file,
+                                     @RequestParam(value = "removerFoto", required = false) String removerFoto,
                                      HttpSession session,
                                      RedirectAttributes ra,
                                      Model model) {
@@ -186,8 +187,17 @@ public class AlunoController {
                 alunoAtualizado.setEndereco(endereco);
             }
 
-            // Upload da foto de perfil, se enviado
-            if (file != null && !file.isEmpty()) {
+            Path uploadDir = Paths.get(uploadBaseDir, "perfis");
+            Files.createDirectories(uploadDir);
+            boolean removeFoto = removerFoto != null && (removerFoto.equals("true") || removerFoto.equals("on"));
+            if (removeFoto) {
+                // Remove do banco e do disco
+                String antigo = sess.getFotoPerfil();
+                alunoAtualizado.setFotoPerfil(null);
+                if (antigo != null && !antigo.isBlank()) {
+                    try { Files.deleteIfExists(uploadDir.resolve(antigo)); } catch (Exception ignored) {}
+                }
+            } else if (file != null && !file.isEmpty()) {
                 String ct = file.getContentType();
                 long max = 2L * 1024 * 1024; // 2 MB
                 boolean tipoValido = ct != null && (ct.equals("image/webp") || ct.equals("image/jpeg") || ct.equals("image/png"));
@@ -200,8 +210,6 @@ public class AlunoController {
                     return "redirect:/aluno/perfil/editar";
                 }
                 String cpfDigits = cpf == null ? "" : cpf.replaceAll("[^0-9]", "");
-                Path uploadDir = Paths.get(uploadBaseDir, "perfis");
-                Files.createDirectories(uploadDir);
                 String original = file.getOriginalFilename();
                 String ext = (original != null && original.lastIndexOf('.') != -1) ? original.substring(original.lastIndexOf('.')) : "";
                 String novoNome = cpfDigits + ext.toLowerCase();
@@ -213,6 +221,9 @@ public class AlunoController {
                 if (antigo != null && !antigo.isBlank() && !antigo.equals(novoNome)) {
                     try { Files.deleteIfExists(uploadDir.resolve(antigo)); } catch (Exception ignored) {}
                 }
+            } else {
+                // Mantém a foto antiga se não enviou nova nem removeu
+                alunoAtualizado.setFotoPerfil(sess.getFotoPerfil());
             }
 
             // Persistir alterações

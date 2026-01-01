@@ -62,10 +62,8 @@ public class InstrutorService {
                 if (instrutorAtualizado.getDataNascimento() != null) {
                     instrutor.setDataNascimento(instrutorAtualizado.getDataNascimento());
                 }
-                // Atualiza a foto de perfil apenas se um novo valor for enviado (igual ao fluxo do aluno)
-                if (instrutorAtualizado.getFotoPerfil() != null && !instrutorAtualizado.getFotoPerfil().isBlank()) {
+                    // Corrigido: sempre atualizar o campo fotoPerfil (permitindo null para remoção)
                     instrutor.setFotoPerfil(instrutorAtualizado.getFotoPerfil());
-                }
                 instrutor.setAdmin(instrutorAtualizado.isAdmin());
                 return instrutorRepository.save(instrutor);
             })
