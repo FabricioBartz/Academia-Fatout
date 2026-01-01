@@ -70,11 +70,11 @@
                                 </div>
                                 <div class="col-md-6">
                                     <label for="dataCadastro" class="form-label">Início na Academia</label>
-                                    <input type="date" class="form-control" id="dataCadastro" th:field="*{dataCadastro}">
+                                    <input type="date" class="form-control" id="dataCadastro" th:value="${instrutor.dataCadastro != null ? #temporals.format(instrutor.dataCadastro, 'yyyy-MM-dd') : ''}" name="dataCadastro">
                                 </div>
                                 <div class="col-md-6">
                                     <label for="dataNascimento" class="form-label">Data de Nascimento</label>
-                                    <input type="date" class="form-control" id="dataNascimento" th:field="*{dataNascimento}">
+                                    <input type="date" class="form-control" id="dataNascimento" th:value="${instrutor.dataNascimento != null ? #temporals.format(instrutor.dataNascimento, 'yyyy-MM-dd') : ''}" name="dataNascimento">
                                 </div>
                                 <div class="col-md-6 d-flex align-items-center">
                                     <div class="form-check mt-4">
