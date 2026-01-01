@@ -42,32 +42,63 @@
             </div>
             <!-- Conteúdo principal -->
             <div class="col-md-9">
-                <h2 class="mb-4">Meu Perfil</h2>
-                <div class="card shadow-sm">
-                    <div class="card-body d-flex flex-wrap align-items-center">
-                        <div class="flex-grow-1">
-                            <h4 th:text="${instrutor.nome}">Nome Instrutor</h4>
-                            <div class="text-muted mb-2" th:text="${instrutor.email}">email@academia.com</div>
-                            <hr>
-                            <div class="row mb-2">
-                                <div class="col-md-6 mb-2"><b>CPF:</b> <span th:text="${instrutor.cpf}">000.000.000-00</span></div>
-                                <div class="col-md-6 mb-2"><b>Telefone:</b> <span th:text="${instrutor.telefone}">(00) 00000-0000</span></div>
-                                <div class="col-md-6 mb-2"><b>Início na Academia:</b> <span th:text="${#temporals.format(instrutor.dataCadastro, 'dd/MM/yyyy')}">01/01/2020</span></div>
-                                <div class="col-md-6 mb-2"><b>Data de Nascimento:</b> <span th:text="${#temporals.format(instrutor.dataNascimento, 'dd/MM/yyyy')}">01/01/1990</span></div>
-                            </div>
-                            <hr>
-                            <div class="d-flex gap-2">
-                                <a th:href="@{/instrutor/editar-perfil}" class="btn btn-warning">Editar Perfil</a>
+                <div class="d-flex align-items-center justify-content-between mb-4">
+                    <h2 class="mb-0">Meu Perfil</h2>
+                    <div class="d-flex align-items-center gap-2">
+                        <div th:if="${msgSucesso}" class="alert alert-success flash-alert mb-0 py-1" th:text="${msgSucesso}">Sucesso</div>
+                        <div th:if="${msgErro}" class="alert alert-danger flash-alert mb-0 py-1" th:text="${msgErro}">Erro</div>
+                    </div>
+                </div>
+
+                <div class="card border-0 shadow-sm">
+                    <div class="card-body">
+                        <div class="row g-3 align-items-start">
+                            <div class="col-md-8">
+                                <h4 class="mb-1" th:text="${instrutor.nome}">Nome Instrutor</h4>
+                                <div class="text-muted mb-3" th:text="${instrutor.email}">email@academia.com</div>
+                                <hr>
+
+                                <div class="row">
+                                    <div class="col-md-6 mb-3">
+                                        <p><strong>CPF:</strong> 
+                                            <span th:text="${instrutor.cpf != null && instrutor.cpf.length() == 11 ? instrutor.cpf.substring(0,3) + '.' + instrutor.cpf.substring(3,6) + '.' + instrutor.cpf.substring(6,9) + '-' + instrutor.cpf.substring(9,11) : instrutor.cpf}">123.456.789-01</span>
+                                        </p>
+                                    </div>
+                                    <div class="col-md-6 mb-3">
+                                        <p><strong>Telefone:</strong> 
+                                            <span th:text="${instrutor.telefone != null && instrutor.telefone.replaceAll('\D', '').length() == 11 ? '(' + instrutor.telefone.substring(0,2) + ') ' + instrutor.telefone.substring(2,7) + '-' + instrutor.telefone.substring(7,11) : instrutor.telefone}">(11) 98765-4321</span>
+                                        </p>
+                                    </div>
+                                    <div class="col-md-6 mb-3">
+                                        <p><strong>Início na Academia:</strong> 
+                                            <span th:text="${instrutor.dataCadastro != null ? #temporals.format(instrutor.dataCadastro, 'dd/MM/yyyy') : '—'}">01/01/2020</span>
+                                        </p>
+                                    </div>
+                                    <div class="col-md-6 mb-3">
+                                        <p><strong>Data de Nascimento:</strong> 
+                                            <span th:text="${instrutor.dataNascimento != null ? #temporals.format(instrutor.dataNascimento, 'dd/MM/yyyy') : '—'}">01/01/1990</span>
+                                        </p>
+                                    </div>
+                                </div>
+                                <hr>
                                 
-                                </form>
+                                <div class="d-flex gap-2">
+                                    <a th:href="@{/instrutor/editar-perfil}" class="btn btn-warning rounded-pill px-4">Editar Perfil</a>
+                                </div>
                             </div>
-                        </div>
-                        <div class="text-center ms-md-5 mt-4 mt-md-0">
-                            <div>
-                                <img th:if="${instrutor.fotoPerfil != null && !#strings.isEmpty(instrutor.fotoPerfil)}" th:src="@{'/uploads/perfis/' + ${instrutor.fotoPerfil}}" alt="Foto de Perfil" class="rounded-circle" style="width: 140px; height: 140px; object-fit: cover;">
-                                <i th:unless="${instrutor.fotoPerfil != null && !#strings.isEmpty(instrutor.fotoPerfil)}" class="bi bi-person-circle" style="font-size: 140px; color: #b0b8c1;"></i>
+
+                            <div class="col-md-4 d-flex align-items-center justify-content-center" style="padding-top: 40px !important;">
+                                <div class="d-flex flex-column align-items-center">
+                                    <div th:if="${instrutor.fotoPerfil != null && !#strings.isEmpty(instrutor.fotoPerfil)}">
+                                        <img th:src="@{'/uploads/perfis/' + ${instrutor.fotoPerfil} + '?v=' + ${#dates.createNow().time}}" 
+                                            alt="Foto de Perfil" class="avatar-150 rounded-circle shadow-sm" style="object-fit: cover; width: 150px; height: 150px;">
+                                    </div>
+                                    <div th:unless="${instrutor.fotoPerfil != null && !#strings.isEmpty(instrutor.fotoPerfil)}">
+                                        <i class="bi bi-person-circle avatar-icon-150"></i>
+                                    </div>
+                                    <div class="mt-2 text-muted" style="font-size: 0.9rem;">Foto de Perfil</div>
+                                </div>
                             </div>
-                            <div class="mt-2 text-muted">Foto de Perfil</div>
                         </div>
                     </div>
                 </div>
