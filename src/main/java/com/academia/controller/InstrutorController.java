@@ -88,7 +88,7 @@ public class InstrutorController {
                     instrutorAtualizado.setDataCadastro(instrutorExistente.getDataCadastro());
                 }
 
-                // 4. LÓGICA DA FOTO (O seu "Pulo do Gato")
+                // 4. LÓGICA DA FOTO 
                 if (removerFoto) {
                     instrutorAtualizado.setFotoPerfil(null);
                 } else if (file != null && !file.isEmpty()) {
@@ -1073,21 +1073,30 @@ public class InstrutorController {
         return "instrutor/editar-aluno";
     }
     
+  
     @PostMapping("/alunos/editar/{cpf}")
     public String salvarEdicaoAluno(@PathVariable String cpf,
-                                   @RequestParam String nome,
-                                   @RequestParam String email,
-                                   @RequestParam(required = false) String telefone,
-                                   @RequestParam(required = false) String dataNascimento,
-                                   @RequestParam(required = false) String dataInicio,
-                                   @RequestParam(required = false) String objetivo,
-                                   @RequestParam(value = "file", required = false) MultipartFile file,
-                                   Model model,
-                                   RedirectAttributes ra) {
+                                @RequestParam String nome,
+                                @RequestParam String email,
+                                @RequestParam(required = false) String telefone,
+                                @RequestParam(required = false) String dataNascimento,
+                                @RequestParam(required = false) String dataInicio,
+                                @RequestParam(required = false) String objetivo,
+                                @RequestParam(value = "file", required = false) MultipartFile file,
+                                @RequestParam(value = "removerFoto", required = false) boolean removerFoto, // NOVO PARÂMETRO
+                                Model model,
+                                RedirectAttributes ra) {
         try {
+            // 1. Busca o aluno atual no banco para ter a "fonte da verdade"
+            Aluno alunoExistente = alunoService.buscarPorCpf(cpf)
+                    .orElseThrow(() -> new Exception("Aluno não encontrado"));
+
             Aluno alunoAtualizado = new Aluno();
+            alunoAtualizado.setCpf(cpf.replaceAll("[^0-9]", ""));
             alunoAtualizado.setNome(nome);
             alunoAtualizado.setEmail(email);
+            alunoAtualizado.setSenha(alunoExistente.getSenha()); // Preserva a senha
+
             if (telefone != null && !telefone.trim().isEmpty()) {
                 alunoAtualizado.setTelefone(telefone.replaceAll("[^0-9]", ""));
             }
@@ -1098,52 +1107,51 @@ public class InstrutorController {
                 alunoAtualizado.setObjetivo(objetivo);
             }
             if (dataInicio != null && !dataInicio.trim().isEmpty()) {
-                alunoAtualizado.setDataCadastro(java.time.LocalDate.parse(dataInicio));
+                alunoAtualizado.setDataCadastro(LocalDate.parse(dataInicio));
             }
-            // Upload da foto de perfil, se enviado
-            if (file != null && !file.isEmpty()) {
+
+            // 2. LÓGICA DA FOTO (Hierarquia: Remover > Nova > Manter Atual)
+            if (removerFoto) {
+                // Caso o instrutor marcou para remover a foto do aluno
+                alunoAtualizado.setFotoPerfil(null);
+                
+                // Opcional: deletar o arquivo físico para economizar espaço
+                if (alunoExistente.getFotoPerfil() != null) {
+                    Path antigo = Paths.get(uploadBaseDir, "perfis", alunoExistente.getFotoPerfil());
+                    Files.deleteIfExists(antigo);
+                }
+            } else if (file != null && !file.isEmpty()) {
+                // Processo de Upload de nova foto
                 String ct = file.getContentType();
-                long max = 2L * 1024 * 1024; // 2 MB
-                boolean tipoValido = ct != null && (ct.equals("image/webp") || ct.equals("image/jpeg") || ct.equals("image/png"));
-                if (!tipoValido) {
-                    ra.addFlashAttribute("msgErro", "Formato de imagem inválido. Use WebP, JPEG ou PNG.");
+                long max = 2L * 1024 * 1024;
+                if (ct == null || (!ct.equals("image/webp") && !ct.equals("image/jpeg") && !ct.equals("image/png"))) {
+                    ra.addFlashAttribute("msgErro", "Formato inválido. Use WebP, JPEG ou PNG.");
                     return "redirect:/instrutor/alunos/perfil/" + cpf;
                 }
-                if (file.getSize() > max) {
-                    ra.addFlashAttribute("msgErro", "Arquivo muito grande. Limite: 2 MB.");
-                    return "redirect:/instrutor/alunos/perfil/" + cpf;
-                }
-                String cpfDigits = cpf == null ? "" : cpf.replaceAll("[^0-9]", "");
+
                 Path uploadDir = Paths.get(uploadBaseDir, "perfis");
                 Files.createDirectories(uploadDir);
+                
                 String original = file.getOriginalFilename();
-                String ext = (original != null && original.lastIndexOf('.') != -1) ? original.substring(original.lastIndexOf('.')) : "";
-                String novoNome = cpfDigits + ext.toLowerCase();
-                Path destino = uploadDir.resolve(novoNome);
-                Files.copy(file.getInputStream(), destino, StandardCopyOption.REPLACE_EXISTING);
-                // Remover foto antiga se nome diferente
-                try {
-                    var atualOpt = alunoService.buscarPorCpf(cpf);
-                    String antigo = atualOpt.map(Aluno::getFotoPerfil).orElse(null);
-                    if (antigo != null && !antigo.isBlank() && !antigo.equals(novoNome)) {
-                        Files.deleteIfExists(uploadDir.resolve(antigo));
-                    }
-                } catch (Exception ignored) {}
+                String ext = (original != null && original.lastIndexOf('.') != -1) ? original.substring(original.lastIndexOf('.')) : ".jpg";
+                String novoNome = alunoAtualizado.getCpf() + ext.toLowerCase();
+                
+                Files.copy(file.getInputStream(), uploadDir.resolve(novoNome), StandardCopyOption.REPLACE_EXISTING);
                 alunoAtualizado.setFotoPerfil(novoNome);
+            } else {
+                // SE O CAMPO ESTIVER VAZIO: Mantém a foto que já existia no banco
+                alunoAtualizado.setFotoPerfil(alunoExistente.getFotoPerfil());
             }
+
             alunoService.atualizarAluno(cpf, alunoAtualizado);
             ra.addFlashAttribute("msgSucesso", "Aluno atualizado com sucesso.");
             return "redirect:/instrutor/alunos/perfil/" + cpf;
+
         } catch (Exception e) {
-            model.addAttribute("error", "Erro ao atualizar aluno: " + e.getMessage());
-            Instrutor instrutor = instrutorService.listarTodos().get(0);
-            model.addAttribute("instrutor", instrutor);
-            Aluno aluno = alunoService.buscarPorCpf(cpf).orElse(null);
-            model.addAttribute("aluno", aluno);
-            return "instrutor/editar-aluno";
+            ra.addFlashAttribute("msgErro", "Erro ao atualizar aluno: " + e.getMessage());
+            return "redirect:/instrutor/alunos/perfil/" + cpf;
         }
     }
-
     // =====================
     // Gestão de Instrutores
     // =====================
