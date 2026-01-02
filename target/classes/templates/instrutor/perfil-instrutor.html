@@ -158,6 +158,16 @@
                 form.submit();
             });
         }
+        document.addEventListener('DOMContentLoaded', function() {
+            const alerts = document.querySelectorAll('.flash-alert');
+            alerts.forEach(a => {
+                setTimeout(() => {
+                    a.classList.add('fade');
+                    a.style.opacity = '0';
+                    setTimeout(() => a.remove(), 300);
+                }, 2000);
+            });
+        });
     </script>
 </body>
 </html>

@@ -106,5 +106,17 @@
         </div>
     </div>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const alerts = document.querySelectorAll('.flash-alert');
+            alerts.forEach(a => {
+                setTimeout(() => {
+                    a.classList.add('fade');
+                    a.style.opacity = '0';
+                    setTimeout(() => a.remove(), 300);
+                }, 2000);
+            });
+        });
+    </script>
 </body>
 </html>

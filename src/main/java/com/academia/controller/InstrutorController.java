@@ -1246,9 +1246,8 @@ public class InstrutorController {
                                 @RequestParam(value = "removerFoto", required = false) boolean removerFoto, // NOVO
                                 HttpSession session,
                                 RedirectAttributes ra) {
+        String cpfLimpo = cpf.replaceAll("\\D", "");
         try {
-            String cpfLimpo = cpf.replaceAll("\\D", "");
-            
             // 1. Busca o instrutor existente para não perder foto nem senha
             Instrutor instrutorExistente = instrutorService.buscarPorCpf(cpfLimpo)
                     .orElseThrow(() -> new Exception("Instrutor não encontrado"));
@@ -1300,7 +1299,11 @@ public class InstrutorController {
         } catch (Exception ex) {
             ra.addFlashAttribute("msgErro", "Erro ao atualizar: " + ex.getMessage());
         }
-        return "redirect:/instrutor/instrutores";
+        if (cpfLimpo == null || cpfLimpo.isEmpty()) {
+            ra.addFlashAttribute("msgErro", "CPF inválido para redirecionamento.");
+            return "redirect:/instrutor/instrutores";
+        }
+        return "redirect:/instrutor/instrutores/perfil/" + cpfLimpo;
     }
 
     // Página dedicada para edição de perfil de instrutor (abre em nova aba)
