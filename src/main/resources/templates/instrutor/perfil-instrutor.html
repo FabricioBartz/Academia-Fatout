@@ -84,10 +84,15 @@
                                 <button type="button" class="btn btn-warning me-2" onclick="editarInstrutor()">Editar Perfil</button>
                                 <button type="button" class="btn btn-danger" onclick="removerInstrutor()">Remover Instrutor</button>
                             </div>
-                            <div class="col-md-4 d-flex align-items-center justify-content-center" style="padding-top: 50px !important;">
+                            <div class="col-md-4 d-flex align-items-center justify-content-center" style="padding-top: 40px !important;">
                                 <div class="d-flex flex-column align-items-center">
-                                    <!-- Placeholder de foto por enquanto -->
-                                    <i class="bi bi-person-circle avatar-icon-150"></i>
+                                    <div th:if="${instrutorPerfil.fotoPerfil != null && !#strings.isEmpty(instrutorPerfil.fotoPerfil)}">
+                                        <img th:src="@{'/uploads/perfis/' + ${instrutorPerfil.fotoPerfil} + '?v=' + ${#dates.createNow().time}}" 
+                                            alt="Foto de Perfil" class="avatar-150 rounded-circle shadow-sm" style="object-fit: cover; width: 150px; height: 150px;">
+                                    </div>
+                                    <div th:unless="${instrutorPerfil.fotoPerfil != null && !#strings.isEmpty(instrutorPerfil.fotoPerfil)}">
+                                        <i class="bi bi-person-circle avatar-icon-150"></i>
+                                    </div>
                                     <div class="mt-2 text-muted" style="font-size: 0.9rem;">Foto de Perfil</div>
                                 </div>
                             </div>

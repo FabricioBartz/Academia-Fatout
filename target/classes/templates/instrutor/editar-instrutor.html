@@ -59,7 +59,7 @@
 
                 <div class="card">
                     <div class="card-body">
-                        <form method="post" th:action="@{/instrutor/instrutores/editar}">
+                        <form method="post" th:action="@{/instrutor/instrutores/editar}" enctype="multipart/form-data">
                             <input type="hidden" name="cpf" th:value="${instrutorPerfil.cpf}">
                                <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}">
                             <div class="row">
@@ -99,17 +99,20 @@
                             <div class="col-md-6 mb-3">
                                 <label for="fotoPerfil" class="form-label">Foto de Perfil</label>
                                 <div class="d-flex align-items-center gap-3">
-                                    <img th:if="${instrutor.fotoPerfil != null && !#strings.isEmpty(instrutor.fotoPerfil)}" 
-                                        th:src="@{'/uploads/perfis/' + ${instrutor.fotoPerfil}}" 
+                                    
+                                    <img th:if="${instrutorPerfil.fotoPerfil != null && !#strings.isEmpty(instrutorPerfil.fotoPerfil)}" 
+                                        th:src="@{'/uploads/perfis/' + ${instrutorPerfil.fotoPerfil}}" 
                                         class="rounded-circle shadow-sm" style="width: 50px; height: 50px; object-fit: cover;">
+                                    
+                                   
                                         
                                     <input type="file" class="form-control" id="fotoPerfil" name="file" accept="image/*">
                                 </div>
 
-                                <div th:if="${instrutor.fotoPerfil != null && !#strings.isEmpty(instrutor.fotoPerfil)}" class="form-check mt-2">
+                                <div th:if="${instrutorPerfil.fotoPerfil != null && !#strings.isEmpty(instrutorPerfil.fotoPerfil)}" class="form-check mt-2">
                                     <input class="form-check-input" type="checkbox" name="removerFoto" id="removerFoto" value="true">
                                     <label class="form-check-label text-danger" for="removerFoto">
-                                        Remover foto atual
+                                        Remover foto atual 
                                     </label>
                                 </div>
                                 <div class="form-text">Formatos: WebP, JPEG ou PNG. Máx: 2 MB.</div>

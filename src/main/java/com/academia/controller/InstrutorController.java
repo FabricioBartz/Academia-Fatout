@@ -1236,45 +1236,69 @@ public class InstrutorController {
 
     @PostMapping("/instrutores/editar")
     public String editarInstrutor(@RequestParam String cpf,
-                                  @RequestParam String nome,
-                                  @RequestParam String email,
-                                  @RequestParam(required = false) String telefone,
-                                  @RequestParam(required = false, name = "dataInicio") String dataInicio,
-                                  @RequestParam(required = false, name = "dataNascimento") String dataNascimento,
-                                  @RequestParam(required = false, name = "admin") Boolean admin,
-                                  HttpSession session,
-                                  RedirectAttributes ra) {
-        Instrutor atual = (Instrutor) session.getAttribute("instrutor");
-        // Fallback para sessão vazia (ex.: nova aba)
-        if (atual == null) {
-            var todos = instrutorService.listarTodos();
-            atual = todos.isEmpty() ? null : todos.get(0);
-        }
-        if (atual == null || !atual.isAdmin()) {
-            ra.addFlashAttribute("msgErro", "Acesso negado: somente administradores podem editar instrutores.");
-            return "redirect:/instrutor/instrutores";
-        }
+                                @RequestParam String nome,
+                                @RequestParam String email,
+                                @RequestParam(required = false) String telefone,
+                                @RequestParam(required = false, name = "dataInicio") String dataInicio,
+                                @RequestParam(required = false, name = "dataNascimento") String dataNascimento,
+                                @RequestParam(required = false, name = "admin") Boolean admin,
+                                @RequestParam(value = "file", required = false) MultipartFile file, // NOVO
+                                @RequestParam(value = "removerFoto", required = false) boolean removerFoto, // NOVO
+                                HttpSession session,
+                                RedirectAttributes ra) {
         try {
+            String cpfLimpo = cpf.replaceAll("\\D", "");
+            
+            // 1. Busca o instrutor existente para não perder foto nem senha
+            Instrutor instrutorExistente = instrutorService.buscarPorCpf(cpfLimpo)
+                    .orElseThrow(() -> new Exception("Instrutor não encontrado"));
+
+            // 2. Monta o objeto de atualização
             Instrutor atualizado = new Instrutor();
+            atualizado.setCpf(cpfLimpo);
             atualizado.setNome(nome);
             atualizado.setEmail(email);
-            if (telefone != null && !telefone.trim().isEmpty()) {
-                atualizado.setTelefone(telefone.replaceAll("[^0-9]", ""));
+            atualizado.setSenha(instrutorExistente.getSenha()); // Preserva senha
+
+            if (telefone != null) {
+                atualizado.setTelefone(telefone.replaceAll("\\D", ""));
             }
-            if (dataInicio != null && !dataInicio.trim().isEmpty()) {
-                java.time.LocalDate inicio = java.time.LocalDate.parse(dataInicio);
-                atualizado.setDiaQueComecouTrabalhar(inicio);
-                // também persistir em Pessoa (data_inicio)
-                atualizado.setDataCadastro(inicio);
+            
+            if (dataInicio != null && !dataInicio.isEmpty()) {
+                atualizado.setDataCadastro(java.time.LocalDate.parse(dataInicio));
+                atualizado.setDiaQueComecouTrabalhar(java.time.LocalDate.parse(dataInicio));
             }
-            if (dataNascimento != null && !dataNascimento.trim().isEmpty()) {
+
+            if (dataNascimento != null && !dataNascimento.isEmpty()) {
                 atualizado.setDataNascimento(java.time.LocalDate.parse(dataNascimento));
             }
+
             atualizado.setAdmin(Boolean.TRUE.equals(admin));
-            instrutorService.atualizarInstrutor(cpf.replaceAll("[^0-9]", ""), atualizado);
+
+            // 3. LÓGICA DA FOTO (IDÊNTICA À QUE FUNCIONA NO SEU PERFIL)
+            if (removerFoto) {
+                atualizado.setFotoPerfil(null);
+                // Opcional: deletar arquivo físico aqui
+            } else if (file != null && !file.isEmpty()) {
+                String uploadDir = "src/main/resources/static/uploads/perfis/";
+                Path uploadPath = Paths.get(uploadDir);
+                if (!Files.exists(uploadPath)) Files.createDirectories(uploadPath);
+
+                String extensao = file.getOriginalFilename().substring(file.getOriginalFilename().lastIndexOf("."));
+                String novoNome = cpfLimpo + extensao;
+                Files.copy(file.getInputStream(), uploadPath.resolve(novoNome), StandardCopyOption.REPLACE_EXISTING);
+                atualizado.setFotoPerfil(novoNome);
+            } else {
+                // Se nada foi feito, mantém a foto que já estava no banco
+                atualizado.setFotoPerfil(instrutorExistente.getFotoPerfil());
+            }
+
+            // 4. Salva no banco
+            instrutorService.atualizarInstrutor(cpfLimpo, atualizado);
+            
             ra.addFlashAttribute("msgSucesso", "Instrutor atualizado com sucesso.");
-        } catch (RuntimeException ex) {
-            ra.addFlashAttribute("msgErro", ex.getMessage());
+        } catch (Exception ex) {
+            ra.addFlashAttribute("msgErro", "Erro ao atualizar: " + ex.getMessage());
         }
         return "redirect:/instrutor/instrutores";
     }
