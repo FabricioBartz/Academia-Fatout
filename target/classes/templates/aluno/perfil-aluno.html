@@ -43,7 +43,7 @@
             </div>
             <div class="col-md-9">
                 <div class="d-flex align-items-center justify-content-between mb-4">
-                    <h2 class="mb-0">Meu Perfil</h2>
+                    <h1 class="mb-0">Meu Perfil</h1>
                     <div class="d-flex align-items-center gap-2">
                         <div th:if="${msgSucesso}" class="alert alert-success flash-alert mb-0" th:text="${msgSucesso}">Sucesso</div>
                         <div th:if="${msgErro}" class="alert alert-danger flash-alert mb-0" th:text="${msgErro}">Erro</div>
@@ -85,7 +85,7 @@
                                 <hr>
                                 
                                 <div class="d-flex gap-2">
-                                    <a th:href="@{/aluno/perfil/editar}" class="btn btn-warning rounded-pill px-4">Editar Dados</a>
+                                    <a th:href="@{/aluno/perfil/editar}" class="btn btn-warning rounded-pill px-4">Editar Perfil</a>
                                 </div>
                             </div>
 
