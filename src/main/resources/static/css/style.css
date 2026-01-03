@@ -79,7 +79,7 @@ body[data-role="instrutor"] .navbar {
     border-bottom: 1px solid #e0e3e7 !important;
 }
 body[data-role="aluno"] .navbar {
-    background-color: var(--header-aluno-bg) !important;
+    background-color: #45a049 !important;
     color: var(--header-aluno-fg) !important;
     box-shadow: var(--header-shadow) !important;
     border-bottom: 1px solid #e0e3e7 !important;
@@ -804,7 +804,7 @@ form.d-flex input[name="q"] + .btn-pesquisar {
 }
 
 .custom-nav-container {
-    background: rgba(25, 135, 84, 0.85); /* Verde Aluno com Transparência */
+    background-color: #45a049 !important; /* Verde Aluno com Transparência */
     backdrop-filter: blur(12px);
     -webkit-backdrop-filter: blur(12px);
     border: 1px solid rgba(255, 255, 255, 0.2);
@@ -873,5 +873,5 @@ margin-bottom: 0.5rem;
 
 .logo-text span {
 color: #f1f3f5 !important;
-text-shadow: 2px 2px 4px rgba(13, 110, 253, 0.2);
+text-shadow: 2px 2px 4px rgba(0,0,0,0.1);
 }
