@@ -350,10 +350,21 @@ public class AlunoController {
             return "redirect:/aluno/turmas";
         }
         var turma = turmaOpt.get();
+        
+        // --- ADICIONE ESTA LINHA ABAIXO ---
+        java.util.Set<Long> turmasMatriculadasIds = turmaService.listarTurmasDoAluno(aluno.getCpf()).stream()
+                .map(com.academia.model.Turma::getId)
+                .collect(java.util.stream.Collectors.toSet());
+        // ---------------------------------
+
         model.addAttribute("aluno", aluno);
         model.addAttribute("turma", turma);
-        model.addAttribute("alunosTurma", turma.getAlunos()); // exibir apenas nomes na view
+        model.addAttribute("alunosTurma", turma.getAlunos()); 
         model.addAttribute("backUrl", "/aluno/turmas");
+        
+        // --- ADICIONE ESTE ATRIBUTO ---
+        model.addAttribute("turmasMatriculadasIds", turmasMatriculadasIds);
+        
         return "aluno/turma-detalhe";
     }
 
@@ -372,10 +383,20 @@ public class AlunoController {
             return "redirect:/aluno/turmas/disponiveis";
         }
         var turma = turmaOpt.get();
+
+        // --- ADICIONE ESTA LINHA ---
+        java.util.Set<Long> turmasMatriculadasIds = turmaService.listarTurmasDoAluno(aluno.getCpf()).stream()
+                .map(com.academia.model.Turma::getId)
+                .collect(java.util.stream.Collectors.toSet());
+
         model.addAttribute("aluno", aluno);
         model.addAttribute("turma", turma);
         model.addAttribute("alunosTurma", turma.getAlunos());
         model.addAttribute("backUrl", "/aluno/turmas/disponiveis");
+        
+        // --- ADICIONE ESTE ATRIBUTO ---
+        model.addAttribute("turmasMatriculadasIds", turmasMatriculadasIds);
+
         return "aluno/turma-detalhe";
     }
 
