@@ -13,14 +13,31 @@ border: 1px solid #dadce0 !important;
 transform: translateY(-4px);
 box-shadow: 0 8px 15px rgba(13, 110, 253, 0.3);
 }
-.login-card {
-border: none;
-border-radius: 24px;
-background: rgba(255, 255, 255, 0.9);
-backdrop-filter: blur(10px);
-max-width: 420px;
-margin: 0 auto;
+
+ /* imagem de fundo */
+body {
+    font-family: 'Inter', sans-serif;
+        /* Substitua o URL abaixo pelo caminho da sua imagem ou uma imagem da web */
+    background: linear-gradient(rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.6)), 
+                    url('../img/fundo-academia.avif');
+    background-size: cover;
+    background-position: center;
+    background-attachment: fixed;
+     min-height: 100vh;
+    display: flex;
+    align-items: center;
 }
+
+.login-card {
+        border: none;
+        border-radius: 24px;
+        /* Aumentamos um pouco a opacidade do branco para destacar do fundo da foto */
+        background: rgba(255, 255, 255, 0.95);
+        backdrop-filter: blur(8px);
+        max-width: 420px;
+        margin: 0 auto;
+        box-shadow: 0 20px 40px rgba(0,0,0,0.4) !important;
+    }
 
 /* Logo Estilizado igual à tela de seleção */
 .logo-text {
