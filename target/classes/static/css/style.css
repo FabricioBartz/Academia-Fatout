@@ -771,3 +771,24 @@ form.d-flex input[name="q"] + .btn-pesquisar {
     color: rgba(255, 255, 255, 0.8);
     line-height: 1;
 }
+
+/* customizar o passar o mouse em linhas */
+/* Customizando o realce ao passar o mouse */
+.list-group-item-action:hover {
+    background-color: #e8f5e9; /* Um verde bem claro */
+    color: #2e7d32;           /* Muda a cor do texto para um verde escuro */
+    border-left: 4px solid #45a049; /* Adiciona uma bordinha lateral no destaque */
+}
+
+/* Faz o hover da tabela ficar idêntico ao list-group-item-action */
+.table-hover tbody tr:hover {
+    background-color: #f8f9fa !important; /* Cor de fundo do list-group-item-action */
+    color: #212529; /* Cor do texto padrão */
+    box-shadow: inset 1px 0 0 #dee2e6, inset -1px 0 0 #dee2e6; /* Leve profundidade */
+}
+
+/* Opcional: Se quiser o efeito de "clique" ou um destaque maior */
+.table-hover tbody tr:active {
+    background-color: #e9ecef !important;
+}
+
