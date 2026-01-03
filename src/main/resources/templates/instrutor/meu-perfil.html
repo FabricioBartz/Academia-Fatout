@@ -49,7 +49,7 @@
                         <div th:if="${msgErro}" class="alert alert-danger flash-alert mb-0 py-1" th:text="${msgErro}">Erro</div>
                     </div>
                 </div>
-
+                
                 <div class="card border-0 shadow-sm">
                     <div class="card-body">
                         <div class="row g-3 align-items-start">
@@ -93,9 +93,7 @@
                                         <img th:src="@{'/uploads/perfis/' + ${instrutor.fotoPerfil} + '?v=' + ${#dates.createNow().time}}" 
                                             alt="Foto de Perfil" class="avatar-150 rounded-circle shadow-sm" style="object-fit: cover; width: 150px; height: 150px;">
                                     </div>
-                                    <div th:unless="${instrutor.fotoPerfil != null && !#strings.isEmpty(instrutor.fotoPerfil)}">
-                                        <i class="bi bi-person-circle avatar-icon-150"></i>
-                                    </div>
+                                    <div th:unless="${instrutor.fotoPerfil != null && !#strings.isEmpty(instrutor.fotoPerfil)}"><i class="bi bi-person-circle avatar-icon-150"></i></div>
                                     <div class="mt-2 text-muted" style="font-size: 0.9rem;">Foto de Perfil</div>
                                 </div>
                             </div>
