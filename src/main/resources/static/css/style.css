@@ -792,3 +792,86 @@ form.d-flex input[name="q"] + .btn-pesquisar {
     background-color: #e9ecef !important;
 }
 
+
+/* =============================
+   Navbar Moderna para Aluno
+   ============================= */ 
+/* Navbar Flutuante com Efeito Vidro */
+.navbar-floating {
+    position: sticky;
+    top: 15px;
+    z-index: 1000;
+}
+
+.custom-nav-container {
+    background: rgba(25, 135, 84, 0.85); /* Verde Aluno com Transparência */
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    border-radius: 50px; /* Formato Pílula */
+    padding: 10px 25px;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.15);
+}
+
+
+/* Foto de Perfil Circular e Moderna */
+.profile-nav-wrapper {
+    width: 42px;
+    height: 42px;
+    border-radius: 50%;
+    border: 2px solid rgba(255, 255, 255, 0.8);
+    overflow: hidden;
+    transition: transform 0.3s ease;
+}
+
+.profile-nav-wrapper:hover {
+    transform: scale(1.1);
+}
+
+.nav-avatar-modern {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.nav-avatar-icon-modern {
+    font-size: 38px;
+    color: white;
+    line-height: 1;
+}
+
+/* Botão Sair Minimalista */
+.btn-sair-modern {
+    background: rgba(0, 0, 0, 0.2);
+    color: white;
+    width: 38px;
+    height: 38px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    text-decoration: none;
+    transition: all 0.3s ease;
+}
+
+.btn-sair-modern:hover {
+    background: #f1f3f4; /* Vermelho ao passar o mouse */
+    color: rgb(27, 26, 26);
+    transform: rotate(90deg);
+}
+
+.logo-text {
+font-family: 'Exo 2', sans-serif;
+font-size: 28px;
+font-weight: 800;
+font-style: italic;
+color: #1e293b !important;
+letter-spacing: 0px;
+text-shadow: 2px 2px 4px rgba(0,0,0,0.1);
+margin-bottom: 0.5rem;
+}
+
+.logo-text span {
+color: #f1f3f5 !important;
+text-shadow: 2px 2px 4px rgba(13, 110, 253, 0.2);
+}
