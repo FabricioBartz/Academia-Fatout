@@ -792,17 +792,3 @@ form.d-flex input[name="q"] + .btn-pesquisar {
     background-color: #e9ecef !important;
 }
 
-/* =============================
-   Logo com Efeito de Texto
-   ============================= */
-.logo-text {
-    font-family: 'Archivo Black', sans-serif;
-    font-size: 2.5rem;
-    text-transform: uppercase;
-    letter-spacing: -2px; /* Letras juntas dão ideia de força */
-    background: linear-gradient(to bottom, #0d6efd, #003d99);
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    filter: drop-shadow(2px 2px 0px rgba(0,0,0,0.1));
-}
-
