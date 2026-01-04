@@ -875,3 +875,119 @@ margin-bottom: 0.5rem;
 color: #f1f3f5 !important;
 text-shadow: 2px 2px 4px rgba(0,0,0,0.1);
 }
+
+/* =============================
+   Cards dos alunos
+   ============================= */
+
+   .alunos-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+    gap: 20px;
+}
+
+.aluno-card-modelo {
+    background: #ffffff;
+    border-radius: 20px;
+    padding: 25px;
+    display: flex;
+    align-items: center;
+    border: 1px solid #e0e6ed;
+    transition: all 0.3s ease;
+    cursor: pointer;
+    position: relative;
+    overflow: hidden;
+}
+
+.aluno-card-modelo:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 12px 24px rgba(0, 0, 0, 0.1);
+    border-color: #0d6efd;
+}
+
+.aluno-avatar-circular {
+    width: 60px;
+    height: 60px;
+    background-color: #0d6efd;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-right: 18px;
+    flex-shrink: 0;
+}
+
+.aluno-avatar-circular img { width: 100%; height: 100%; object-fit: cover; border-radius: 50%; }
+.aluno-avatar-circular i { font-size: 30px; color: #fff; }
+
+.aluno-nome-modelo { font-size: 1.1rem; font-weight: 700; margin-bottom: 2px; color: #1e293b; }
+.aluno-meta-modelo { font-size: 0.9rem; color: #64748b; margin: 0; }
+
+/* Ações no Hover */
+.aluno-card-hover-actions {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    display: flex;
+    gap: 8px;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+}
+
+.aluno-card-modelo:hover .aluno-card-hover-actions {
+    opacity: 1;
+}
+
+.btn-icon-action {
+    border: none;
+    width: 35px;
+    height: 35px;
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: 0.2s;
+}
+
+.btn-icon-action.edit { background: #f0f7ff; color: #0d6efd; }
+.btn-icon-action.edit:hover { background: #0d6efd; color: #fff; }
+
+.btn-icon-action.delete { background: #fff5f5; color: #dc3545; }
+.btn-icon-action.delete:hover { background: #dc3545; color: #fff; }
+
+/* Container do Avatar nos Cards */
+.aluno-avatar-circular-vazado {
+    width: 65px;
+    height: 65px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-right: 20px;
+    flex-shrink: 0;
+    
+    /* ESSENCIAIS PARA FICAR REDONDO: */
+    border-radius: 50%; 
+    overflow: hidden; 
+    position: relative;
+    background-color: transparent; /* Garante que não apareça fundo quadrado */
+}
+
+/* Quando for a imagem do aluno */
+.aluno-avatar-circular-vazado img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    border-radius: 50%; /* Garante arredondamento da própria imagem */
+}
+
+/* Quando for o ícone cinza vazado */
+.aluno-avatar-circular-vazado i {
+    font-size: 66px; /* Ajuste para preencher todo o espaço */
+    color: #cbd5e1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    line-height: 0; /* REMOVE O ESPAÇO NA PARTE DE BAIXO */
+    margin: 0;
+    padding: 0;
+}

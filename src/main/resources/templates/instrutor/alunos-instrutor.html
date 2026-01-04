@@ -246,42 +246,51 @@
                 </div>
                 
                 <!-- Lista de Alunos -->
-                <h3>Alunos Cadastrados</h3>
-                <div class="table-responsive">
-                    <table class="table table-striped table-hover">
-                        <thead>
-                            <tr>
-                                <th>CPF</th>
-                                <th>Nome</th>
-                                <th>Email</th>
-                                <th>Telefone</th>
-                                <th>Início</th>
-                                <th>Ações</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr th:each="aluno : ${alunos}" style="cursor: pointer;" onclick="abrirPerfilAluno(this)" th:data-cpf="${aluno.cpf}">
-                                <td th:text="${aluno.cpf.replaceAll('(\d{3})(\d{3})(\d{3})(\d{2})', '$1.$2.$3-$4')}">123.456.789-01</td>
-                                <td th:text="${aluno.nome}">João Silva</td>
-                                <td th:text="${aluno.email}">joao@email.com</td>
-                                <td th:text="${aluno.telefone != null && aluno.telefone.length() == 11 ? aluno.telefone.replaceAll('(\d{2})(\d{5})(\d{4})', '($1) $2-$3') : aluno.telefone}">(11) 98765-4321</td>
-                                <td th:text="${inicioPorAluno[aluno.cpf] != null ? #temporals.format(inicioPorAluno[aluno.cpf], 'dd/MM/yyyy') : '—'}">—</td>
-                                <td>
-                                    <button class="btn btn-sm btn-warning" onclick="event.stopPropagation(); editarAluno(this)"
-                                        th:data-cpf="${aluno.cpf}"
-                                        th:data-nome="${aluno.nome}"
-                                        th:data-email="${aluno.email}"
-                                        th:data-telefone="${aluno.telefone}"
-                                        th:data-data="${#temporals.format(aluno.dataNascimento, 'yyyy-MM-dd')}"
-                                        th:data-inicio="${aluno.dataCadastro != null ? #temporals.format(aluno.dataCadastro, 'yyyy-MM-dd') : ''}"
-                                        th:data-objetivo="${aluno.objetivo}">Editar</button>
-                                    <form method="post" th:action="@{/instrutor/alunos/excluir/{cpf}(cpf=${aluno.cpf})}" style="display:inline;" onsubmit="event.stopPropagation(); return handleConfirmSubmit(event)" data-confirm="Tem certeza que deseja excluir este aluno?" onclick="event.stopPropagation()">
-                                        <button type="submit" class="btn btn-sm btn-danger" onclick="event.stopPropagation()">Excluir</button>
-                                    </form>
-                                </td>
-                            </tr>
-                        </tbody>
-                    </table>
+                <h3 class="mt-4 mb-3 text-white-shadow">Alunos Cadastrados</h3>
+               
+
+                <div class="alunos-grid">
+                    <div th:each="aluno : ${alunos}" 
+                        class="aluno-card-modelo" 
+                        th:data-cpf="${aluno.cpf}"
+                        onclick="abrirPerfilAluno(this)">
+                        
+                         <div class="aluno-avatar-circular-vazado">
+                            <img th:if="${aluno.fotoPerfil != null && !#strings.isEmpty(aluno.fotoPerfil)}" 
+                                th:src="@{'/uploads/perfis/' + ${aluno.fotoPerfil}}" 
+                                alt="Foto">
+                            <i th:unless="${aluno.fotoPerfil != null && !#strings.isEmpty(aluno.fotoPerfil)}" 
+                            class="bi bi-person-circle"></i>
+                        </div>
+
+                        <div class="aluno-info-modelo">
+                            <h5 class="aluno-nome-modelo" th:text="${aluno.nome}">João Silva</h5>
+                            <p class="aluno-meta-modelo" th:text="${aluno.email}">joao.silva@email.com</p>
+                            <p class="aluno-meta-modelo">
+                                <span th:text="${aluno.telefone != null && aluno.telefone.length() == 11 ? aluno.telefone.replaceAll('(\d{2})(\d{5})(\d{4})', '($1) $2-$3') : aluno.telefone}">(11) 98765-4321</span>
+                            </p>
+                        </div>
+
+                        <div class="aluno-card-hover-actions">
+                            <button class="btn-icon-action edit" onclick="event.stopPropagation(); editarAluno(this)"
+                                    th:data-cpf="${aluno.cpf}" th:data-nome="${aluno.nome}"
+                                    th:data-email="${aluno.email}" th:data-telefone="${aluno.telefone}"
+                                    th:data-data="${#temporals.format(aluno.dataNascimento, 'yyyy-MM-dd')}"
+                                    th:data-inicio="${aluno.dataCadastro != null ? #temporals.format(aluno.dataCadastro, 'yyyy-MM-dd') : ''}"
+                                    th:data-objetivo="${aluno.objetivo}">
+                                <i class="bi bi-pencil"></i>
+                            </button>
+
+                            <form method="post" th:action="@{/instrutor/alunos/excluir/{cpf}(cpf=${aluno.cpf})}" 
+                                onsubmit="event.stopPropagation(); return handleConfirmSubmit(event)" 
+                                data-confirm="Deseja realmente excluir este aluno?"
+                                style="display: inline;" onclick="event.stopPropagation()">
+                                <button type="submit" class="btn-icon-action delete">
+                                    <i class="bi bi-trash"></i>
+                                </button>
+                            </form>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
