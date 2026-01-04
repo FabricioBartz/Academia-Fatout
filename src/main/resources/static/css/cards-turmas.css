@@ -130,3 +130,24 @@
 .bar-low { background-color: #22c55e !important; }    /* Verde */
 .bar-medium { background-color: #f59e0b !important; } /* Laranja */
 .bar-high { background-color: #ef4444 !important; }   /* Vermelho */
+
+/* Badge de Aula Realizada */
+.badge-realizada {
+    background-color: #f1f5f9;
+    color: #64748b;
+    font-size: 0.7rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    padding: 5px 10px;
+    border-radius: 6px;
+    border: 1px solid #e2e8f0;
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+}
+
+/* Estilo opcional para esmaecer o card de aulas passadas */
+.turma-passada {
+    opacity: 0.8;
+    background-color: #fafafa;
+}
