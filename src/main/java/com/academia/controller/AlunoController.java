@@ -288,19 +288,52 @@ public class AlunoController {
         };
     }
     
-    @GetMapping("/turmas")
-    public String turmas(Model model, HttpSession session) {
+   @GetMapping("/turmas")
+    public String turmas(@RequestParam(name = "q", required = false) String q, 
+                         Model model, HttpSession session) {
         Aluno aluno = (Aluno) session.getAttribute("aluno");
         if (aluno == null) {
             aluno = alunoService.listarTodos().isEmpty() ? null : alunoService.listarTodos().get(0);
         }
         model.addAttribute("aluno", aluno);
+
         if (aluno != null) {
-            // Turmas matriculadas
-            var turmasMatriculadas = turmaService.listarTurmasDoAluno(aluno.getCpf());
-            model.addAttribute("turmasMatriculadas", turmasMatriculadas);
+            // 1. Busca todas as turmas do aluno (retorna uma lista mutável)
+            java.util.List<com.academia.model.Turma> turmasTotal = turmaService.listarTurmasDoAluno(aluno.getCpf());
+            
+            // Criamos uma nova lista mutável para evitar erros de ordenação em listas fixas
+            java.util.List<com.academia.model.Turma> turmas = new java.util.ArrayList<>(turmasTotal);
+
+            // 2. Filtra por nome se houver uma busca (parâmetro 'q')
+            if (q != null && !q.trim().isEmpty()) {
+                String termoBusca = q.trim().toLowerCase();
+                turmas = turmas.stream()
+                        .filter(t -> t.getTitulo() != null && t.getTitulo().toLowerCase().contains(termoBusca))
+                        .collect(java.util.stream.Collectors.toList());
+                model.addAttribute("q", q);
+            } else {
+                model.addAttribute("q", "");
+            }
+
+            // 3. Ordena as turmas por data e hora
+            if (!turmas.isEmpty()) {
+                turmas.sort(java.util.Comparator.comparing(com.academia.model.Turma::getDataDaAula)
+                                                .thenComparing(com.academia.model.Turma::getHoraAula)
+                                                .reversed());
+            }
+
+            model.addAttribute("turmasMatriculadas", turmas);
         }
         return "aluno/turmas-aluno";
+    }
+
+   
+
+    // Alias para garantir que a URL amigável use a mesma lógica
+    @GetMapping("/minhas_turmas")
+    public String minhasTurmas(@RequestParam(name = "q", required = false) String q, 
+                               Model model, HttpSession session) {
+        return turmas(q, model, session);
     }
 
     // Lista de turmas disponíveis do mesmo instrutor do plano ativo
@@ -460,10 +493,6 @@ public class AlunoController {
         return treino(model, session);
     }
 
-    @GetMapping("/minhas_turmas")
-    public String minhasTurmas(Model model, HttpSession session) {
-        return turmas(model, session);
-    }
 
     @GetMapping("/minhas_avaliacoes")
     public String minhasAvaliacoes(Model model, HttpSession session) {
