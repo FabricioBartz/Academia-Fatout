@@ -55,10 +55,10 @@
 }
 
 
-/* Estilos gerais */
+/* cor de fundo das páginas */
 body {
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    background-color: #f8f9fa;
+    background: linear-gradient(135deg, #f1f5f9 0%, #e2e8f0 100%);
+    min-height: 100vh;
 }
 
 .navbar {
