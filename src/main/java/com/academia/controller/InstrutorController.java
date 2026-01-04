@@ -219,14 +219,15 @@ public class InstrutorController {
         return alunos(q, model, session);
     }
     
-    @GetMapping("/turmas")
+   @GetMapping("/turmas")
     public String turmas(@RequestParam(name = "q", required = false) String q,
-                         Model model, HttpSession session) {
+                        Model model, HttpSession session) {
         Instrutor instrutor = (Instrutor) session.getAttribute("instrutor");
         if (instrutor == null) {
             instrutor = instrutorService.listarTodos().isEmpty() ? null : instrutorService.listarTodos().get(0);
         }
         model.addAttribute("instrutor", instrutor);
+
         java.util.List<Turma> turmas;
         if (q != null && !q.trim().isEmpty()) {
             turmas = turmaService.buscarPorTitulo(q.trim());
@@ -235,6 +236,15 @@ public class InstrutorController {
             turmas = turmaService.listarPorInstrutor(instrutor == null ? "" : instrutor.getCpf());
             model.addAttribute("q", "");
         }
+
+        // --- ADICIONE ESTA LÓGICA DE ORDENAÇÃO AQUI ---
+        if (turmas != null) {
+            turmas.sort(java.util.Comparator.comparing(Turma::getDataDaAula)
+                                .thenComparing(Turma::getHoraAula)
+                                .reversed());
+        }
+        // ----------------------------------------------
+
         model.addAttribute("turmas", turmas);
         return "instrutor/turmas-instrutor";
     }
