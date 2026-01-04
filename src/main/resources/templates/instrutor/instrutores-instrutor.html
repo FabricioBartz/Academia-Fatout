@@ -221,45 +221,65 @@
                         </div>
                     </div>
                 </div>
-                <h3>Instrutores Cadastrados</h3>
-                <div class="table-responsive">
-                    <table class="table table-striped table-hover">
-                        <thead>
-                            <tr>
-                                <th>CPF</th>
-                                <th>Nome</th>
-                                <th>Email</th>
-                                <th>Telefone</th>
-                                <th>Início</th>
-                                <th>Ações</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr th:each="i : ${instrutores}" class="table-row" style="cursor:pointer;"
-                                th:attr="data-href=@{/instrutor/instrutores/perfil/{cpf}(cpf=${i.cpf})}">
-                                <td th:text="${i.cpf.replaceAll('(\d{3})(\d{3})(\d{3})(\d{2})', '$1.$2.$3-$4')}">123.456.789-01</td>
-                                <td th:text="${i.nome}">Maria</td>
-                                <td th:text="${i.email}">maria@email.com</td>
-                                <td th:text="${i.telefone != null && i.telefone.length() == 11 ? i.telefone.replaceAll('(\d{2})(\d{5})(\d{4})', '($1) $2-$3') : i.telefone}"> (11) 99999-9999 </td>
-                                <td th:text="${i.dataCadastro != null ? #temporals.format(i.dataCadastro, 'dd/MM/yyyy') : '—'}">—</td>
-                                <td>
-                                    <button class="btn btn-sm btn-warning" onclick="editarInstrutorLinha(this)"
-                                        th:data-cpf="${i.cpf}"
-                                        th:data-nome="${i.nome}"
-                                        th:data-email="${i.email}"
-                                        th:data-telefone="${i.telefone}"
-                                        th:data-inicio="${i.dataCadastro != null ? #temporals.format(i.dataCadastro, 'yyyy-MM-dd') : ''}"
-                                        th:data-nascimento="${i.dataNascimento != null ? #temporals.format(i.dataNascimento, 'yyyy-MM-dd') : ''}"
-                                        th:data-admin="${i.admin}">Editar</button>
-                                    <form th:action="@{/instrutor/instrutores/excluir/{cpf}(cpf=${i.cpf})}" method="post" style="display:inline;"
-                                        onsubmit="return handleConfirmSubmit(event)" data-confirm="Tem certeza que deseja excluir este instrutor?">
-                                        <button type="submit" class="btn btn-sm btn-danger">Excluir</button>
-                                    </form>
-                                </td>
-                            </tr>
-                        </tbody>
-                    </table>
+
+
+                <h3 class="mt-4 mb-3 text-white-shadow">Instrutores Cadastrados</h3>
+                
+                <div class="alunos-grid">
+                    <div th:each="i : ${instrutores}" 
+                        class="aluno-card-modelo" 
+                        th:data-cpf="${i.cpf}"
+                        onclick="abPerfil(this)">
+                        
+                        <div class="aluno-avatar-circular-vazado">
+                            <img th:if="${i.fotoPerfil != null && !#strings.isEmpty(i.fotoPerfil)}" 
+                                th:src="@{'/uploads/perfis/' + ${i.fotoPerfil}}" 
+                                alt="Foto">
+                            <i th:unless="${i.fotoPerfil != null && !#strings.isEmpty(i.fotoPerfil)}" 
+                            class="bi bi-person-circle"></i>
+                        </div>
+
+                        <div class="aluno-info-modelo">
+                            <h5 class="aluno-nome-modelo">
+                                <span th:text="${i.nome}">Nome</span>
+                                <span th:if="${i.admin}" class="badge bg-primary ms-1" style="font-size: 0.6rem;">ADMIN</span>
+                            </h5>
+                            <p class="aluno-meta-modelo" th:text="${i.email}">email@academia.com</p>
+                            <p class="aluno-meta-modelo">
+                                <span th:text="${i.telefone != null && i.telefone.length() == 11 ? i.telefone.replaceAll('(\d{2})(\d{5})(\d{4})', '($1) $2-$3') : i.telefone}">(00) 00000-0000</span>
+                            </p>
+                        </div>
+
+                        <div class="aluno-card-hover-actions">
+                            <button class="btn-icon-action edit" title="Editar"
+                                    onclick="event.stopPropagation(); editarInstrutorLinha(this)"
+                                    th:data-cpf="${i.cpf}"
+                                    th:data-nome="${i.nome}"
+                                    th:data-email="${i.email}"
+                                    th:data-telefone="${i.telefone}"
+                                    th:data-inicio="${i.dataCadastro != null ? #temporals.format(i.dataCadastro, 'yyyy-MM-dd') : ''}"
+                                    th:data-nascimento="${i.dataNascimento != null ? #temporals.format(i.dataNascimento, 'yyyy-MM-dd') : ''}"
+                                    th:data-admin="${i.admin}">
+                                <i class="bi bi-pencil"></i>
+                            </button>
+
+                            <form th:action="@{/instrutor/instrutores/excluir/{cpf}(cpf=${i.cpf})}" method="post" 
+                                onsubmit="event.stopPropagation(); return handleConfirmSubmit(event)" 
+                                data-confirm="Tem certeza que deseja excluir este instrutor?" 
+                                style="display: inline;" onclick="event.stopPropagation()">
+                                <button type="submit" class="btn-icon-action delete" title="Excluir">
+                                    <i class="bi bi-trash"></i>
+                                </button>
+                            </form>
+                        </div>
+                    </div>
                 </div>
+
+                <div th:if="${#lists.isEmpty(instrutores)}" class="text-center py-5">
+                    <i class="bi bi-person-badge text-muted" style="font-size: 3rem;"></i>
+                    <p class="text-muted mt-2">Nenhum instrutor encontrado.</p>
+                </div>
+            </div>
             </div>
         </div>
     </div>
@@ -440,6 +460,19 @@
             if (btnE) btnE.disabled = !ok;
         }
         window.checarE = checarE;
+    </script>
+    <script>
+        function abPerfil(card) {
+            const cpf = card.getAttribute('data-cpf');
+            if (cpf) {
+                // 1. Remove pontos e traços do CPF (ex: 123.456.789-01 -> 12345678901)
+                const cpfLimpo = cpf.replace(/\D/g, '');
+                
+                // 2. Redireciona para a página de perfil do instrutor
+                // Verifique se a rota no seu Controller é exatamente esta abaixo
+                window.location.href = '/instrutor/instrutores/perfil/' + encodeURIComponent(cpfLimpo);
+            }
+        }
     </script>
 </body>
 </html>
