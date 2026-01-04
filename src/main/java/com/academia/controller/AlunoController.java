@@ -7,6 +7,7 @@ import com.academia.model.PlanoTreino;
 import com.academia.service.PlanoTreinoService;
 import com.academia.service.TurmaService;
 import java.time.LocalDate;
+import java.time.LocalTime;
 import java.time.DayOfWeek;
 import java.util.Arrays;
 import org.springframework.stereotype.Controller;
@@ -337,6 +338,8 @@ public class AlunoController {
     }
 
     // Lista de turmas disponíveis do mesmo instrutor do plano ativo
+    // Lista de turmas disponíveis de todos os instrutores
+    // Lista de turmas disponíveis de todos os instrutores
     @GetMapping("/turmas/disponiveis")
     public String turmasDisponiveis(@RequestParam(name = "q", required = false) String q,
                                     Model model, HttpSession session) {
@@ -345,26 +348,37 @@ public class AlunoController {
             aluno = alunoService.listarTodos().isEmpty() ? null : alunoService.listarTodos().get(0);
         }
         model.addAttribute("aluno", aluno);
+        
         java.util.List<com.academia.model.Turma> turmas = java.util.List.of();
         java.util.Set<Long> turmasMatriculadasIds = java.util.Set.of();
+        
         if (aluno != null) {
+            LocalDate hoje = LocalDate.now();
+            LocalTime agora = LocalTime.now();
+
             turmas = turmaService.listarTodas().stream()
-                // Filtrar por título se houver busca
+                // 1. Filtra para remover turmas que já passaram (data anterior ou hoje com hora passada)
+                .filter(t -> t.getDataDaAula().isAfter(hoje) || 
+                       (t.getDataDaAula().isEqual(hoje) && t.getHoraAula().isAfter(agora)))
+                
+                // 2. Filtrar por título se houver busca no parâmetro 'q'
                 .filter(t -> q == null || q.trim().isEmpty() ||
                         (t.getTitulo() != null && t.getTitulo().toLowerCase().contains(q.trim().toLowerCase())))
-                // Ordenar alfabeticamente por título
-                .sorted(java.util.Comparator.comparing(
-                        (com.academia.model.Turma t) -> t.getTitulo() == null ? "" : t.getTitulo(),
-                        String.CASE_INSENSITIVE_ORDER
-                ))
+                
+                // 3. Ordenar por data mais próxima primeiro e depois por hora
+                .sorted(java.util.Comparator.comparing(com.academia.model.Turma::getDataDaAula)
+                                            .thenComparing(com.academia.model.Turma::getHoraAula))
                 .toList();
+
             turmasMatriculadasIds = turmaService.listarTurmasDoAluno(aluno.getCpf()).stream()
                 .map(com.academia.model.Turma::getId)
                 .collect(java.util.stream.Collectors.toSet());
         }
+        
         model.addAttribute("turmasDisponiveis", turmas);
         model.addAttribute("turmasMatriculadasIds", turmasMatriculadasIds);
         model.addAttribute("q", q == null ? "" : q.trim());
+        
         return "aluno/turmas-disponiveis";
     }
 
