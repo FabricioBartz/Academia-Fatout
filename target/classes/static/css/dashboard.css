@@ -84,3 +84,52 @@ body[data-role="instrutor"] {
     color: #0d6efd;
     transform: scale(1.02);
 }
+
+
+
+/* dashboard aluno */
+.card-icon-modern {
+    width: 45px;
+    height: 45px;
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.3rem;
+    flex-shrink: 0;
+}
+
+/* Ajuste para garantir que o card ocupe a altura total da linha */
+.turma-card {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    background: #ffffff;
+    border-radius: 20px; /* Bordas arredondadas modernas */
+    transition: all 0.3s ease;
+}
+
+/* Efeito de elevação ao passar o mouse (opcional) */
+.turma-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 15px 30px rgba(0, 0, 0, 0.08) !important;
+}
+
+/* Limpeza visual para a lista de exercícios no card */
+.training-preview {
+    background: #fcfcfc;
+    padding: 10px;
+    border-radius: 10px;
+}
+
+/* Tipografia de rótulos (PESO, ALTURA, etc) */
+.text-muted.small.fw-bold {
+    letter-spacing: 0.5px;
+    font-size: 0.7rem;
+}
+
+.custom-date-badge {
+    background-color: #efeded; /* Cor de fundo (ex: verde bem claro) */
+    color: #166534;           /* Cor do texto (ex: verde escuro) */
+    border: 1px solid #f0fdf4; /* Opcional: borda fina para destacar */
+}

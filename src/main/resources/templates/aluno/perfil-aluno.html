@@ -59,12 +59,16 @@
             </div>
             <div class="col-md-9">
                 <div class="d-flex align-items-center justify-content-between mb-4">
-                    <h1 class="mb-0">Meu Perfil</h1>
+                    <div>
+                    <h1>Meu Perfil</h1>
+                    <p class="text-muted mb-0">Gerencie suas informações pessoais.</p></div>
                     <div class="d-flex align-items-center gap-2">
                         <div th:if="${msgSucesso}" class="alert alert-success flash-alert mb-0" th:text="${msgSucesso}">Sucesso</div>
                         <div th:if="${msgErro}" class="alert alert-danger flash-alert mb-0" th:text="${msgErro}">Erro</div>
                     </div>
+                    
                 </div> <div class="card border-0 shadow-sm">
+                    
                     <div class="card-body">
                         <div class="row g-3 align-items-start">
                             <div class="col-md-8">
