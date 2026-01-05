@@ -113,3 +113,19 @@
     margin: 0;
     padding: 0;
 }
+
+.btn-turma-action {
+    border: none;
+    background: #f8f9fa;
+    color: #64748b;
+    width: 32px;
+    height: 32px;
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: 0.2s;
+}
+
+.btn-turma-action.edit:hover { background: #e0f2fe; color: #0d6efd; }
+.btn-turma-action.delete:hover { background: #fee2e2; color: #ef4444; }

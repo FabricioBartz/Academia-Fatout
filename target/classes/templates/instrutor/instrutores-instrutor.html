@@ -252,7 +252,7 @@
                         </div>
 
                         <div class="aluno-card-hover-actions">
-                            <button class="btn-icon-action edit" title="Editar"
+                            <button class="btn-turma-action edit" title="Editar"
                                     onclick="event.stopPropagation(); editarInstrutorLinha(this)"
                                     th:data-cpf="${i.cpf}"
                                     th:data-nome="${i.nome}"
@@ -268,7 +268,7 @@
                                 onsubmit="event.stopPropagation(); return handleConfirmSubmit(event)" 
                                 data-confirm="Tem certeza que deseja excluir este instrutor?" 
                                 style="display: inline;" onclick="event.stopPropagation()">
-                                <button type="submit" class="btn-icon-action delete" title="Excluir">
+                                <button type="submit" class="btn-turma-action delete" title="Excluir">
                                     <i class="bi bi-trash"></i>
                                 </button>
                             </form>

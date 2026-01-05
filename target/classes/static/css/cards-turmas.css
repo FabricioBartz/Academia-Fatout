@@ -151,3 +151,57 @@
     opacity: 0.8;
     background-color: #fafafa;
 }
+
+/* Cor personalizada para gerenciar exercicios */
+/* Cor personalizada do badge */
+.custom-date-badge {
+    background-color: #f0fdf4 !important;
+    color: #166534 !important;
+    border: 1px solid #dcfce7;
+    font-weight: 700;
+    font-size: 0.75rem;
+    padding: 6px 15px;
+}
+
+/* Card moderno em linha única */
+.exercicio-card-row {
+    background: #ffffff;
+    border-radius: 20px;
+    border: 1px solid #eef2f6;
+    padding: 25px;
+    margin-bottom: 20px;
+    transition: all 0.3s ease;
+    position: relative;
+}
+
+.exercicio-card-row:hover {
+    transform: translateX(10px); /* Leve deslocamento para a direita no hover */
+    box-shadow: 0 10px 30px rgba(0,0,0,0.08);
+}
+
+/* Esconder e mostrar botões no hover */
+.exercicio-card-row .turma-actions {
+    opacity: 0;
+    transition: opacity 0.3s ease;
+}
+
+.exercicio-card-row:hover .turma-actions {
+    opacity: 1;
+}
+
+/* Título e labels */
+.info-label {
+    font-size: 0.7rem;
+    font-weight: 800;
+    color: #94a3b8;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    margin-bottom: 4px;
+    display: block;
+}
+
+.info-content {
+    font-size: 0.95rem;
+    color: #334155;
+    font-weight: 500;
+}

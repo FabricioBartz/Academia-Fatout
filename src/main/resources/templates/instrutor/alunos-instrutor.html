@@ -247,7 +247,7 @@
                 </div>
                 
                 <!-- Lista de Alunos -->
-                <h3 class="mt-4 mb-3 text-white-shadow">Alunos Cadastrados</h3>
+                <h3>Alunos Cadastrados</h3>
                
 
                 <div class="alunos-grid">
@@ -273,7 +273,7 @@
                         </div>
 
                         <div class="aluno-card-hover-actions">
-                            <button class="btn-icon-action edit" onclick="event.stopPropagation(); editarAluno(this)"
+                            <button class="btn-turma-action edit" onclick="event.stopPropagation(); editarAluno(this)"
                                     th:data-cpf="${aluno.cpf}" th:data-nome="${aluno.nome}"
                                     th:data-email="${aluno.email}" th:data-telefone="${aluno.telefone}"
                                     th:data-data="${#temporals.format(aluno.dataNascimento, 'yyyy-MM-dd')}"
@@ -286,7 +286,7 @@
                                 onsubmit="event.stopPropagation(); return handleConfirmSubmit(event)" 
                                 data-confirm="Deseja realmente excluir este aluno?"
                                 style="display: inline;" onclick="event.stopPropagation()">
-                                <button type="submit" class="btn-icon-action delete">
+                                <button type="submit" class="btn-turma-action delete">
                                     <i class="bi bi-trash"></i>
                                 </button>
                             </form>
