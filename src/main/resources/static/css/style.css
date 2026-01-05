@@ -959,9 +959,7 @@ text-shadow: 2px 2px 4px rgba(0,0,0,0.1);
     transition: all 0.2s;
 }
 
-.btn-turma-action.edit { background-color: #fff3e0; color: #ef6c00; }
-.btn-turma-action.delete { background-color: #ffebee; color: #d32f2f; }
-.btn-turma-action:hover { transform: scale(1.1); }
+
 
 /* --- ESTILIZAÇÃO DAS ABAS (NAV-TABS) --- */
 .nav-tabs {
