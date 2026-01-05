@@ -899,8 +899,18 @@ text-shadow: 2px 2px 4px rgba(0,0,0,0.1);
     background-color: rgba(0, 0, 0, 0.02);
 }
 
-/* Ajuste do card interno das abas */
+/* Ajuste do card interno das abas do perfil do aluno*/
 .tab-pane .exercicio-card-row:hover {
     transform: translateY(-3px);
     border-left: 4px solid #45a049;
+}
+
+.nav-pills .nav-link {
+    color: #6c757d;
+    border-radius: 20px;
+}
+.nav-pills .nav-link.active {
+    background-color: #f8f9fa;
+    color: #000;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.05);
 }
