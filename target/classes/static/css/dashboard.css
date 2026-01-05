@@ -129,7 +129,7 @@ body[data-role="instrutor"] {
 }
 
 .custom-date-badge {
-    background-color: #efeded; /* Cor de fundo (ex: verde bem claro) */
-    color: #166534;           /* Cor do texto (ex: verde escuro) */
+    background-color: #fcfcfc; /* Cor de fundo (ex: verde bem claro) */
+    color: #000000;           /* Cor do texto (ex: verde escuro) */
     border: 1px solid #f0fdf4; /* Opcional: borda fina para destacar */
 }

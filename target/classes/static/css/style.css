@@ -876,3 +876,31 @@ color: #f1f3f5 !important;
 text-shadow: 2px 2px 4px rgba(0,0,0,0.1);
 }
 
+/* =============================
+   perfil do aluno
+   ============================= */
+
+   /* Estilização das abas estilo 'Pills' da imagem */
+#pills-tab .nav-link {
+    color: #64748b;
+    font-weight: 600;
+    font-size: 0.9rem;
+    border: none;
+    transition: all 0.3s ease;
+}
+
+#pills-tab .nav-link.active {
+    background-color: #ffffff !important;
+    color: #1e293b !important;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+}
+
+#pills-tab .nav-link:not(.active):hover {
+    background-color: rgba(0, 0, 0, 0.02);
+}
+
+/* Ajuste do card interno das abas */
+.tab-pane .exercicio-card-row:hover {
+    transform: translateY(-3px);
+    border-left: 4px solid #45a049;
+}
