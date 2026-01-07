@@ -3,7 +3,6 @@ com\academia\service\PlanoTreinoService.class
 com\academia\AcademiaApplication.class
 com\academia\model\Turma.class
 com\academia\service\AlunoService.class
-com\academia\service\AvaliacaoService.class
 com\academia\repository\TurmaRepository.class
 com\academia\repository\ExercicioRepository.class
 com\academia\model\ExercicioPlano.class
@@ -14,7 +13,6 @@ com\academia\model\Aluno.class
 com\academia\service\ExercicioService.class
 com\academia\config\BackfillInicioAlunoRunner.class
 com\academia\service\InstrutorService.class
-com\academia\controller\AlunoController.class
 com\academia\repository\PlanoTreinoRepository.class
 com\academia\model\Exercicio.class
 com\academia\controller\AlunoController$1.class

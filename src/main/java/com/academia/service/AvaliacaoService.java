@@ -60,6 +60,11 @@ public class AvaliacaoService {
         return avaliacaoRepository.findByAlunoCpf(cpfAluno);
     }
 
+    // Método para buscar avaliações por termo (dia, mês ou ano)
+    public List<AvaliacaoFisica> buscarPorAlunoEData(String cpf, String q) {
+        return avaliacaoRepository.buscarPorDiaMesAno(cpf, q);
+    }
+
     // Listar as 5 últimas avaliações de um aluno (ordenadas desc)
     public List<AvaliacaoFisica> listarUltimas5PorAluno(String cpfAluno) {
         return avaliacaoRepository.findTop5ByAlunoCpfOrderByDataDesc(cpfAluno);

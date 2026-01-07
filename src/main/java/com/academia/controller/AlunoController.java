@@ -509,8 +509,33 @@ public class AlunoController {
 
 
     @GetMapping("/minhas_avaliacoes")
-    public String minhasAvaliacoes(Model model, HttpSession session) {
-        return avaliacoes(model, session);
+    public String minhasAvaliacoes(@RequestParam(name = "q", required = false) String q, 
+                                Model model, HttpSession session) {
+        Aluno aluno = (Aluno) session.getAttribute("aluno");
+        if (aluno == null) {
+            aluno = alunoService.listarTodos().isEmpty() ? null : alunoService.listarTodos().get(0);
+        }
+        
+        if (aluno == null) {
+            return "redirect:/aluno/login";
+        }
+
+        java.util.List<com.academia.model.AvaliacaoFisica> avaliacoes;
+
+        // Lógica de busca
+        if (q != null && !q.trim().isEmpty()) {
+            // Busca filtrada por data (dia, mês ou ano)
+            avaliacoes = avaliacaoService.buscarPorAlunoEData(aluno.getCpf(), q.trim());
+            model.addAttribute("q", q);
+        } else {
+            // Busca todas as avaliações do aluno
+            avaliacoes = avaliacaoService.listarPorAluno(aluno.getCpf());
+            model.addAttribute("q", "");
+        }
+
+        model.addAttribute("aluno", aluno);
+        model.addAttribute("avaliacoes", avaliacoes);
+        return "aluno/avaliacoes-aluno";
     }
 
     @GetMapping("/meu_perfil")
