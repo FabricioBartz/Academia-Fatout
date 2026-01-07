@@ -59,17 +59,18 @@
             </div>
             
             <div class="col-md-9">
-                <div class="d-flex justify-content-between align-items-center mb-4">
+               <div class="d-flex align-items-center justify-content-between mb-4">
                     <div>
                         <h1 class="mb-0 fw-bold">Minhas Avaliações</h1>
                         <p class="text-muted mb-0">Histórico detalhado do seu progresso físico na Academia FatOut.</p>
-                        <form class="d-flex" th:action="@{/aluno/minhas_turmas}" method="get" style="max-width: 320px;">
-                        <input type="text" class="form-control me-2" name="q" placeholder="Pesquisar por nome" th:value="${q}">
+                    </div>
+
+                    <form class="d-flex" th:action="@{/aluno/minhas_avaliacoes}" method="get" style="max-width: 320px;">
+                        <input type="text" class="form-control me-2" name="q" placeholder="Pesquisar por data" th:value="${q}">
                         <button class="btn btn-outline-secondary btn-pesquisar" type="submit" aria-label="Pesquisar" title="Pesquisar"></button>
                     </form>
-                    </div>
-                    
                 </div>
+                
 
                 <div th:if="${avaliacoes.isEmpty()}" class="alert alert-info border-0 shadow-sm p-4 d-flex align-items-center" style="border-radius: 15px;">
                     <i class="bi bi-info-circle-fill fs-3 me-3"></i>
@@ -78,6 +79,7 @@
                         <span>Você ainda não possui avaliações registradas. Solicite ao seu instrutor para iniciar o acompanhamento.</span>
                     </div>
                 </div>
+            
 
                 <div th:if="${!avaliacoes.isEmpty()}" class="exercicios-container">
                     <div th:each="avaliacao : ${avaliacoes}" class="exercicio-card-row shadow-sm border-0 mb-4 p-4">

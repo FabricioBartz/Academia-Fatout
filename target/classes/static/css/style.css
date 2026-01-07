@@ -357,7 +357,7 @@ body[data-role="aluno"] .navbar .btn { border-color: #ffffff55 !important; }
 .btn-pesquisar:hover {
     background-color: #e8eaed !important;
     border-color: #d2d4d7 !important;
-    color: #202124 !important;
+    color: #f7f8fb !important;
     box-shadow: 0 1px 2px 0 rgba(60,64,67,0.3) !important;
 }
 
@@ -376,6 +376,12 @@ body[data-role="aluno"] .navbar .btn { border-color: #ffffff55 !important; }
     
     /* Ícone da lupa original do Google (Cinza escuro #5f6368) */
     background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%235f6368'><path d='M15.5 14h-.79l-.28-.27A6.471 6.471 0 0016 9.5 6.5 6.5 0 109.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0A4.5 4.5 0 1114 9.5 4.5 4.5 0 019.5 14z'/></svg>");
+}
+
+.btn-pesquisar:focus, 
+.btn-pesquisar:active {
+    outline: none !important;
+    box-shadow: none !important;
 }
 
 /* Ajuste específico para o tamanho SM do Bootstrap se necessário */
@@ -408,7 +414,7 @@ form.d-flex .btn-sm.btn-pesquisar {
 }
 /* Foco conjunto: quando o input recebe foco, aplicamos anel também ao botão */
 form.d-flex input[name="q"]:focus + .btn-pesquisar {
-    box-shadow: 0 0 0 3px var(--pesquisa-focus-ring) !important;
+    box-shadow: 0 0 0 1px var(--pesquisa-focus-ring) !important;
     border-color: #c7c9cc !important;
 }
 
@@ -671,7 +677,7 @@ form.d-flex input[name="q"]::placeholder {
 form.d-flex input[name="q"]:focus {
     background-color: #ffffff !important;
     border-color: #c7c9cc !important;
-    box-shadow: 0 0 0 3px var(--pesquisa-focus-ring) !important;
+    box-shadow: 0 0 0 1px var(--pesquisa-focus-ring) !important;
     outline: none !important;
 }
 /* Alinhar altura do botão de pesquisa ao input */
