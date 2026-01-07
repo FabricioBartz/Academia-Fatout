@@ -74,8 +74,8 @@
             </div>
             
             <div class="col-md-9">
-                <div class="d-flex align-items-center justify-content-between mb-2" style="height: 45px;">
-                    <h1 class="mb-0">Gerenciar Exercícios</h1>
+                <div class="d-flex align-items-center justify-content-between mb-0" style="height: 45px;">
+                    <h1 class="mb-0 fw-bold">Gerenciar Exercícios</h1>
                     <div class="ms-3 flash-slot">
                         <div th:if="${msgSucesso}" class="alert alert-success flash-alert mb-0" th:text="${msgSucesso}">Sucesso</div>
                         <div th:if="${msgErro}" class="alert alert-danger flash-alert mb-0" th:text="${msgErro}">Erro</div>
@@ -178,7 +178,7 @@
                 </div>-->
                 
                 <!-- Lista de Exercícios -->
-                <h3>Exercícios Cadastrados</h3>
+                <h3 class="fw-bold mb-3">Exercícios Cadastrados</h3>
                     <div class="exercicios-container">
                     <div th:each="exercicio : ${exercicios}" class="exercicio-card-row shadow-sm">
                         
@@ -210,14 +210,14 @@
                         <div class="row g-4">
                             <div class="col-md-5 border-end border-light">
                                 <span class="info-label">Descrição</span>
-                                <p class="info-content mb-0" th:text="${exercicio.descricao ?: 'Nenhuma descrição detalhada informada.'}">
+                                <p class="mb-0 text-muted small" th:text="${exercicio.descricao ?: 'Nenhuma descrição detalhada informada.'}">
                                     Descrição do exercício...
                                 </p>
                             </div>
 
                             <div class="col-md-4 border-end border-light">
                                 <span class="info-label">Instruções de Execução</span>
-                                <p class="info-content mb-0 small" th:text="${exercicio.instrucoes ?: 'Instruções não cadastradas.'}">
+                                <p class="mb-0 text-muted small" th:text="${exercicio.instrucoes ?: 'Instruções não cadastradas.'}">
                                     Passo a passo da execução...
                                 </p>
                             </div>
@@ -225,14 +225,14 @@
                             <div class="col-md-3">
                                 <div class="mb-3">
                                     <span class="info-label">Equipamento Requerido</span>
-                                    <div class="d-flex align-items-center info-content">
+                                    
                                         
-                                        <span th:text="${exercicio.equipamento ?: 'Peso Livre'}">Halteres</span>
-                                    </div>
+                                        <span class="mb-0 text-muted small" th:text="${exercicio.equipamento ?: 'Peso Livre'}">Halteres</span>
+                                  
                                 </div>
                                 <div>
                                     <span class="info-label">Grupo Muscular</span>
-                                    <span class="info-content mb-0" th:text="${exercicio.grupoMuscular}">Grupo Muscular</span>
+                                    <span class="mb-0 text-muted small" th:text="${exercicio.grupoMuscular}">Grupo Muscular</span>
                                 
                                 </div>
                             </div>

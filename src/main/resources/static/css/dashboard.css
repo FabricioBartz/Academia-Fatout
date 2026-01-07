@@ -128,7 +128,7 @@ body[data-role="instrutor"] {
     font-size: 0.7rem;
 }
 
-.custom-date-badge {
+.custom-date-badge-aluno {
     background-color: #fcfcfc; /* Cor de fundo (ex: verde bem claro) */
     color: #000000;           /* Cor do texto (ex: verde escuro) */
     border: 1px solid #f0fdf4; /* Opcional: borda fina para destacar */

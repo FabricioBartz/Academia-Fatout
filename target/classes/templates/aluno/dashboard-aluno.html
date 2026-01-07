@@ -61,7 +61,7 @@
             </div>
 
             <div class="col-md-9">
-                <h1>Olá, <span th:text="${aluno.nome}">João</span>!</h1>
+                <h1 class="mb-0 fw-bold">Olá, <span th:text="${aluno.nome}">João</span>!</h1>
                 <p class="text-muted">O sucesso é a soma de pequenos esforços repetidos dia após dia.</p>
                
                 
@@ -71,8 +71,8 @@
             <div class="col-md-6">
                 <div class="turma-card h-100 p-4 shadow-sm border-0">
                     <div class="d-flex align-items-center mb-3">
-                        <div class="card-icon-modern me-3" style="background-color: #e8f5e9; color: #2e7d32;">
-                            <i class="bi bi-clipboard2-pulse-fill"></i>
+                        <div class="card-icon-modern me-3 bg-light text-success" style="width: 45px; height: 45px;">
+                            <i class="bi bi-clipboard2-pulse-fill fs-4"></i>
                         </div>
                         <h5 class="turma-title mb-0" style="font-size: 1.15rem;">Última Avaliação</h5>
                     </div>
@@ -89,11 +89,11 @@
                             </div>
                             <div class="col-6">
                                 <span class="d-block text-muted small fw-bold">IMC</span>
-                                <span class="fs-5 fw-bold text-success" th:text="${#numbers.formatDecimal(ultimaAvaliacao.imc, 1, 2)}">26.0</span>
+                                <span class="fs-5 fw-bold" th:text="${#numbers.formatDecimal(ultimaAvaliacao.imc, 1, 2)}">26.0</span>
                             </div>
                             <div class="col-6">
                                 <span class="d-block text-muted small fw-bold">DATA</span>
-                                <span class="small fw-bold text-secondary" th:text="${#temporals.format(ultimaAvaliacao.data, 'dd/MM/yyyy')}">10/12/2025</span>
+                                <span class="small fw-bold" th:text="${#temporals.format(ultimaAvaliacao.data, 'dd/MM/yyyy')}">10/12/2025</span>
                             </div>
                         </div>
                     </div>
@@ -111,14 +111,14 @@
             <div class="col-md-6">
                 <div class="turma-card h-100 p-4 shadow-sm border-0">
                     <div class="d-flex align-items-center mb-3">
-                        <div class="card-icon-modern me-3" style="background-color: #e3f2fd; color: #1976d2;">
-                            <i class="bi bi-calendar-check"></i>
+                        <div class="card-icon-modern me-3 bg-light text-primary" style="width: 45px; height: 45px;">
+                            <i class="bi bi-calendar-check fs-4"></i>
                         </div>
                         <h5 class="turma-title mb-0" style="font-size: 1.15rem;">Treino de Hoje</h5>
                     </div>
                     
                     <div th:if="${planoHoje != null}" class="mt-2 flex-grow-1">
-                        <div class="badge custom-date-badge mb-3 px-3 py-2 rounded-pill">
+                        <div class="badge custom-date-badge-aluno mb-3 px-3 py-2 rounded-pill">
                             <i class="bi bi-clock me-1"></i>
                             <span th:text="${diaHoje + ' - ' + dataHojeStr}">Data</span>
                         </div>

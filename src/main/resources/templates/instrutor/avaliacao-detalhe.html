@@ -63,7 +63,7 @@
                     <span class="material-symbols-outlined">arrow_back</span>
                 </a>
                 <div>
-                    <h1 class="mb-0">Detalhes da Avaliação</h1>
+                    <h1 class="mb-0 fw-bold">Detalhes da Avaliação</h1>
                     <p class="text-muted mb-0">Aluno: <span class="fw-bold text-dark" th:text="${aluno.nome}">João Silva</span></p>
                 </div>
             </div>
@@ -82,10 +82,11 @@
 
         <div class="exercicio-card-row p-4 mb-4 shadow-sm border-0 bg-white" style="border-radius: 20px;">
             <div class="row align-items-center text-center">
+                
                 <div class="col-md-4 border-end">
                     <span class="info-label">Data da Avaliação</span>
-                    <div class="info-content fs-5 fw-bold text-primary">
-                        <i class="bi bi-calendar-event me-2"></i>
+                    <div class="info-content fs-5 fw-bold"> 
+                        <i class="bi bi-calendar-event me-2 text-primary"></i>
                         <span th:text="${#temporals.format(avaliacao.data, 'dd/MM/yyyy')}">14/12/2025</span>
                     </div>
                 </div>
@@ -98,7 +99,7 @@
                 </div>
                 <div class="col-md-4">
                     <span class="info-label">Índice de Massa Corporal (IMC)</span>
-                    <div class="info-content fs-5 fw-bold text-success">
+                    <div class="info-content fs-5 fw-bold ">
                         <span th:text="${#numbers.formatDecimal(avaliacao.imc, 1, 2)}">24,65</span>
                         <small class="text-muted" style="font-size: 0.7rem;"> kg/m²</small>
                     </div>
@@ -110,7 +111,7 @@
             <div class="col-md-4">
                 <div class="turma-card h-100 p-4 border-0 shadow-sm">
                     <div class="d-flex align-items-center mb-3">
-                        <div class="card-icon-modern me-3" style="background-color: #e3f2fd; color: #000000;">
+                        <div class="card-icon-modern me-3 bg-light  text-success" style="width: 45px; height: 45px;">
                             <i class="bi bi-person-arms-up"></i>
                         </div>
                         <h6 class="fw-bold mb-0">Braços</h6>
@@ -129,7 +130,7 @@
             <div class="col-md-4">
                 <div class="turma-card h-100 p-4 border-0 shadow-sm">
                     <div class="d-flex align-items-center mb-3">
-                        <div class="card-icon-modern me-3" style="background-color: #f3e5f5; color: #050505;">
+                        <div class="card-icon-modern me-3 bg-light" style="background-color: #f3e5f5; color: #ce73b0;">
                             <i class="bi bi-body-text"></i>
                         </div>
                         <h6 class="fw-bold mb-0">Tronco & Quadril</h6>
@@ -152,7 +153,7 @@
             <div class="col-md-4">
                 <div class="turma-card h-100 p-4 border-0 shadow-sm">
                     <div class="d-flex align-items-center mb-3">
-                        <div class="card-icon-modern me-3" style="background-color: #fff3e0; color: #070707;">
+                        <div class="card-icon-modern me-3 bg-light" style="background-color: #fff3e0; color: #d38816;">
                             <i class="bi bi-symmetry-vertical"></i>
                         </div>
                         <h6 class="fw-bold mb-0">Membros Inferiores</h6>
@@ -182,7 +183,7 @@
         <div class="exercicio-card-row p-4 shadow-sm border-0 bg-white" style="border-radius: 20px;">
             <span class="info-label mb-2"><i class="bi bi-chat-left-text me-1"></i> Observações Técnicas</span>
             <div class="p-3 bg-light rounded-3">
-                <p class="mb-0 info-content italic" th:text="${avaliacao.observacoes ?: 'Nenhuma observação registrada para esta avaliação.'}">Sem observações.</p>
+                <p class="mb-0 text-muted fst-italic small" th:text="${avaliacao.observacoes ?: 'Nenhuma observação registrada para esta avaliação.'}">Sem observações.</p>
             </div>
         </div>
     </div>
