@@ -101,6 +101,9 @@
                                         
                                         <small class="text-muted" style="font-size: 0.75rem;">
                                             Criado em <span th:text="${#temporals.format(p.dataCriacao, 'dd/MM/yyyy')}">Data</span>
+                                            <span th:if="${p.dataTermino != null}" class="ms-2">| Término:
+                                                <span th:text="${#temporals.format(p.dataTermino, 'dd/MM/yyyy')}">Data Término</span>
+                                            </span>
                                         </small>
                                     </div>
                                 </div>

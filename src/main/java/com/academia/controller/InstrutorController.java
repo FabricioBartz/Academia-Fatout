@@ -660,6 +660,7 @@ public class InstrutorController {
                               @RequestParam(required = false) String observacoes,
                               @RequestParam(name = "diasSemana", required = false) java.util.List<String> diasSemana,
                               @RequestParam(name = "copiarPlanoId", required = false) Long copiarPlanoId,
+                              @RequestParam(name = "dataTermino", required = false) String dataTermino,
                               @RequestParam(name = "exercicioId") java.util.List<Long> exercicioIds,
                               @RequestParam(name = "series") java.util.List<Integer> seriesList,
                               @RequestParam(name = "repeticoes") java.util.List<Integer> repeticoesList,
@@ -685,6 +686,9 @@ public class InstrutorController {
             plano.setObservacoes(observacoes);
             if (diasSemana != null && !diasSemana.isEmpty()) {
                 plano.setDiasSemana(String.join(",", diasSemana));
+            }
+            if (dataTermino != null && !dataTermino.isEmpty()) {
+                plano.setDataTermino(java.time.LocalDate.parse(dataTermino));
             }
             if (copiarPlanoId != null) {
                 var origemOpt = planoTreinoService.buscarPorId(copiarPlanoId);
@@ -825,6 +829,7 @@ public class InstrutorController {
                                              @RequestParam String nome,
                                              @RequestParam(required = false) String observacoes,
                                              @RequestParam(name = "diasSemana", required = false) java.util.List<String> diasSemana,
+                                             @RequestParam(name = "dataTermino", required = false) String dataTermino,
                                              @RequestParam(name = "exercicioId") java.util.List<Long> exercicioIds,
                                              @RequestParam(name = "series") java.util.List<Integer> seriesList,
                                              @RequestParam(name = "repeticoes") java.util.List<Integer> repeticoesList,
@@ -844,6 +849,12 @@ public class InstrutorController {
                 plano.setDiasSemana(String.join(",", diasSemana));
             } else {
                 plano.setDiasSemana("");
+            }
+
+            if (dataTermino != null && !dataTermino.isEmpty()) {
+                plano.setDataTermino(java.time.LocalDate.parse(dataTermino));
+            } else {
+                plano.setDataTermino(null);
             }
 
             // Validar ao menos um exercício

@@ -1,3 +1,4 @@
+
 package com.academia.model;
 
 import jakarta.persistence.*;
@@ -9,6 +10,8 @@ import java.util.List;
 @Entity
 @Table(name = "plano_de_treino")
 public class PlanoTreino {
+        @Column(name = "data_termino")
+        private LocalDate dataTermino;
     
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -51,6 +54,9 @@ public class PlanoTreino {
         this.instrutor = instrutor;
         this.nome = nome;
     }
+
+    public LocalDate getDataTermino() { return dataTermino; }
+    public void setDataTermino(LocalDate dataTermino) { this.dataTermino = dataTermino; }
     
     // Getters e Setters
     public Long getId() { return id; }
