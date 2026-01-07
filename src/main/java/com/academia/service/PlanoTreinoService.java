@@ -122,16 +122,8 @@ public class PlanoTreinoService {
         return planoTreinoRepository.findByAlunoCpf(cpfAluno);
     }
 
-    // Método para buscar planos do aluno por termo (nome ou dias da semana)
-    public List<PlanoTreino> buscarPorAlunoETermo(String cpfAluno, String termo) {
-        String busca = termo.toLowerCase().trim();
-        
-        // Filtramos a lista retornada pelo banco
-        return planoTreinoRepository.findByAlunoCpf(cpfAluno).stream()
-                .filter(p -> p.getNome().toLowerCase().contains(busca) || 
-                            (p.getDiasSemana() != null && p.getDiasSemana().toLowerCase().contains(busca)))
-                .toList();
-    }
+    // Método para buscar planos do aluno por termo (nome)
+
 
     public List<PlanoTreino> buscarPorAlunoETermo(String cpfAluno, String termo) {
         if (termo == null || termo.trim().isEmpty()) {
