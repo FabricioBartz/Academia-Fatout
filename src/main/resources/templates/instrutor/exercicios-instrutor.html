@@ -60,7 +60,7 @@
             <div class="col-md-3">
                 <div class="card">
                     <div class="card-body">
-                        <h5 class="card-title">Menu</h5>
+                        <h5 class="card-title fw-bold">Menu</h5>
                         <div class="list-group list-group-flush">
                             <a th:href="@{/instrutor/painel_principal}" class="list-group-item list-group-item-action">Painel Principal</a>
                             <a th:href="@{/instrutor/meu_perfil}" class="list-group-item list-group-item-action"><i class="bi bi-person-circle"></i> Meu Perfil</a>
@@ -178,7 +178,7 @@
                 </div>-->
                 
                 <!-- Lista de Exercícios -->
-                <h3 class="fw-bold mb-3">Exercícios Cadastrados</h3>
+                <h3>Exercícios Cadastrados</h3>
                     <div class="exercicios-container">
                     <div th:each="exercicio : ${exercicios}" class="exercicio-card-row shadow-sm">
                         

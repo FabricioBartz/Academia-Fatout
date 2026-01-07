@@ -1422,15 +1422,20 @@ public class InstrutorController {
         model.addAttribute("aluno", aluno);
         model.addAttribute("inicioAluno", aluno.getDataCadastro());
 
-        // --- LÓGICA DE ORDENAÇÃO: Mais recente primeiro ---
+        // --- ORDENAÇÃO DOS PLANOS: Mais recente primeiro ---
         java.util.List<PlanoTreino> planos = planoTreinoService.listarHistorico(aluno.getCpf());
         if (planos != null) {
             planos.sort((p1, p2) -> p2.getDataCriacao().compareTo(p1.getDataCriacao()));
         }
         model.addAttribute("planos", planos);
-        // --------------------------------------------------
 
-        var avaliacoes = avaliacaoService.listarUltimas5PorAluno(aluno.getCpf());
+        // --- ORDENAÇÃO DAS AVALIAÇÕES: Mais recente primeiro ---
+        // Buscamos todas as avaliações (ou as últimas 5)
+        var avaliacoes = avaliacaoService.listarPorAluno(aluno.getCpf()); 
+        if (avaliacoes != null) {
+            // Ordena pela data: a maior data (mais recente) fica no topo
+            avaliacoes.sort((a1, a2) -> a2.getData().compareTo(a1.getData()));
+        }
         model.addAttribute("avaliacoes", avaliacoes);
         
         return "instrutor/perfil-aluno";

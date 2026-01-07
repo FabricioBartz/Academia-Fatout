@@ -45,7 +45,7 @@
             <div class="col-md-3">
                 <div class="card">
                     <div class="card-body">
-                        <h5 class="card-title">Menu</h5>
+                        <h5 class="card-title fw-bold">Menu</h5>
                         <div class="list-group list-group-flush">
                             <a th:href="@{/aluno/painel_principal}" class="list-group-item list-group-item-action">Painel Principal</a>
                             <a th:href="@{/aluno/meu_perfil}" class="list-group-item list-group-item-action"><i class="bi bi-person-circle"></i> Meu Perfil</a>
@@ -85,8 +85,16 @@
                 </div>
                 
 
-                <div th:if="${turmasMatriculadas == null || #lists.isEmpty(turmasMatriculadas)}" class="alert alert-warning">
-                    Você ainda não está matriculado em nenhuma turma.
+                <div th:if="${turmasMatriculadas == null || #lists.isEmpty(turmasMatriculadas)}" 
+                    class="alert alert-info border-0 shadow-sm p-4 d-flex align-items-center" 
+                    style="border-radius: 15px;">
+                    
+                    <i class="bi bi-info-circle-fill fs-3 me-3"></i>
+                    
+                    <div>
+                        <h6 class="mb-1 fw-bold">Nenhuma turma encontrada</h6>
+                        <span>Você ainda não está matriculado em nenhuma turma.</span>
+                    </div>
                 </div>
 
                 <div class="turmas-grid" th:if="${turmasMatriculadas != null && !#lists.isEmpty(turmasMatriculadas)}">

@@ -46,7 +46,7 @@
             <div class="col-md-3">
                 <div class="card">
                     <div class="card-body">
-                        <h5 class="card-title">Menu</h5>
+                        <h5 class="card-title fw-bold">Menu</h5>
                         <div class="list-group list-group-flush">
                             <a th:href="@{/aluno/painel_principal}" class="list-group-item list-group-item-action active">Painel Principal</a>
                             <a th:href="@{/aluno/meu_perfil}" class="list-group-item list-group-item-action"><i class="bi bi-person-circle"></i> Meu Perfil</a>
@@ -103,7 +103,7 @@
                     </div>
                     
                     <div class="mt-4 pt-3 d-flex justify-content-end border-top border-light">
-                        <a th:href="@{/aluno/minhas_avaliacoes}" class="btn btn-outline-success btn-sm rounded-pill px-4">Ver Histórico</a>
+                        <a th:href="@{/aluno/minhas_avaliacoes}" class="btn btn-outline-success btn-sm rounded-pill px-4" th:classappend="${ultimaAvaliacao == null} ? 'disabled' : ''">Ver Histórico</a>
                     </div>
                 </div>
             </div>
@@ -158,7 +158,7 @@
 
                     <div class="mt-4 pt-3 d-flex justify-content-end border-top border-light">
                         <a th:href="@{'/aluno/treino/' + ${planoHoje != null ? planoHoje.id : 0}}" 
-                        class="btn btn-success btn-sm rounded-pill px-4 shadow-sm"
+                        class="btn btn-outline-success btn-sm rounded-pill px-4 shadow-sm"
                         th:classappend="${planoHoje == null} ? 'disabled' : ''">Abrir Plano</a>
                     </div>
                 </div>

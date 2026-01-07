@@ -46,7 +46,7 @@
             <div class="col-md-3">
                 <div class="card">
                     <div class="card-body">
-                        <h5 class="card-title">Menu</h5>
+                        <h5 class="card-title fw-bold">Menu</h5>
                         <div class="list-group list-group-flush">
                             <a th:href="@{/aluno/painel_principal}" class="list-group-item list-group-item-action">Painel Principal</a>
                             <a th:href="@{/aluno/meu_perfil}" class="list-group-item list-group-item-action"><i class="bi bi-person-circle"></i> Meu Perfil</a>
@@ -74,8 +74,15 @@
 
                     </div>
 
-                <div th:if="${planos == null or planos.isEmpty()}" class="alert alert-info">
-                    Nenhum plano de treino ativo. Consulte seu instrutor.
+                <div th:if="${planos == null or planos.isEmpty()}" 
+                    class="alert alert-info border-0 shadow-sm p-4 d-flex align-items-center" style="border-radius: 15px;">
+                    
+                    <i class="bi bi-info-circle-fill fs-3 me-3"></i>
+                    
+                    <div>
+                        <h6 class="mb-1 fw-bold">Nenhum plano encontrado</h6>
+                        <span class="d-block">Você não possui nenhum plano de treino ativo. Consulte seu instrutor.</span>
+                    </div>
                 </div>
 
                 <div th:if="${planos != null and !planos.isEmpty()}">
