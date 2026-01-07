@@ -132,4 +132,12 @@ public class PlanoTreinoService {
                             (p.getDiasSemana() != null && p.getDiasSemana().toLowerCase().contains(busca)))
                 .toList();
     }
+
+    public List<PlanoTreino> buscarPorAlunoETermo(String cpfAluno, String termo) {
+        if (termo == null || termo.trim().isEmpty()) {
+            return listarPorAluno(cpfAluno);
+        }
+        // Agora ele usa o método que você acabou de criar no Repository
+        return planoTreinoRepository.findByAlunoCpfAndNomeContainingIgnoreCase(cpfAluno, termo.trim());
+    }
 }

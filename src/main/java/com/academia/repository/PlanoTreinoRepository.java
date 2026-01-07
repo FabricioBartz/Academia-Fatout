@@ -29,4 +29,8 @@ public interface PlanoTreinoRepository extends JpaRepository<PlanoTreino, Long> 
     // Verificar se aluno tem plano ativo
     @Query("SELECT COUNT(p) > 0 FROM PlanoTreino p WHERE p.aluno.cpf = :cpfAluno")
     boolean alunoTemPlanoAtivo(@Param("cpfAluno") String cpfAluno);
-}
+
+    
+    // O campo deve ser 'Nome' (com N maiúsculo) se na sua classe PlanoTreino a variável for 'nome'
+    List<PlanoTreino> findByAlunoCpfAndNomeContainingIgnoreCase(String cpfAluno, String nome);
+    }

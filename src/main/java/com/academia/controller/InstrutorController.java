@@ -779,8 +779,10 @@ public class InstrutorController {
     }
 
     // Listar todos os planos do aluno (página dedicada)
+    // Listar todos os planos do aluno (página dedicada)
     @GetMapping("/alunos/planos/{cpf}")
     public String listarPlanosAluno(@PathVariable String cpf,
+                                    @RequestParam(name = "q", required = false) String q, // Recebe a pesquisa
                                     Model model,
                                     HttpSession session) {
         Instrutor instrutor = (Instrutor) session.getAttribute("instrutor");
@@ -793,16 +795,22 @@ public class InstrutorController {
         if (aluno == null) return "redirect:/instrutor/alunos";
         model.addAttribute("aluno", aluno);
 
-        // 1. Busca a lista original
-        var planos = planoTreinoService.listarPorAluno(cpf);
+        // Lógica de Busca Filtrada
+        java.util.List<PlanoTreino> planos;
+        if (q != null && !q.trim().isEmpty()) {
+            // Você precisa ter esse método no seu PlanoTreinoService
+            planos = planoTreinoService.buscarPorAlunoETermo(cpf, q.trim());
+        } else {
+            planos = planoTreinoService.listarPorAluno(cpf);
+        }
 
-        // 2. ADICIONE ESTA LÓGICA DE ORDENAÇÃO AQUI:
+        // Ordenação: Mais recente primeiro
         if (planos != null) {
-            // Compara p2 com p1 para ordem decrescente (mais recente primeiro)
             planos.sort((p1, p2) -> p2.getDataCriacao().compareTo(p1.getDataCriacao()));
         }
 
         model.addAttribute("planos", planos);
+        model.addAttribute("q", q); // Devolve o termo para o input não esvaziar
         return "instrutor/planos-aluno";
     }
 
