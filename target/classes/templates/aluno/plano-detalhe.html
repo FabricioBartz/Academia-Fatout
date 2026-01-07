@@ -61,7 +61,7 @@
 
         <div class="col-md-9">
             <div class="d-flex align-items-center mb-4">
-                <a th:href="@{/aluno/turmas}" class="btn btn-secondary btn-sm me-3 btn-voltar-google">
+                <a th:href="@{/aluno/meus_treinos}" class="btn btn-secondary btn-sm me-3 btn-voltar-google">
                             <span class="material-symbols-outlined">arrow_back</span>
                             <span></span>
                         </a>
@@ -74,7 +74,7 @@
                         <strong th:text="${plano.nome}">Treino A</strong>
                         <span class="text-muted ms-2" th:text="${#temporals.format(plano.dataCriacao, 'dd/MM/yyyy')}">10/12/2025</span>
                     </div>
-                    <span class="badge bg-secondary" th:text="${plano.diasSemana}">SEG,QUA,SEX</span>
+                    <span class="badge bg-secondary info-content" th:text="${plano.diasSemana}">SEG,QUA,SEX</span>
                 </div>
                 <div class="card-body">
                     <div class="list-group">
