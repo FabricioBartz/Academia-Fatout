@@ -502,9 +502,28 @@ public class AlunoController {
     }
 
     // Aliases amigáveis para URLs do aluno
-    @GetMapping("/meus_treinos")
-    public String meusTreinos(Model model, HttpSession session) {
-        return treino(model, session);
+    @GetMapping("/meus_treinos") // Certifique-se de que o mapeamento está correto
+    public String meusTreinos(@RequestParam(name = "q", required = false) String q, 
+                            Model model, HttpSession session) {
+        Aluno aluno = (Aluno) session.getAttribute("aluno");
+        if (aluno == null) return "redirect:/aluno/login";
+
+        model.addAttribute("aluno", aluno);
+        
+        java.util.List<PlanoTreino> planos;
+        
+        if (q != null && !q.trim().isEmpty()) {
+            // Busca filtrada no Service
+            planos = planoTreinoService.buscarPorAlunoETermo(aluno.getCpf(), q.trim());
+            model.addAttribute("q", q);
+        } else {
+            // Lista normal
+            planos = planoTreinoService.listarPorAluno(aluno.getCpf());
+            model.addAttribute("q", "");
+        }
+        
+        model.addAttribute("planos", planos);
+        return "aluno/treino-aluno";
     }
 
 
