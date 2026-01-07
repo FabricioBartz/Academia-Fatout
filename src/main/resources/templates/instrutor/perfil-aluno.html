@@ -154,11 +154,20 @@
                             class="list-group-item list-group-item-action d-flex justify-content-between align-items-center py-3">
                                 
                                 <div>
-                                    <h6 class="mb-1 text-dark">
-                                        <strong th:text="${plano.nome}">Treino A - Peito e Tríceps</strong>
+                                    <h6 class="mb-1 text-dark d-flex align-items-center">
+                                        <strong th:text="${plano.nome}">Treino A</strong>
+                                        
+                                        <span th:if="${plano.dataTermino != null and plano.dataTermino.isBefore(T(java.time.LocalDate).now())}" 
+                                            class="badge bg-secondary ms-2" style="font-size: 0.65rem; text-transform: uppercase;">
+                                            Finalizado
+                                        </span>
                                     </h6>
+                                    
                                     <small class="text-muted">
                                         Criado em <span th:text="${#temporals.format(plano.dataCriacao, 'dd/MM/yyyy')}">14/11/2024</span>
+                                        <span th:if="${plano.dataTermino != null}"> 
+                                            | Término em: <span th:text="${#temporals.format(plano.dataTermino, 'dd/MM/yyyy')}">14/12/2024</span>
+                                        </span>
                                     </small>
                                 </div>
 

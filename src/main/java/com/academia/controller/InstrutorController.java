@@ -1412,14 +1412,19 @@ public class InstrutorController {
         }
         
         model.addAttribute("aluno", aluno);
-        // Exibir a data de início na academia do aluno (data editável)
         model.addAttribute("inicioAluno", aluno.getDataCadastro());
-        // Histórico de planos de treino
-        var planos = planoTreinoService.listarHistorico(aluno.getCpf());
+
+        // --- LÓGICA DE ORDENAÇÃO: Mais recente primeiro ---
+        java.util.List<PlanoTreino> planos = planoTreinoService.listarHistorico(aluno.getCpf());
+        if (planos != null) {
+            planos.sort((p1, p2) -> p2.getDataCriacao().compareTo(p1.getDataCriacao()));
+        }
         model.addAttribute("planos", planos);
-        // Carregar últimas 5 avaliações (ordenadas por data desc)
+        // --------------------------------------------------
+
         var avaliacoes = avaliacaoService.listarUltimas5PorAluno(aluno.getCpf());
         model.addAttribute("avaliacoes", avaliacoes);
+        
         return "instrutor/perfil-aluno";
     }
         // Página Meu Perfil do Instrutor (instrutor logado)
