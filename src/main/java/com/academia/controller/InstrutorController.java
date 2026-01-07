@@ -793,7 +793,15 @@ public class InstrutorController {
         if (aluno == null) return "redirect:/instrutor/alunos";
         model.addAttribute("aluno", aluno);
 
+        // 1. Busca a lista original
         var planos = planoTreinoService.listarPorAluno(cpf);
+
+        // 2. ADICIONE ESTA LÓGICA DE ORDENAÇÃO AQUI:
+        if (planos != null) {
+            // Compara p2 com p1 para ordem decrescente (mais recente primeiro)
+            planos.sort((p1, p2) -> p2.getDataCriacao().compareTo(p1.getDataCriacao()));
+        }
+
         model.addAttribute("planos", planos);
         return "instrutor/planos-aluno";
     }

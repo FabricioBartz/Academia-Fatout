@@ -61,9 +61,8 @@
                 <div class="d-flex align-items-center">
                     <a th:href="@{/instrutor/alunos/perfil/{cpf}(cpf=${aluno.cpf})}" class="btn btn-secondary btn-sm me-3 btn-voltar-google">
                         <span class="material-symbols-outlined">arrow_back</span>
-                        <span></span>
                     </a>
-                    <h1 class="mb-0 fw-bold">Plano de Treino</h1>
+                    <h1 class="mb-0 fw-bold">Detalhes do Treino</h1>
                     <span class="text-muted ms-3" th:text="${aluno.nome}">João Silva</span>
                 </div>
                 <div class="ms-3 flash-slot">
@@ -72,34 +71,78 @@
                 </div>
             </div>
 
-            <div class="card">
-                <div class="card-header d-flex justify-content-between">
-                    <div>
-                        <strong th:text="${plano.nome}">Treino A</strong>
-                        <span class="text-muted ms-2" th:text="${#temporals.format(plano.dataCriacao, 'dd/MM/yyyy')}">10/12/2025</span>
-                        <span th:if="${plano.dataTermino != null}" class="ms-2">| Término:
-                            <span th:text="${#temporals.format(plano.dataTermino, 'dd/MM/yyyy')}">Data Término</span>
+            <div class="exercicio-card-row shadow-sm border-0 mb-4 p-0 overflow-hidden">
+                
+                <div class="p-4 border-bottom bg-light bg-opacity-25">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <div class="d-flex align-items-center">
+                            <div class="card-icon-modern me-3 bg-white shadow-sm text-success" style="width: 50px; height: 50px;">
+                                <i class="bi bi-journal-check fs-4"></i>
+                            </div>
+                            
+                            <div>
+                                <div class="d-flex align-items-center flex-wrap gap-2">
+                                    <h3 class="fw-bold mb-0 text-dark" th:text="${plano.nome}">Nome do Treino</h3>
+                                    <span class="badge custom-date-badge-aluno rounded-pill px-3 py-1 info-content" 
+                                        th:text="${plano.diasSemana}" style="font-size: 0.8rem;">SEG, QUA, SEX</span>
+                                </div>
+                                <small class="text-muted">
+                                    Criado em <span th:text="${#temporals.format(plano.dataCriacao, 'dd/MM/yyyy')}">Data</span>
+                                    <span th:if="${plano.dataTermino != null}" class="ms-2">| 
+                                         Término: <span th:text="${#temporals.format(plano.dataTermino, 'dd/MM/yyyy')}">Data</span>
+                                    </span>
+                                </small>
+                            </div>
+                        </div>
+
+                        <span th:if="${plano.dataTermino != null and plano.dataTermino.isBefore(T(java.time.LocalDate).now())}" 
+                            class="badge bg-secondary bg-opacity-10 text-secondary border px-3 py-2" 
+                            style="font-size: 0.75rem; text-transform: uppercase; border-radius: 10px; font-weight: 700;">
+                            <i class="bi bi-clock-history me-1"></i> Finalizado
                         </span>
                     </div>
-                    <span class="badge bg-secondary" th:text="${plano.diasSemana}">SEG,QUA,SEX</span>
                 </div>
-                <div class="card-body">
-                    <div class="list-group">
-                        <div th:each="ep : ${plano.exercicios}" class="list-group-item">
-                            <div class="d-flex justify-content-between align-items-center">
-                                <div>
-                                    <strong th:text="${ep.exercicio.nome}">Supino</strong>
-                                    <span class="text-muted ms-2" th:text="'Séries: ' + ${ep.series} + ' | Reps: ' + ${ep.repeticoes}">Séries/Reps</span>
+
+                <div class="p-4 bg-white">
+                    <div class="row g-3">
+                        <div th:each="ep : ${plano.exercicios}" class="col-md-6">
+                            <div class="p-3 border rounded-3 h-100 bg-light bg-opacity-10 d-flex flex-column justify-content-between">
+                                <div class="d-flex justify-content-between align-items-start mb-2">
+                                    <div>
+                                        <span class="d-block fw-bold text-dark fs-5" th:text="${ep.exercicio.nome}">Nome do Exercício</span>
+                                        <span class="text-muted small" th:text="${ep.exercicio.grupoMuscular}">Grupo Muscular</span>
+                                    </div>
+                                    <div class="text-end" th:if="${ep.carga != null}">
+                                        <span class="badge bg-white text-dark border fw-normal shadow-sm px-2 py-1">
+                                            <i class="bi bi-lightning-charge-fill text-warning"></i>
+                                            <span th:text="${ep.carga}">70</span> kg
+                                        </span>
+                                    </div>
                                 </div>
-                                <span class="text-muted" th:if="${ep.carga != null}" th:text="'Carga: ' + ${ep.carga} + ' kg'"></span>
-                            </div>
-                            <div th:if="${ep.observacoes}" class="mt-2">
-                                <small class="text-muted" th:text="${ep.observacoes}"></small>
+                                
+                                <div class="mt-2 d-flex align-items-center gap-3">
+                                    <div class="text-center">
+                                        <small class="text-muted d-block" style="font-size: 0.7rem; text-transform: uppercase;">Séries</small>
+                                        <strong class="fs-5" th:text="${ep.series}">3</strong>
+                                    </div>
+                                    <div class="border-start ps-3 text-center">
+                                        <small class="text-muted d-block" style="font-size: 0.7rem; text-transform: uppercase;">Repetições</small>
+                                        <strong class="fs-5" th:text="${ep.repeticoes}">12</strong>
+                                    </div>
+                                </div>
+
+                                <div th:if="${ep.observacoes}" class="mt-3 pt-2 border-top">
+                                    <small class="text-muted fst-italic">
+                                        <i class="bi bi-info-circle me-1"></i><span th:text="${ep.observacoes}">Obs</span>
+                                    </small>
+                                </div>
                             </div>
                         </div>
                     </div>
-                    <div th:if="${plano.observacoes}" class="mt-3">
-                        <small class="text-muted" th:text="${plano.observacoes}">Obs</small>
+
+                    <div th:if="${plano.observacoes != null and plano.observacoes != ''}" class="mt-4 p-3 bg-warning bg-opacity-10 border-start border-warning border-4 rounded-end">
+                        <span class="info-label text-warning-emphasis mb-1"><i class="bi bi-sticky me-1"></i> Observações Técnicas do Plano</span>
+                        <p class="mb-0 text-dark small fst-italic" th:text="${plano.observacoes}">Descrição geral...</p>
                     </div>
                 </div>
             </div>
