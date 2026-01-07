@@ -58,69 +58,87 @@
             
             <!-- Conteúdo principal -->
             <div class="col-md-9">
-                <h1>Bem-vindo, <span th:text="${instrutor.nome}">Carlos</span>!</h1>
-                <p class="text-muted">Painel de controle do instrutor.</p>
-                
-                <!-- Cards de estatísticas -->
-                <div class="row">
-                    <div class="col-md-4">
-                        <div class="card text-white bg-primary position-relative">
-                            <div class="card-body text-center">
-                                <h5 class="card-title"><i class="bi bi-people-fill"></i> Alunos</h5>
-                                <p class="dashboard-stats" th:text="${alunosCount}">24</p>
-                                <p class="card-text">Total cadastrados</p>
-                                <a th:href="@{/instrutor/meus_alunos}" class="stretched-link" aria-label="Ir para Meus Alunos"></a>
-                            </div>
-                        </div>
+    <div class="mb-4">
+        <h1 class="fw-bold mb-1">Bem-vindo, <span th:text="${instrutor.nome}">Carlos</span>!</h1>
+        <p class="text-muted">Veja o resumo da sua academia e gerencie seus alunos.</p>
+    </div>
+    
+    <div class="row g-4 mb-4">
+        <div class="col-md-4">
+            <div class="exercicio-card-row h-100 p-4 shadow-sm border-0 position-relative transition-hover" style="border-radius: 20px; background: #fff;">
+                <div class="d-flex align-items-center mb-3">
+                    <div class="card-icon-modern me-3 bg-light text-primary" style="width: 50px; height: 50px; border-radius: 12px;">
+                        <i class="bi bi-people-fill fs-4"></i>
                     </div>
-                    
-                    <div class="col-md-4">
-                        <div class="card text-white bg-success position-relative">
-                            <div class="card-body text-center">
-                                <h5 class="card-title"><i class="bi bi-person-lines-fill"></i> Minhas Turmas</h5>
-                                <p class="dashboard-stats" th:text="${turmasCount}">8</p>
-                                <p class="card-text">Turmas ativas</p>
-                                <a th:href="@{/instrutor/minhas_turmas}" class="stretched-link" aria-label="Ir para Minhas Turmas"></a>
-                            </div>
-                        </div>
-                    </div>
-                    
-                    <div class="col-md-4">
-                        <div class="card text-white bg-info position-relative">
-                            <div class="card-body text-center">
-                                <h5 class="card-title"><i class="bi bi-activity"></i> Exercícios</h5>
-                                <p class="dashboard-stats" th:text="${exerciciosCount}">45</p>
-                                <p class="card-text">Na biblioteca</p>
-                                <a th:href="@{/instrutor/exercicios}" class="stretched-link" aria-label="Ir para Exercícios"></a>
-                            </div>
-                        </div>
-                    </div>
+                    <span class="fw-bold text-muted small" style="letter-spacing: 1px;">ALUNOS</span>
                 </div>
-                
-                <!-- Ações rápidas -->
-                <div class="card mt-4">
-                    <div class="card-body">
-                        <h5 class="card-title"><i class="bi bi-lightning-charge-fill"></i> Ações Rápidas</h5>
-                        <div class="row mt-3">
-                            <div class="col-md-4 mb-2">
-                                <a th:href="@{/instrutor/alunos(showModal='cadastrarAluno')}" class="btn btn-primary w-100 d-flex align-items-center justify-content-center gap-2">
-                                    <i class="bi bi-person-plus-fill"></i> Cadastrar Aluno
-                                </a>
-                            </div>
-                            <div class="col-md-4 mb-2">
-                                <a th:href="@{/instrutor/turmas(showModal='criarTurma')}" class="btn btn-turma-dashboard w-100 d-flex align-items-center justify-content-center gap-2">
-                                    <i class="bi bi-barbell"></i><i class="bi bi-person-lines-fill"></i> Criar Turma
-                                </a>
-                            </div>
-                            <div class="col-md-4 mb-2">
-                                <a th:href="@{/instrutor/exercicios(showModal='adicionarExercicio')}" class="btn btn-addexercicio-dashboard w-100 d-flex align-items-center justify-content-center gap-2">
-                                    <i class="bi bi-activity"></i> Adicionar Exercício
-                                </a>
-                            </div>
-                        </div>
-                    </div>
-                </div>
+                <h2 class="fw-bold mb-1" th:text="${alunosCount}">24</h2>
+                <p class="text-muted small mb-0">Alunos cadastrados</p>
+                <a th:href="@{/instrutor/meus_alunos}" class="stretched-link"></a>
             </div>
+        </div>
+        
+        <div class="col-md-4">
+            <div class="exercicio-card-row h-100 p-4 shadow-sm border-0 position-relative transition-hover" style="border-radius: 20px; background: #fff;">
+                <div class="d-flex align-items-center mb-3">
+                    <div class="card-icon-modern me-3 bg-success bg-opacity-10 text-success" style="width: 50px; height: 50px; border-radius: 12px;">
+                        <i class="bi bi-person-video3 fs-4"></i>
+                    </div>
+                    <span class="fw-bold text-muted small" style="letter-spacing: 1px;">TURMAS</span>
+                </div>
+                <h2 class="fw-bold mb-1" th:text="${turmasCount}">8</h2>
+                <p class="text-muted small mb-0">Turmas em andamento</p>
+                <a th:href="@{/instrutor/minhas_turmas}" class="stretched-link"></a>
+            </div>
+        </div>
+        
+        <div class="col-md-4">
+            <div class="exercicio-card-row h-100 p-4 shadow-sm border-0 position-relative transition-hover" style="border-radius: 20px; background: #fff;">
+                <div class="d-flex align-items-center mb-3">
+                    <div class="card-icon-modern me-3 bg-info bg-opacity-10 text-info" style="width: 50px; height: 50px; border-radius: 12px;">
+                        <i class="bi bi-activity fs-4"></i>
+                    </div>
+                    <span class="fw-bold text-muted small" style="letter-spacing: 1px;">EXERCÍCIOS</span>
+                </div>
+                <h2 class="fw-bold mb-1" th:text="${exerciciosCount}">45</h2>
+                <p class="text-muted small mb-0">Biblioteca de treinos</p>
+                <a th:href="@{/instrutor/exercicios}" class="stretched-link"></a>
+            </div>
+        </div>
+    </div>
+    
+    <div class="exercicio-card-row p-4 shadow-sm border-0" style="border-radius: 20px; background: #fff;">
+        <h5 class="fw-bold mb-4 d-flex align-items-center">
+            <i class="bi bi-lightning-charge-fill text-warning me-2"></i> Ações Rápidas
+        </h5>
+        <div class="row g-3">
+            <div class="col-md-4">
+                <a th:href="@{/instrutor/alunos(showModal='cadastrarAluno')}" class="btn btn-light w-100 p-3 border d-flex flex-column align-items-center gap-2 rounded-3 hover-shadow">
+                    <i class="bi bi-person-plus-fill fs-3 text-primary"></i>
+                    <span class="fw-bold small text-dark">Cadastrar Aluno</span>
+                </a>
+            </div>
+            <div class="col-md-4">
+                <a th:href="@{/instrutor/turmas(showModal='criarTurma')}" class="btn btn-light w-100 p-3 border d-flex flex-column align-items-center gap-2 rounded-3 hover-shadow">
+                    <div class="d-flex gap-1">
+                        <i class="bi bi-calendar-plus fs-3 text-success"></i>
+                    </div>
+                    <span class="fw-bold small text-dark">Criar Nova Turma</span>
+                </a>
+            </div>
+            <div class="col-md-4">
+                <a th:href="@{/instrutor/exercicios(showModal='adicionarExercicio')}" class="btn btn-light w-100 p-3 border d-flex flex-column align-items-center gap-2 rounded-3 hover-shadow">
+                    <i class="bi bi-plus-circle-dotted fs-3 text-info"></i>
+                    <span class="fw-bold small text-dark">Adicionar Exercício</span>
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <div class="mt-4 p-3 bg-light rounded-3 text-center border-0">
+        <small class="text-muted italic">"A excelência não é um ato, mas um hábito." – Aristóteles</small>
+    </div>
+</div>
         </div>
     </div>
     
