@@ -136,9 +136,6 @@ body[data-role="instrutor"] {
 
 
 .turma-card, .exercicio-card {
-   
-   
-   
     transition: all 0.3s ease;
     position: relative;
     overflow: hidden;
@@ -146,6 +143,8 @@ body[data-role="instrutor"] {
 
 /* Efeito de elevação ao passar o mouse */
 .turma-card:hover, .exercicio-card:hover {
+    background: #f9fafc !important ;
     transform: translateY(-5px);
     box-shadow: 0 12px 30px rgba(0,0,0,0.08) !important;
 }
+
