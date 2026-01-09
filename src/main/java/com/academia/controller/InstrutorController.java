@@ -259,9 +259,14 @@ public class InstrutorController {
                             @RequestParam String dataDaAula,
                             @RequestParam String horaAula,
                             @RequestParam Integer vagas,
+                            HttpSession session,
                             RedirectAttributes ra) {
         try {
-            Instrutor instrutor = instrutorService.listarTodos().get(0);
+            Instrutor instrutor = (Instrutor) session.getAttribute("instrutor");
+            if (instrutor == null) {
+                ra.addFlashAttribute("msgErro", "Instrutor não encontrado na sessão. Faça login novamente.");
+                return "redirect:/instrutor/turmas";
+            }
             Turma turma = new Turma();
             turma.setTitulo(titulo);
             turma.setDescricao(descricao);
