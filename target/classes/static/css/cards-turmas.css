@@ -175,7 +175,7 @@
 }
 
 .exercicio-card-row:hover {
-    transform: translateX(10px); /* Leve deslocamento para a direita no hover */
+    transform: translatey(-5px); /* Leve deslocamento para a direita no hover */
     box-shadow: 0 10px 30px rgba(0,0,0,0.08);
 }
 
