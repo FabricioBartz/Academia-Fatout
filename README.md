@@ -52,7 +52,7 @@ spring.datasource.password=admin
 No terminal, execute:
 ```bash
 mvn clean package
-mvn spring-boot:run
+mvn -e spring-boot:run
 ```
 Ou rode o JAR gerado:
 ```bash
@@ -61,18 +61,3 @@ java -jar target/academia-fatout-1.0.0.jar
 
 ### 4. Acesse a aplicação
 Abra o navegador em: [http://localhost:8081/](http://localhost:8081/)
-
-
-## Licença
-Defina a licença do projeto (ex.: MIT, Apache-2.0) conforme necessário.
-
-## Créditos
-- Spring Boot, Thymeleaf, Spring Data JPA, Spring Security
-- Bootstrap e jQuery via WebJars
-
-## Autores 
--Arthur Soares Alves
--Artur Pieper Gruppelli
--Fabricio Fiss Bartz
--Thiago Mazzoni
--Valtair Augusto
