@@ -9,7 +9,8 @@ border: 1px solid #dadce0 !important;
 }
 
 .btn-voltar-login:hover {
-box-shadow: 0 8px 15px rgba(13, 110, 253, 0.3);
+background-color: #eceff1;
+box-shadow: 0 2px 2px rgba(13, 110, 253, 0.3);
 }
 
  /* imagem de fundo */
@@ -64,8 +65,18 @@ body {
     box-shadow: 0 4px 12px rgba(13, 110, 253, 0.2);
 }
 
+.btn-instrutor:hover {
+    background-color: #0b5ed9;
+    box-shadow: 0 2px 2px rgba(13, 110, 253, 0.2);
+}
+
 .btn-aluno {
     background-color: #198754;
+    box-shadow: 0 4px 12px rgba(25, 135, 84, 0.2);
+}
+
+.btn-aluno:hover {
+    background-color: #0c5a2b;
     box-shadow: 0 4px 12px rgba(25, 135, 84, 0.2);
 }
 
@@ -74,7 +85,7 @@ body {
     font-weight: 700;
 }
 
-..btn-access small {
+.btn-access small {
     opacity: 0.85;
     font-weight: 400;
 }
@@ -118,7 +129,8 @@ border: 1px solid #dadce0 !important;
 }
 
 .btn-login:hover {
-box-shadow: 0 8px 15px rgba(13, 110, 253, 0.3);
+background-color: #0b5ed9;
+box-shadow: 0 2px 2px rgba(13, 110, 253, 0.3);
 }
 
 .btn-login-aluno {
@@ -131,7 +143,8 @@ border: 1px solid #dadce0 !important;
 }
 
 .btn-login-aluno:hover {
-box-shadow: 0 8px 15px rgba(25, 135, 84, 0.3);
+background-color: #0c5a2b;
+box-shadow: 0 2px 2px rgba(25, 135, 84, 0.3);
 }
 
 .test-credentials {
