@@ -37,3 +37,4 @@ public interface AvaliacaoRepository extends JpaRepository<AvaliacaoFisica, Long
     @Query(value = "SELECT * FROM avaliacao_fisica a WHERE a.cpf_aluno = :cpf AND " +
        "DATE_FORMAT(a.data, '%d/%m/%Y') LIKE %:q%", nativeQuery = true)
     List<AvaliacaoFisica> buscarPorDiaMesAno(@Param("cpf") String cpf, @Param("q") String q);
+}

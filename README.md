@@ -1,6 +1,6 @@
 # Academia Fatout
 
-Aplicação web para gestão de academia, com áreas para aluno e instrutor, telas Thymeleaf e layout responsivo. O projeto utiliza Spring Boot, Spring Data JPA, Spring Security e MySQL.
+Aplicação web para gestão de academia, com áreas para aluno e instrutor, telas Thymeleaf e com layout para desktop. O projeto utiliza Spring Boot, Spring Data JPA, Spring Security e MySQL.
 
 ## Visão Geral
 - Backend em Spring Boot 3.2.0 (Java 21) com Maven.
