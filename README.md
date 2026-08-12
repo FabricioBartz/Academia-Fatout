@@ -2,7 +2,7 @@
 
 Sistema web de gestão de academia com interface voltada para Desktop. Permite que **instrutores** gerenciem alunos, turmas, planos de treino e avaliações físicas, enquanto **alunos** acompanham seus treinos, se matriculam em turmas e visualizam sua evolução física.
 
-🔗 **Demo online:** [https://academia-fatout.onrender.com/](https://academia-fatout.onrender.com/)(#)
+🔗 **Demo online:** [https://academia-fatout.onrender.com/](https://academia-fatout.onrender.com/)
 
 > ⚠️ **Sobre a demo pública:** para manter o ambiente de demonstração limpo e seguro, o banco de dados é **restaurado automaticamente para o estado inicial a cada 6 horas**. Qualquer cadastro feito na demo (novos alunos, turmas, planos de treino etc.) é temporário e será apagado no próximo ciclo de reset. Veja a seção [Arquitetura de Deploy](#arquitetura-de-deploy) para mais detalhes.
 
