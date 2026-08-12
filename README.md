@@ -60,4 +60,4 @@ java -jar target/academia-fatout-1.0.0.jar
 ```
 
 ### 4. Acesse a aplicação
-Abra o navegador em: [http://localhost:8081/](http://localhost:8081/)
+Abra o navegador em: [http://localhost:8080/](http://localhost:8080/)
