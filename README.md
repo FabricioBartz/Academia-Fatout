@@ -6,6 +6,9 @@ Sistema web de gestão de academia com interface voltada para Desktop. Permite q
 
 > ⚠️ **Sobre a demo pública:** para manter o ambiente de demonstração limpo e seguro, o banco de dados é **restaurado automaticamente para o estado inicial a cada 6 horas**. Qualquer cadastro feito na demo (novos alunos, turmas, planos de treino etc.) é temporário e será apagado no próximo ciclo de reset. Veja a seção [Arquitetura de Deploy](#arquitetura-de-deploy) para mais detalhes.
 
+> ⚠️ **Sobre os dados de exemplo:** todos os nomes, CPFs, e-mails, telefones e demais informações pessoais presentes no banco de dados de demonstração são **fictícios**, gerados apenas para fins de teste e apresentação do projeto. Não correspondem a pessoas reais.
+
+
 ---
 
 ## Índice

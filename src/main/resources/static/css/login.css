@@ -16,7 +16,7 @@ box-shadow: 0 2px 2px rgba(13, 110, 253, 0.3);
  /* imagem de fundo */
 body {
     font-family: 'Inter', sans-serif;
-        /* Substitua o URL abaixo pelo caminho da sua imagem ou uma imagem da web */
+        
     background: linear-gradient(rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.6)), 
                     url('../img/fundo-academia.avif');
     background-size: cover;
@@ -114,8 +114,8 @@ background-color: #f8f9fa;
 }
 
 .form-control:focus {
-box-shadow: 0 0 0 4px rgba(13, 110, 253, 0.15);
-border-color: #0d6efd;
+box-shadow: 0 0 0 1px rgba(13, 110, 253, 0.15);
+border-color: #cfd0d2;
 }
 
 /* Botão principal com o efeito de saltar */
