@@ -1,6 +1,6 @@
 # Academia FatOut
 
-Sistema web de gestão de academia. Permite que **instrutores** gerenciem alunos, turmas, planos de treino e avaliações físicas, enquanto **alunos** acompanham seus treinos, se matriculam em turmas e visualizam sua evolução física.
+Sistema web de gestão de academia com interface voltada para Desktop. Permite que **instrutores** gerenciem alunos, turmas, planos de treino e avaliações físicas, enquanto **alunos** acompanham seus treinos, se matriculam em turmas e visualizam sua evolução física.
 
 🔗 **Demo online:** [https://academia-fatout.onrender.com/](#)
 
