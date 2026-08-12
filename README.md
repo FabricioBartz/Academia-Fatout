@@ -61,10 +61,10 @@ O projeto foi construído com foco em aprendizado prático de tecnologias usadas
 A versão de demonstração pública roda em uma arquitetura simples de duas peças, ambas em planos gratuitos:
 
 ```
-┌─────────────────┐         ┌──────────────────────┐
-│   Render (app)   │ ──────▶ │  Aiven for MySQL      │
-│  Docker container │  JDBC  │  (banco gerenciado)   │
-└─────────────────┘         └──────────────────────┘
+┌───────────────────┐          ┌──────────────────────┐
+│   Render (app)    │  --->    │   Aiven for MySQL    │
+│  Docker container │  JDBC    │  (banco gerenciado)  │
+└───────────────────┘          └──────────────────────┘
 ```
 
 - **Render** hospeda o container Docker da aplicação Spring Boot, com deploy automático a cada push na branch principal.
