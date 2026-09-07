@@ -30,7 +30,9 @@ Depois da entrega, decidi ir além do escopo acadêmico e publicar o projeto com
 
 **Reset automático do banco.** Como a demo aceita cadastro de qualquer visitante, criei uma rotina agendada (`DataResetScheduler`, com `@Scheduled`) que restaura o banco ao estado inicial periodicamente, via script SQL. Resolve dois problemas de uma vez: evita que o banco fique cheio de lixo de teste, e limita o estrago que um usuário mal-intencionado consegue causar.
 
-Usei o GitHub Copilot como apoio de produtividade ao longo do desenvolvimento, mas toda a parte de arquitetura, modelagem de dados, deploy e troubleshooting de produção foi conduzida e entendida por mim — inclusive os problemas acima, que não vieram de nenhum tutorial, apareceram na prática e precisaram ser debugados do zero.
+Usei o GitHub Copilot como apoio de produtividade ao longo do desenvolvimento (principalmente para código repetitivo/boilerplate), mas toda a parte de arquitetura, modelagem de dados, deploy e troubleshooting de produção foi conduzida e entendida por mim — inclusive os problemas acima, que não vieram de nenhum tutorial, apareceram na prática e precisaram ser debugados do zero.
+
+**O que faria diferente hoje:** na época, o grupo optou por Thymeleaf (renderização no servidor), o que fazia sentido pelo prazo e escopo da disciplina. Hoje, já com experiência em React, eu optaria por separar o projeto em uma API REST (Spring Boot) consumida por um frontend em React — principalmente pela maior interatividade na interface e por deixar a lógica de backend reaproveitável para outros clientes (ex: um futuro app mobile).
 
 ## Stack
 
@@ -75,7 +77,7 @@ docker run -p 8080:8080 \
 ## Arquitetura de deploy
 
 ```
-Render (container Docker)  --JDBC-->  Aiven for MySQL (banco gerenciado)
+Render (container Docker)  --JDBC (via Hibernate)-->  Aiven for MySQL (banco gerenciado)
 ```
 
 Deploy automático a cada push na branch principal. O profile `demo` (`application-demo.properties`) ativa a rotina de reset e lê as credenciais do banco via variáveis de ambiente — nunca ficam hardcoded no repositório.
